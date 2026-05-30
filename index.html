@@ -350,7 +350,7 @@
                         <path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
                         <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
                     </svg>
-                    Sign in with Google
+                    <span id="google-login-text">Sign in with Google</span>
                 </button>
                 <button id="email-login-btn-main">✉️ 이메일 로그인</button>
                 <button id="email-signup-btn-main">✨ 이메일로 회원가입</button>
@@ -671,8 +671,8 @@
         document.getElementById('rep-m-desc').innerText = lang.reportDesc;
 
 // 수정한 코드: .querySelector('span')을 완전히 제거했습니다.
-if (document.getElementById('google-login-btn')) {
-    document.getElementById('google-login-btn').innerText = (currentLang === 'en') ? "Sign in with Google" : "구글 로그인";
+if (document.getElementById('google-login-text')) {
+    document.getElementById('google-login-text').innerText = (currentLang === 'en') ? "Sign in with Google" : "구글 로그인";
 }
 document.getElementById('logout-btn').innerText = (currentLang === 'en') ? "Logout" : "로그아웃";
 document.getElementById('email-login-btn-main').innerText = (currentLang === 'en') ? "Email Login" : "이메일 로그인";
