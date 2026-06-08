@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B-TALK</title>
-    <!-- Firebase Legacy SDKs (Compat mode matching user's stack) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <!-- Agora RTC Web SDK -->
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.18.0.js"></script>
 
     <style>
@@ -251,7 +249,6 @@
             border-radius: 20px;          /* 둥글기 동일 */
             cursor: pointer;
             font-size: 12.5px;            /* 글자 크기 동일 */
-            margin: 0 auto 20px auto;     /* 위쪽(0)은 평판 버튼에 붙이고, 아래쪽만 여백 부여 */
             transition: all 0.2s;
         }
         #logout-btn:hover {
@@ -325,7 +322,7 @@
             background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
             color: #fff; padding: 12px; border-radius: 8px; text-align: left; font-size: 13.5px; cursor: pointer; transition: all 0.2s;
         }
-        .target-btn:hover { background: rgba(0,229,255,0.08); border-color: var(--accent-color); }
+        .target-btn:hover { background: rgba(0,229,255,0.08); border-color: var(--accent-color); color: var(--accent-color); }
         .target-btn.selected { background: rgba(0,229,255,0.15); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; }
 
         .badge-select-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
@@ -353,7 +350,6 @@
             border-radius: 20px;
             cursor: pointer;
             font-size: 12.5px;
-            margin: 25px auto 8px auto; /* 위쪽은 대화 버튼과 띄우고, 아래쪽(8px)은 로그아웃과 가깝게 */
             transition: all 0.2s;
         }
         #toggle-rep-btn:hover {
@@ -361,11 +357,152 @@
             color: var(--accent-color);
             background: rgba(0, 229, 255, 0.05);
         }
+        /* 조그만 '또 대화하기' 버튼 스타일 */
+#btn-talk-again {
+    width: auto;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.8);
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+#btn-talk-again:hover {
+    border-color: #34c759;
+    color: #34c759;
+    background: rgba(52, 199, 89, 0.05);
+
+    #user-action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 핵심 */
+    gap: 12px;
+    margin: 20px 0;
+}
+}
+
+#btn-talk-again,
+#toggle-rep-btn,
+#logout-btn {
+    width: auto;
+    height: 42px;
+    padding: 0 18px;
+    margin: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+    font-size: 12.5px;
+}
+
+/* 친구 리스트 아이템 디자인 */
+.friend-item-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+.friend-info { display: flex; flex-direction: column; gap: 4px; }
+.friend-name { font-size: 13.5px; color: #fff; font-weight: 500; }
+.friend-date { font-size: 11px; color: rgba(255,255,255,0.4); }
+.friend-call-btn {
+    background: var(--accent-color);
+    color: #000;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0;
+    width: auto;
+}
+
+#user-action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+/* 친구 닉네임 입력 모달 */
+.nickname-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease;
+    padding: 20px;
+}
+.nickname-modal-overlay.active { opacity: 1; visibility: visible; }
+.nickname-modal-box {
+    background: #161920; border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 380px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.nickname-modal-box h3 { margin: 0 0 6px 0; font-size: 18px; font-weight: 500; }
+.nickname-modal-box p { color: rgba(255,255,255,0.45); font-size: 13px; margin: 0 0 18px 0; line-height: 1.5; }
+.nickname-modal-box input {
+    width: 100%; padding: 13px 16px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 10px;
+    color: #fff; font-size: 14px; margin-bottom: 14px;
+}
+.nickname-modal-box input:focus { border-color: var(--accent-color); outline: none; box-shadow: 0 0 12px var(--accent-glow); }
+.nickname-modal-actions { display: flex; gap: 10px; }
+.nickname-modal-actions button { flex: 1; padding: 13px; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; border: none; margin: 0; }
+.nm-confirm-btn { background: var(--accent-color); color: #000; }
+.nm-confirm-btn:hover { background: #00cce0; }
+.nm-cancel-btn { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.1) !important; }
+.nm-cancel-btn:hover { background: rgba(255,255,255,0.1); }
+
+/* 친구 요청 수신 알림 배너 */
+#friend-request-banner {
+    position: fixed; top: 16px; left: 50%; transform: translateX(-50%);
+    background: #1a1f2e; border: 1px solid rgba(0,229,255,0.35);
+    border-radius: 16px; padding: 16px 20px; z-index: 3000;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5); width: calc(100% - 32px); max-width: 400px;
+    display: none; flex-direction: column; gap: 12px;
+}
+#friend-request-banner.show { display: flex; }
+.frb-top { display: flex; flex-direction: column; gap: 4px; }
+.frb-title { font-size: 14px; font-weight: 600; color: var(--accent-color); }
+.frb-desc { font-size: 12.5px; color: rgba(255,255,255,0.55); line-height: 1.4; }
+.frb-nickname-row { display: flex; align-items: center; gap: 8px; }
+.frb-nickname-row input {
+    flex: 1; padding: 10px 13px; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 8px;
+    color: #fff; font-size: 13px;
+}
+.frb-nickname-row input:focus { border-color: var(--accent-color); outline: none; }
+.frb-actions { display: flex; gap: 8px; }
+.frb-actions button { flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; margin: 0; }
+.frb-accept-btn { background: var(--accent-color); color: #000; }
+.frb-accept-btn:hover { background: #00cce0; }
+.frb-reject-btn { background: rgba(255,59,48,0.1); color: var(--danger-color); border: 1px solid rgba(255,59,48,0.25) !important; }
+.frb-reject-btn:hover { background: rgba(255,59,48,0.18); }
+
+/* 친구 목록 아이템 — 닉네임 편집 버튼 */
+.friend-edit-btn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.4); padding: 4px 9px; border-radius: 6px;
+    font-size: 11px; cursor: pointer; margin: 0; width: auto;
+}
+.friend-edit-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+.friend-action-group { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
     </style>
 </head>
 <body>
 
-    <!-- 유해유저 영구 제한 오버레이 화면 -->
     <div id="ban-overlay">
         <h1 id="ban-title">ACCESS DENIED</h1>
         <p id="ban-desc">AI 정밀 분석 결과, 지속적인 규정 위반(욕설, 성희롱 등 유해 패턴)이 적발되어 이 계정은 서비스 이용이 영구 정지되었습니다.</p>
@@ -380,10 +517,8 @@
         <h2 id="app-title">BOUNDLESS VOICE TALK</h2>
         <p id="app-subtitle" class="sub-title">talk about anything with anyone!</p>
 
-        <!-- 인증 섹션 -->
         <div id="auth-section">
 
-            <!-- ① 3개 버튼 그룹 -->
             <div class="auth-btn-group">
                 <button id="google-login-btn">
                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -398,7 +533,6 @@
                 <button id="email-signup-btn-main">✨ 이메일로 회원가입</button>
             </div>
 
-            <!-- ② 이메일 로그인 폼 (토글) -->
             <div class="auth-form-panel" id="login-form-panel">
                 <div class="auth-form-inner">
                     <div class="form-title" id="login-form-title">이메일 로그인</div>
@@ -408,11 +542,9 @@
                 </div>
             </div>
 
-            <!-- ③ 이메일 회원가입 폼 (단계별) -->
             <div class="auth-form-panel" id="signup-form-panel">
                 <div class="auth-form-inner">
 
-                    <!-- 스텝 표시 -->
                     <div class="step-indicator">
                         <div class="step-dot active" id="step-dot-1"></div>
                         <div style="width:20px; height:1px; background:rgba(255,255,255,0.1);"></div>
@@ -422,14 +554,12 @@
                         <span id="step-label" style="margin-left:6px;">이메일 입력</span>
                     </div>
 
-                    <!-- Step 1: 이메일 입력 + 인증 메일 발송 -->
                     <div id="signup-step-1">
                         <input type="email" id="signup-email-input" placeholder="가입할 이메일 주소" style="margin-bottom:0;">
                         <div class="form-hint" id="signup-hint-1" style="margin-top:8px;">인증 메일을 발송해 드립니다.</div>
                         <button class="auth-submit-btn primary" id="send-verify-btn" style="margin-top:10px;">인증 메일 발송</button>
                     </div>
 
-                    <!-- Step 2: 인증 확인 대기 -->
                     <div id="signup-step-2" style="display:none; text-align:center;">
                         <div style="font-size:32px; margin-bottom:8px;">📬</div>
                         <div class="form-hint" id="signup-hint-2">이메일을 확인하고 인증 링크를 클릭하세요.<br>완료 후 아래 버튼을 눌러주세요.</div>
@@ -437,7 +567,6 @@
                         <button style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:12px; cursor:pointer; margin-top:6px; width:100%; padding:6px;" id="resend-verify-btn">메일 재전송</button>
                     </div>
 
-                    <!-- Step 3: 비밀번호 설정 -->
                     <div id="signup-step-3" style="display:none;">
                         <input type="password" id="signup-pw-input" placeholder="비밀번호 (6자 이상)" style="margin-bottom:0;">
                         <input type="password" id="signup-pw-confirm-input" placeholder="비밀번호 확인 (재입력)" style="margin-bottom:0; margin-top:10px;">
@@ -450,7 +579,6 @@
 
         </div>
 
-        <!-- 추가됨: 로그인 후에만 노출될 요소들을 감싸는 컨테이너 -->
         <div id="talk-controls" style="display: none; width: 100%;">
         
         <div class="input-group">
@@ -468,12 +596,10 @@
             </select>
         </div>
 
-        <!-- 현재 참여자 관리 UI 박스 -->
         <div id="participants-box">
             <div class="part-title" id="part-title-label">Active Channel Participants</div>
             <div class="part-list" id="part-list-container">
-                <!-- 동적으로 다중 유저 추가됨 -->
-            </div>
+                </div>
         </div>
 
         <button id="join-btn" disabled>Start Talk</button>
@@ -482,11 +608,15 @@
 
         <div id="channel-debug"></div>
     </div>
-    <!-- 💡 추가됨: 평판 프로필을 켜고 끌 토글 버튼 -->
-    <button id="toggle-rep-btn">📊 내 평판 프로필 보기</button>
 
-    <!-- 내 평판 점수판 -->
-    <div class="reputation-board" id="reputation-section" style="display: none;">
+    <div id="user-action-buttons">
+    <button id="btn-talk-again" style="margin: 0; display: none;">🗣️ 또 대화하기</button>
+    <button id="toggle-rep-btn">📊 내 평판 대시보드</button>
+    <button id="logout-btn">로그아웃</button>
+          </div>
+
+
+   <div class="reputation-board" id="reputation-section" style="display: none;">
         <div class="reputation-title" id="rep-title">My Reputation Profile</div>
         <div class="badge-list">
             <div class="badge-item">👍 <span id="label-manner">Manner</span>: <strong id="score-manner">0</strong></div>
@@ -494,12 +624,11 @@
             <div class="badge-item">🤣 <span id="label-humor">Humor</span>: <strong id="score-humor">0</strong></div>
         </div>
     </div>
-        <button id="logout-btn">로그아웃</button>
+  
 
     </div>
 
 
-    <!-- 종합 평가 및 배지 선물 모달창 -->
     <div class="modal-overlay" id="badge-modal">
         <div class="modal-content">
             <h3 id="modal-title">Conversation Report</h3>
@@ -510,19 +639,57 @@
                 <span id="summary-content" style="color: rgba(255,255,255,0.7);">Analyzing the dialogue pattern...</span>
             </div>
 
-            <!-- 다중 접속 환경 대응: 평가 타겟 유저 선택 영역 -->
             <div class="target-select-list" id="vote-target-container"></div>
 
             <div class="badge-select-grid">
                 <button class="badge-vote-btn" id="btn-vote-manner" onclick="executeVote('manner')" disabled>👍 <span id="vote-manner">Good Manners</span></button>
                 <button class="badge-vote-btn" id="btn-vote-logic" onclick="executeVote('logic')" disabled>🧠 <span id="vote-logic">Highly Logical</span></button>
                 <button class="badge-vote-btn" id="btn-vote-humor" onclick="executeVote('humor')" disabled>🤣 <span id="vote-humor">Very Humorous</span></button>
+                <button class="badge-vote-btn" id="btn-add-friend" onclick="executeAddFriend()" style="background: rgba(0, 229, 255, 0.05); border-color: rgba(0, 229, 255, 0.4);" disabled>
+        <span id="label-add-friend">➕ 친구 추가</span>
+    </button>
                 <button class="badge-vote-btn" onclick="closeModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-weight:400; margin-top: 10px;" id="vote-skip">Skip Feedback</button>
             </div>
         </div>
     </div>
 
-    <!-- 신고 전용 모달창 -->
+    <div class="modal-overlay" id="friends-modal">
+    <div class="modal-content">
+        <h3 id="friends-m-title">나의 친구 목록</h3>
+        <div class="target-select-list" id="friends-list-container" style="max-height: 250px; text-align: left;"></div>
+        <button onclick="closeFriendsModal()" style="background: rgba(255,255,255,0.05); color: #fff; margin-top: 10px; width: 100%;">닫기</button>
+    </div>
+    </div>
+
+    <!-- 친구 추가 닉네임 입력 모달 -->
+    <div class="nickname-modal-overlay" id="nickname-modal">
+        <div class="nickname-modal-box">
+            <h3>👤 친구 닉네임 설정</h3>
+            <p>이 친구를 어떤 이름으로 저장할까요?<br>나만 볼 수 있는 이름입니다.</p>
+            <input type="text" id="nickname-input" placeholder="닉네임 입력 (최대 12자)" maxlength="12">
+            <div class="nickname-modal-actions">
+                <button class="nm-cancel-btn" onclick="closeNicknameModal()">취소</button>
+                <button class="nm-confirm-btn" onclick="confirmFriendRequest()">친구 요청 보내기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 친구 요청 수신 배너 -->
+    <div id="friend-request-banner">
+        <div class="frb-top">
+            <div class="frb-title">👋 친구 요청이 왔어요!</div>
+            <div class="frb-desc" id="frb-desc">익명의 사용자가 친구 요청을 보냈습니다.<br>수락하면 서로 친구가 됩니다. 상대방 닉네임을 정해주세요.</div>
+        </div>
+        <div class="frb-nickname-row">
+            <input type="text" id="frb-nickname-input" placeholder="상대방 닉네임 (나만 보임)" maxlength="12">
+        </div>
+        <div class="frb-actions">
+            <button class="frb-reject-btn" onclick="rejectFriendRequest()">거절</button>
+            <button class="frb-accept-btn" onclick="acceptFriendRequest()">수락하기</button>
+        </div>
+    </div>
+
+
     <div class="modal-overlay" id="report-modal">
         <div class="modal-content">
             <h3 style="color: var(--danger-color);" id="rep-m-title">🚨 Report Toxic User</h3>
@@ -616,7 +783,35 @@
             emailPlaceholder: "Email address (e.g., test@gmail.com)",
             passwordPlaceholder: "Password (minimum 6 characters)",
             emailLogin: "Login",
-            emailSignup: "Sign Up"
+            emailSignup: "Sign Up",
+            // ── 이메일 인증/가입 확장 다국어 ──
+            loginFormTitle: "Email Login",
+            loginBtnText: "Login",
+            signupFormTitle: "Email Sign Up",
+            signupEmailPlaceholder: "Email address to register",
+            signupHint1: "We will send you a verification email.",
+            sendVerifyBtnText: "Send Verification Email",
+            sendVerifyBtnLoading: "Sending...",
+            signupHint2: "Please check your email and click the verification link.<br>Once done, click the button below.",
+            checkVerifyBtnText: "Confirm Verification",
+            checkVerifyBtnLoading: "Checking...",
+            resendVerifyBtnText: "Resend Email",
+            signupPwPlaceholder: "Password (6+ characters)",
+            signupPwConfirmPlaceholder: "Confirm Password (re-enter)",
+            emailSignupBtnText: "Complete Sign Up",
+            emailSignupBtnLoading: "Processing...",
+            stepLabels: ["Enter Email", "Verify Email", "Set Password"],
+            pwHintMin: "Password must be at least 6 characters.",
+            pwHintMismatch: "Passwords do not match.",
+            pwHintMatch: "✓ Passwords match.",
+        talkAgainBtn: "🗣️ Talk Again",
+        addFriendBtn: "➕ Add Friend",
+        friendsModalTitle: "My Friends List",
+        noFriends: "No friends added yet. Make some friends after a talk!",
+        lastTalked: "Last talked:",
+        callBtn: "Call",
+        friendAdded: "🎉 Added to your friend list!",
+        privateChannelAlert: (name) => `Connecting to private channel with ${name}...`
         },
         ko: {
             title: "경계 없는 목소리",
@@ -653,7 +848,35 @@
             emailPlaceholder: "이메일 주소 (예: test@naver.com)",
             passwordPlaceholder: "비밀번호 (6자리 이상)",
             emailLogin: "로그인",
-            emailSignup: "회원가입"
+            emailSignup: "회원가입",
+            // ── 이메일 인증/가입 확장 다국어 ──
+            loginFormTitle: "이메일 로그인",
+            loginBtnText: "로그인",
+            signupFormTitle: "이메일 회원가입",
+            signupEmailPlaceholder: "가입할 이메일 주소",
+            signupHint1: "인증 메일을 발송해 드립니다.",
+            sendVerifyBtnText: "인증 메일 발송",
+            sendVerifyBtnLoading: "발송 중...",
+            signupHint2: "이메일을 확인하고 인증 링크를 클릭하세요.<br>완료 후 아래 버튼을 눌러주세요.",
+            checkVerifyBtnText: "인증 완료 확인",
+            checkVerifyBtnLoading: "확인 중...",
+            resendVerifyBtnText: "메일 재전송",
+            signupPwPlaceholder: "비밀번호 (6자 이상)",
+            signupPwConfirmPlaceholder: "비밀번호 확인 (재입력)",
+            emailSignupBtnText: "가입 완료",
+            emailSignupBtnLoading: "처리 중...",
+            stepLabels: ["이메일 입력", "메일 인증", "비밀번호 설정"],
+            pwHintMin: "비밀번호는 6자 이상이어야 합니다.",
+            pwHintMismatch: "비밀번호가 일치하지 않습니다.",
+            pwHintMatch: "✓ 비밀번호가 일치합니다.",
+        talkAgainBtn: "🗣️ 또 대화하기",
+        addFriendBtn: "➕ 친구 추가",
+        friendsModalTitle: "나의 친구 목록",
+        noFriends: "아직 추가된 친구가 없습니다. 대화 후 친구를 맺어보세요!",
+        lastTalked: "마지막 대화:",
+        callBtn: "연결",
+        friendAdded: "🎉 친구 목록에 추가되었습니다!",
+        privateChannelAlert: (name) => `${name} 님과의 비밀 채널로 연결합니다...`
         }
     };
 
@@ -682,6 +905,7 @@
             if (startBtn && !isJoined) startBtn.disabled = false;
             document.getElementById("toggle-rep-btn").style.display = "inline-block";
             if (reputationSection) reputationSection.style.display = "none";
+            document.getElementById("btn-talk-again").style.display = "inline-block";
 
 
             // 평판 데이터 연동 (배지 수 누적 리스닝)
@@ -692,10 +916,14 @@
                 document.getElementById('score-humor').innerText = badges.humor || 0;
             });
 
+            // 친구 요청 실시간 수신 리스너 시작
+            startFriendRequestListener();
+
         } else {
             document.getElementById("auth-section").style.display = "flex";
             if (logoutBtn) logoutBtn.style.display = "none";
             if (talkControls) talkControls.style.display = "none";
+            document.getElementById("btn-talk-again").style.display = "none";
 
             document.getElementById("toggle-rep-btn").style.display = "none";
             if (reputationSection) reputationSection.style.display = "none";
@@ -710,21 +938,24 @@
         console.error("Persistence configuration error:", error);
     });
 
-// 4. UI 갱신 & 다국어 바인딩 매핑 로직
+    // 4. UI 갱신 & 다국어 바인딩 매핑 로직
     function updateUI() {
         const lang = textData[currentLang];
         const appTitle = document.getElementById('app-title');
         const appSubtitle = document.getElementById('app-subtitle');
         const isRepOpen = document.getElementById('reputation-section').style.display === "block";
         
+        document.getElementById('btn-talk-again').innerText = lang.talkAgainBtn;
+        if(document.getElementById('label-add-friend')) document.getElementById('label-add-friend').innerText = lang.addFriendBtn;
+        if(document.getElementById('friends-m-title')) document.getElementById('friends-m-title').innerText = lang.friendsModalTitle;
+        
         // 토글 버튼 텍스트 다국어 처리
         if (currentLang === 'ko') {
-            document.getElementById('toggle-rep-btn').innerText = isRepOpen ? "📊 평판 프로필 접기" : "📊 내 평판 프로필 보기";
+            document.getElementById('toggle-rep-btn').innerText = isRepOpen ? "📊 평판 대시보드 접기" : "📊 내 평판 대시보드";
         } else {
-            document.getElementById('toggle-rep-btn').innerText = isRepOpen ? "📊 Hide Reputation Profile" : "📊 View My Reputation Profile";
+            document.getElementById('toggle-rep-btn').innerText = isRepOpen ? "📊 Hide Reputation Profile" : "📊 View My Reputation";
         }
         
-        // 💡 위에서 잘못 닫혔던 괄호를 지웠습니다. 아래 코드들이 정상적으로 함수 안에서 실행됩니다.
         if (appTitle) appTitle.innerText = lang.title;
         if (appSubtitle) appSubtitle.innerText = lang.subtitle;
         document.getElementById('app-title').innerText = lang.title;
@@ -752,13 +983,57 @@
         document.getElementById('rep-m-title').innerText = lang.reportTitle;
         document.getElementById('rep-m-desc').innerText = lang.reportDesc;
 
-// 수정한 코드: .querySelector('span')을 완전히 제거했습니다.
-if (document.getElementById('google-login-text')) {
-    document.getElementById('google-login-text').innerText = (currentLang === 'en') ? "Sign in with Google" : "구글 로그인";
-}
-document.getElementById('logout-btn').innerText = (currentLang === 'en') ? "Logout" : "로그아웃";
-document.getElementById('email-login-btn-main').innerText = (currentLang === 'en') ? "Email Login" : "이메일 로그인";
-document.getElementById('email-signup-btn-main').innerText = (currentLang === 'en') ? "Sign Up with Email" : "이메일로 회원가입";
+        if (document.getElementById('google-login-text')) {
+            document.getElementById('google-login-text').innerText = (currentLang === 'en') ? "Sign in with Google" : "구글 로그인";
+        }
+        document.getElementById('logout-btn').innerText = (currentLang === 'en') ? "Logout" : "로그아웃";
+        document.getElementById('email-login-btn-main').innerText = (currentLang === 'en') ? "Email Login" : "이메일 로그인";
+        document.getElementById('email-signup-btn-main').innerText = (currentLang === 'en') ? "Sign Up with Email" : "이메일로 회원가입";
+
+        // ── 이메일 로그인/회원가입 패널 내부 요소 번역 반영 ──
+        document.getElementById('login-form-title').innerText = lang.loginFormTitle;
+        document.getElementById('email-input').placeholder = lang.emailPlaceholder;
+        document.getElementById('password-input').placeholder = lang.passwordPlaceholder;
+        document.getElementById('email-login-btn').innerText = lang.loginBtnText;
+
+        document.getElementById('signup-email-input').placeholder = lang.signupEmailPlaceholder;
+        document.getElementById('signup-hint-1').innerText = lang.signupHint1;
+        
+        const sendBtn = document.getElementById('send-verify-btn');
+        if (sendBtn.disabled && (sendBtn.innerText === "발송 중..." || sendBtn.innerText === "Sending...")) {
+            sendBtn.innerText = lang.sendVerifyBtnLoading;
+        } else {
+            sendBtn.innerText = lang.sendVerifyBtnText;
+        }
+
+        document.getElementById('signup-hint-2').innerHTML = lang.signupHint2;
+        
+        const checkBtn = document.getElementById('check-verify-btn');
+        if (checkBtn.disabled && (checkBtn.innerText === "확인 중..." || checkBtn.innerText === "Checking...")) {
+            checkBtn.innerText = lang.checkVerifyBtnLoading;
+        } else {
+            checkBtn.innerText = lang.checkVerifyBtnText;
+        }
+
+        document.getElementById('resend-verify-btn').innerText = lang.resendVerifyBtnText;
+        document.getElementById('signup-pw-input').placeholder = lang.signupPwPlaceholder;
+        document.getElementById('signup-pw-confirm-input').placeholder = lang.signupPwConfirmPlaceholder;
+        
+        const signupBtn = document.getElementById('email-signup-btn');
+        if (signupBtn.disabled && (signupBtn.innerText === "처리 중..." || signupBtn.innerText === "Processing...")) {
+            signupBtn.innerText = lang.emailSignupBtnLoading;
+        } else {
+            signupBtn.innerText = lang.emailSignupBtnText;
+        }
+
+        // 현재 스텝 인디케이터 라벨 실시간 갱신
+        let currentStep = 1;
+        if (document.getElementById('signup-step-2').style.display === 'block') currentStep = 2;
+        if (document.getElementById('signup-step-3').style.display === 'block') currentStep = 3;
+        document.getElementById('step-label').innerText = lang.stepLabels[currentStep - 1];
+
+        // 실시간 비밀번호 검증 텍스트 갱신
+        checkPwMatch();
 
         if (!document.getElementById('badge-modal').classList.contains('active')) {
             document.getElementById('summary-headline').innerText = lang.aiLoading;
@@ -778,10 +1053,10 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
         
         if (repSection.style.display === "none") {
             repSection.style.display = "block";
-            btn.innerText = (currentLang === 'ko') ? "📊 평판 프로필 접기" : "📊 Hide Reputation Profile";
+            btn.innerText = (currentLang === 'ko') ? "📊 평판 대시보드 접기" : "📊 Hide Reputation Profile";
         } else {
             repSection.style.display = "none";
-            btn.innerText = (currentLang === 'ko') ? "📊 내 평판 프로필 보기" : "📊 View My Reputation Profile";
+            btn.innerText = (currentLang === 'ko') ? "📊 내 평판 대시보드" : "📊 View My Reputation";
         }
     });
     // ── 이메일 로그인 토글 ──
@@ -845,8 +1120,8 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
         ['step-dot-1','step-dot-2','step-dot-3'].forEach((id, i) => {
             document.getElementById(id).classList.toggle('active', i < step);
         });
-        const labels = ['이메일 입력', '메일 인증', '비밀번호 설정'];
-        document.getElementById('step-label').innerText = labels[step - 1];
+        const lang = textData[currentLang];
+        document.getElementById('step-label').innerText = lang.stepLabels[step - 1];
     }
 
     // Step 1: 인증 메일 발송
@@ -859,7 +1134,7 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
 
         const btn = document.getElementById('send-verify-btn');
         btn.disabled = true;
-        btn.innerText = "발송 중...";
+        btn.innerText = textData[currentLang].sendVerifyBtnLoading;
 
         try {
             // 임시 랜덤 비밀번호로 계정 생성 후 인증 메일 발송
@@ -877,7 +1152,7 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
                 alert("오류: " + error.message);
             }
             btn.disabled = false;
-            btn.innerText = "인증 메일 발송";
+            btn.innerText = textData[currentLang].sendVerifyBtnText;
         }
     });
 
@@ -886,7 +1161,7 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
         if (!tempSignupUser) return;
         const btn = document.getElementById('check-verify-btn');
         btn.disabled = true;
-        btn.innerText = "확인 중...";
+        btn.innerText = textData[currentLang].checkVerifyBtnLoading;
 
         try {
             await tempSignupUser.reload();
@@ -895,12 +1170,12 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
             } else {
                 alert(currentLang === 'ko' ? "아직 이메일 인증이 완료되지 않았습니다. 받은 메일함을 확인해 주세요." : "Email not verified yet. Please check your inbox.");
                 btn.disabled = false;
-                btn.innerText = "인증 완료 확인";
+                btn.innerText = textData[currentLang].checkVerifyBtnText;
             }
         } catch(e) {
             alert("오류: " + e.message);
             btn.disabled = false;
-            btn.innerText = "인증 완료 확인";
+            btn.innerText = textData[currentLang].checkVerifyBtnText;
         }
     });
 
@@ -921,19 +1196,20 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
         const pw2 = document.getElementById('signup-pw-confirm-input').value;
         const hint = document.getElementById('pw-match-hint');
         const btn = document.getElementById('email-signup-btn');
+        const lang = textData[currentLang];
 
         if (!pw2) { hint.innerText = ""; btn.disabled = true; return; }
         if (pw.length < 6) {
             hint.style.color = "#ff6b6b";
-            hint.innerText = "비밀번호는 6자 이상이어야 합니다.";
+            hint.innerText = lang.pwHintMin;
             btn.disabled = true;
         } else if (pw !== pw2) {
             hint.style.color = "#ff6b6b";
-            hint.innerText = "비밀번호가 일치하지 않습니다.";
+            hint.innerText = lang.pwHintMismatch;
             btn.disabled = true;
         } else {
             hint.style.color = "#34c759";
-            hint.innerText = "✓ 비밀번호가 일치합니다.";
+            hint.innerText = lang.pwHintMatch;
             btn.disabled = false;
         }
     }
@@ -946,7 +1222,7 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
         const pw = document.getElementById('signup-pw-input').value;
         const btn = document.getElementById('email-signup-btn');
         btn.disabled = true;
-        btn.innerText = "처리 중...";
+        btn.innerText = textData[currentLang].emailSignupBtnLoading;
 
         try {
             await tempSignupUser.updatePassword(pw);
@@ -957,7 +1233,7 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
         } catch(e) {
             alert("오류: " + e.message);
             btn.disabled = false;
-            btn.innerText = "가입 완료";
+            btn.innerText = textData[currentLang].emailSignupBtnText;
         }
     });
 
@@ -991,8 +1267,9 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
             return topic;
         } catch (error) {
             console.error("AI matching failed, moving to fallback route:", error);
-            statusEl.innerText = lang.matchingFail;
-            // 💡 에러 발생 시 유저가 입력한 한글 주제를 그대로 반환합니다!
+            // 최신 언어 선택 상태를 원자적으로 강제 반영하기 위해 textData[currentLang] 직접 참조
+            statusEl.innerText = textData[currentLang].matchingFail;
+            // 💡 에러 발생 시 유저가 입력한 주제를 그대로 반환합니다!
             return userInput.trim() || "general";
         }
     }
@@ -1067,7 +1344,13 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
         const maxPeople = parseInt(document.getElementById('max-people-select').value);
         document.getElementById('join-btn').disabled = true;
 
-        const finalTopic = await getAIMatchedTopic(rawTopic);
+        let finalTopic;
+        if (rawTopic.startsWith("🔒_")) {
+            finalTopic = rawTopic; // 친구 1:1 방은 AI를 거치지 않고 다이렉트 패스
+            document.getElementById('matching-status').innerText = (currentLang === 'ko') ? "🔒 1:1 비밀 채널 개설 완료!" : "🔒 Private Channel Connected!";
+        } else {
+            finalTopic = await getAIMatchedTopic(rawTopic); // 일반 주제는 기존처럼 AI 매칭
+        }
         
         // 💡 UI 표시용 한글 채널 이름 설정
         currentChannelName = finalTopic;
@@ -1322,6 +1605,7 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
         document.getElementById('btn-vote-manner').disabled = !enable;
         document.getElementById('btn-vote-logic').disabled = !enable;
         document.getElementById('btn-vote-humor').disabled = !enable;
+        document.getElementById('btn-add-friend').disabled = !enable;
     }
 
     async function executeVote(badgeType) {
@@ -1358,6 +1642,239 @@ document.getElementById('email-signup-btn-main').innerText = (currentLang === 'e
     window.addEventListener('DOMContentLoaded', () => {
         updateUI();
     });
+
+    // 타임스탬프를 "YYYY.MM.DD" 포맷으로 변환하는 헬퍼 함수
+function formatDate(timestamp) {
+    if (!timestamp) return "";
+    const d = new Date(timestamp);
+    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+}
+
+// ── 친구 추가 신규 시스템 ──
+let pendingFriendTargetUid = null;      // 요청 보낼 상대 UID
+let incomingRequestSenderUid = null;    // 수신한 요청의 발신자 UID
+let friendRequestListener = null;       // Firebase 리스너 참조
+
+// 1. 친구 추가 버튼 클릭 → 닉네임 입력 모달 열기
+async function executeAddFriend() {
+    if (!selectedVoteTarget || !auth.currentUser) return;
+    const myUid = auth.currentUser.uid;
+    if (selectedVoteTarget === myUid) return;
+
+    // 이미 친구인지 확인
+    const snap = await database.ref(`users/${myUid}/friends/${selectedVoteTarget}`).once('value');
+    if (snap.exists() && snap.val().status === 'accepted') {
+        alert(currentLang === 'ko' ? "이미 친구로 등록된 사용자입니다." : "Already your friend.");
+        return;
+    }
+    // 이미 보낸 요청이 있는지 확인
+    const sentSnap = await database.ref(`users/${selectedVoteTarget}/friendRequests/${myUid}`).once('value');
+    if (sentSnap.exists()) {
+        alert(currentLang === 'ko' ? "이미 친구 요청을 보낸 상태입니다." : "Friend request already sent.");
+        return;
+    }
+
+    pendingFriendTargetUid = selectedVoteTarget;
+    document.getElementById('nickname-input').value = "";
+    document.getElementById('nickname-modal').classList.add('active');
+}
+
+function closeNicknameModal() {
+    document.getElementById('nickname-modal').classList.remove('active');
+    pendingFriendTargetUid = null;
+}
+
+// 2. 닉네임 확정 → Firebase에 pending 요청 저장
+async function confirmFriendRequest() {
+    const nickname = document.getElementById('nickname-input').value.trim();
+    if (!nickname) {
+        alert(currentLang === 'ko' ? "닉네임을 입력해 주세요." : "Please enter a nickname.");
+        return;
+    }
+    if (!pendingFriendTargetUid || !auth.currentUser) return;
+
+    const myUid = auth.currentUser.uid;
+    const now = Date.now();
+
+    try {
+        // 내 쪽에 pending 상태로 저장 (닉네임 포함)
+        await database.ref(`users/${myUid}/friends/${pendingFriendTargetUid}`).set({
+            status: 'pending_sent',
+            nickname: nickname,
+            addedAt: now
+        });
+        // 상대방 수신함에 요청 등록
+        await database.ref(`users/${pendingFriendTargetUid}/friendRequests/${myUid}`).set({
+            from: myUid,
+            timestamp: now
+        });
+
+        alert(currentLang === 'ko' ? "✅ 친구 요청을 보냈습니다! 상대방이 수락하면 친구가 됩니다." : "✅ Friend request sent!");
+        closeNicknameModal();
+        document.getElementById('btn-add-friend').disabled = true;
+    } catch(e) {
+        console.error("Friend request failed:", e);
+    }
+}
+
+// 3. 로그인 후 / 앱 진입 시 수신된 친구 요청 실시간 감지
+function startFriendRequestListener() {
+    if (!auth.currentUser) return;
+    const myUid = auth.currentUser.uid;
+    if (friendRequestListener) friendRequestListener.off();
+
+    const reqRef = database.ref(`users/${myUid}/friendRequests`);
+    friendRequestListener = reqRef;
+
+    reqRef.on('child_added', async (snap) => {
+        const senderUid = snap.key;
+        const data = snap.val();
+        if (!data) return;
+
+        incomingRequestSenderUid = senderUid;
+        document.getElementById('frb-nickname-input').value = "";
+        document.getElementById('friend-request-banner').classList.add('show');
+    });
+}
+
+// 4. 친구 요청 수락
+async function acceptFriendRequest() {
+    const myUid = auth.currentUser ? auth.currentUser.uid : null;
+    if (!myUid || !incomingRequestSenderUid) return;
+
+    const nickname = document.getElementById('frb-nickname-input').value.trim();
+    if (!nickname) {
+        alert(currentLang === 'ko' ? "닉네임을 입력해 주세요." : "Please enter a nickname.");
+        return;
+    }
+
+    const now = Date.now();
+    try {
+        // 내 친구 목록에 수락 상태로 저장
+        await database.ref(`users/${myUid}/friends/${incomingRequestSenderUid}`).set({
+            status: 'accepted',
+            nickname: nickname,
+            addedAt: now,
+            lastTalked: now
+        });
+        // 요청 보낸 사람 쪽 상태도 accepted로 업데이트
+        await database.ref(`users/${incomingRequestSenderUid}/friends/${myUid}`).update({
+            status: 'accepted',
+            lastTalked: now
+        });
+        // 수신함에서 요청 삭제
+        await database.ref(`users/${myUid}/friendRequests/${incomingRequestSenderUid}`).remove();
+
+        document.getElementById('friend-request-banner').classList.remove('show');
+        incomingRequestSenderUid = null;
+        alert(currentLang === 'ko' ? "🎉 친구가 되었습니다!" : "🎉 You are now friends!");
+    } catch(e) {
+        console.error("Accept friend failed:", e);
+    }
+}
+
+// 5. 친구 요청 거절
+async function rejectFriendRequest() {
+    const myUid = auth.currentUser ? auth.currentUser.uid : null;
+    if (!myUid || !incomingRequestSenderUid) return;
+
+    try {
+        // 수신함에서 삭제
+        await database.ref(`users/${myUid}/friendRequests/${incomingRequestSenderUid}`).remove();
+        // 보낸 사람 쪽 pending 기록도 삭제
+        await database.ref(`users/${incomingRequestSenderUid}/friends/${myUid}`).remove();
+
+        document.getElementById('friend-request-banner').classList.remove('show');
+        incomingRequestSenderUid = null;
+    } catch(e) {
+        console.error("Reject friend failed:", e);
+    }
+}
+
+// 6. 친구 닉네임 편집
+async function editFriendNickname(friendUid) {
+    const newName = prompt(currentLang === 'ko' ? "새 닉네임을 입력하세요 (나만 보임):" : "Enter new nickname (only you can see):");
+    if (!newName || !newName.trim()) return;
+    const myUid = auth.currentUser.uid;
+    await database.ref(`users/${myUid}/friends/${friendUid}`).update({ nickname: newName.trim() });
+    // 목록 새로고침
+    document.getElementById('btn-talk-again').click();
+    // 이미 열려있으면 그냥 다시 렌더
+    loadFriendsList();
+}
+
+// 2. '또 대화하기' 버튼 클릭 시 친구 목록 열기 및 실시간 렌더링
+document.getElementById('btn-talk-again').addEventListener('click', () => {
+    document.getElementById('friends-modal').classList.add('active');
+    loadFriendsList();
+});
+
+function loadFriendsList() {
+    if (!auth.currentUser) return;
+    const myUid = auth.currentUser.uid;
+    database.ref(`users/${myUid}/friends`).once('value', (snapshot) => {
+        const container = document.getElementById('friends-list-container');
+        container.innerHTML = "";
+        const friendsData = snapshot.val();
+
+        // accepted 상태인 친구만 필터
+        const accepted = friendsData
+            ? Object.entries(friendsData).filter(([, v]) => v.status === 'accepted')
+            : [];
+
+        if (accepted.length === 0) {
+            container.innerHTML = `<div style="padding: 20px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.4);">${textData[currentLang].noFriends}</div>`;
+            return;
+        }
+
+        const sorted = accepted.sort((a, b) => (b[1].lastTalked || 0) - (a[1].lastTalked || 0));
+
+        sorted.forEach(([friendUid, info]) => {
+            const displayName = info.nickname || `익명 친구 (${friendUid.substring(0,8)})`;
+            const dateStr = formatDate(info.lastTalked);
+
+            const el = document.createElement('div');
+            el.className = "friend-item-box";
+            el.innerHTML = `
+                <div class="friend-info">
+                    <span class="friend-name">👤 ${displayName}</span>
+                    <span class="friend-date">${textData[currentLang].lastTalked} ${dateStr}</span>
+                </div>
+                <div class="friend-action-group">
+                    <button class="friend-call-btn" onclick="connectToFriend('${friendUid}')">📞 ${textData[currentLang].callBtn}</button>
+                    <button class="friend-edit-btn" onclick="editFriendNickname('${friendUid}')">✏️ 이름 변경</button>
+                </div>
+            `;
+            container.appendChild(el);
+        });
+    });
+}
+
+function closeFriendsModal() {
+    document.getElementById('friends-modal').classList.remove('active');
+}
+
+// 3. 친구와 재연결 실행 (AI 우회 및 다이렉트 방 개설)
+async function connectToFriend(friendUid) {
+    if (!auth.currentUser) return;
+    const myUid = auth.currentUser.uid;
+    
+    // 마지막 대화 날짜 갱신
+    database.ref(`users/${myUid}/friends/${friendUid}`).update({
+        lastTalked: firebase.database.ServerValue.TIMESTAMP
+    });
+    
+    // 서로의 UID를 알파벳 순으로 정렬해 조합 (누가 누르든 항상 동일한 1:1 방 ID가 생성됨)
+    const privateChannelId = `🔒_${[myUid, friendUid].sort().join("_")}`;
+    
+    closeFriendsModal();
+    alert(textData[currentLang].privateChannelAlert(`Friend(${friendUid.substring(0,8)})`));
+    
+    // 숨어있는 topic 입력창에 비밀 채널 ID를 강제 주입 후 시작 버튼 강제 클릭 트리거
+    const topicInput = document.getElementById('topic-input');
+    topicInput.value = privateChannelId;
+    document.getElementById('join-btn').click();
+}
 </script>
 </body>
 </html>
