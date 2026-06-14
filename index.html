@@ -857,6 +857,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     // 2. Global State Management
     let currentLang = "ko"; 
     const AGORA_APP_ID = "71b6f8c1cb424be1b2b5480d447e69e2";
+    const TOKEN_SERVER_URL = "https://b-talk-0gi0.onrender.com";
     const SIGNAL_SERVER_URL = "https://kvdb.io/YAPuhyeXZWiNidFcsstzqK/";
 
     let client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
@@ -1648,8 +1649,17 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             const firebaseUser = auth.currentUser;
             const agoraUid = firebaseUser ? firebaseUser.uid : null;
 
-            // 💡 아고라 서버에는 안전하게 변환된 'safeAgoraChannelId'로 접속합니다.
-            myUid = await client.join(AGORA_APP_ID, safeAgoraChannelId, null, agoraUid);
+            // 💡 토큰 서버에서 Agora 토큰 발급 후 접속
+            let agoraToken = null;
+            try {
+                const tokenRes = await fetch(`${TOKEN_SERVER_URL}/token?channelName=${encodeURIComponent(safeAgoraChannelId)}&uid=0`);
+                const tokenData = await tokenRes.json();
+                agoraToken = tokenData.token;
+            } catch(e) {
+                console.error("Token fetch failed:", e);
+                throw new Error("토큰 서버 연결 실패. 잠시 후 다시 시도해 주세요.");
+            }
+            myUid = await client.join(AGORA_APP_ID, safeAgoraChannelId, agoraToken, 0);
             isJoined = true;
             roomParticipants = [];
             sessionParticipants = [];
@@ -1760,12 +1770,21 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             const el = document.createElement('div');
             el.className = "part-item";
             el.id = `part-${uid}`;
-            el.innerHTML = `
-                <span class="animal-avatar">${animal.emoji}</span>
-                <span class="animal-name">${animal.label}</span>
-                <span class="speaking-bar">
-                    <span></span><span></span><span></span><span></span>
-                </span>`;
+            const avatarSpan = document.createElement('span');
+            avatarSpan.className = 'animal-avatar';
+            avatarSpan.textContent = animal.emoji;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'animal-name';
+            nameSpan.textContent = animal.label;
+
+            const speakingBar = document.createElement('span');
+            speakingBar.className = 'speaking-bar';
+            for (let i = 0; i < 4; i++) speakingBar.appendChild(document.createElement('span'));
+
+            el.appendChild(avatarSpan);
+            el.appendChild(nameSpan);
+            el.appendChild(speakingBar);
             container.appendChild(el);
         });
     }
@@ -2219,7 +2238,10 @@ function loadFriendsList() {
             : [];
 
         if (accepted.length === 0) {
-            container.innerHTML = `<div style="padding: 20px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.4);">${textData[currentLang].noFriends}</div>`;
+            const noFriendsDiv = document.createElement('div');
+            noFriendsDiv.style.cssText = 'padding: 20px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.4);';
+            noFriendsDiv.textContent = textData[currentLang].noFriends;
+            container.appendChild(noFriendsDiv);
             return;
         }
 
@@ -2233,19 +2255,49 @@ function loadFriendsList() {
             el.className = "friend-item-box";
             el.id = `friend-item-${friendUid}`;
             
-            el.innerHTML = `
-                <div class="friend-info">
-                    <span class="friend-name">
-                        <span id="status-${friendUid}" style="font-size: 10px; color: gray;">⚫</span> 
-                        👤 ${displayName}
-                    </span>
-                    <span class="friend-date">${textData[currentLang].lastTalked} ${dateStr}</span>
-                </div>
-                <div class="friend-action-group">
-                    <button class="friend-call-btn" onclick="connectToFriend('${friendUid}')">📞 ${textData[currentLang].callBtn}</button>
-                    <button class="friend-edit-btn" onclick="editFriendNickname('${friendUid}')">✏️ 이름 변경</button>
-                </div>
-            `;
+            // XSS 방어: 사용자 입력값(displayName, dateStr)은 textContent로만 삽입
+            const friendInfo = document.createElement('div');
+            friendInfo.className = 'friend-info';
+
+            const friendNameSpan = document.createElement('span');
+            friendNameSpan.className = 'friend-name';
+
+            const statusDot = document.createElement('span');
+            statusDot.id = `status-${friendUid}`;
+            statusDot.style.cssText = 'font-size: 10px; color: gray;';
+            statusDot.textContent = '⚫';
+
+            friendNameSpan.appendChild(statusDot);
+            friendNameSpan.appendChild(document.createTextNode(' 👤 '));
+            const nameNode = document.createElement('span');
+            nameNode.textContent = displayName;
+            friendNameSpan.appendChild(nameNode);
+
+            const dateSpan = document.createElement('span');
+            dateSpan.className = 'friend-date';
+            dateSpan.textContent = `${textData[currentLang].lastTalked} ${dateStr}`;
+
+            friendInfo.appendChild(friendNameSpan);
+            friendInfo.appendChild(dateSpan);
+
+            const actionGroup = document.createElement('div');
+            actionGroup.className = 'friend-action-group';
+
+            const callBtn = document.createElement('button');
+            callBtn.className = 'friend-call-btn';
+            callBtn.textContent = `📞 ${textData[currentLang].callBtn}`;
+            callBtn.onclick = () => connectToFriend(friendUid);
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'friend-edit-btn';
+            editBtn.textContent = '✏️ 이름 변경';
+            editBtn.onclick = () => editFriendNickname(friendUid);
+
+            actionGroup.appendChild(callBtn);
+            actionGroup.appendChild(editBtn);
+
+            el.appendChild(friendInfo);
+            el.appendChild(actionGroup);
             container.appendChild(el);
 
             // [개선 1-2] 친구의 접속 상태 경로를 변수에 저장하고 추적 배열에 삽입
@@ -2303,13 +2355,32 @@ async function connectToFriend(friendUid) {
     updates[`users/${friendUid}/friends/${myUid}/lastTalked`] = firebase.database.ServerValue.TIMESTAMP;
     database.ref().update(updates);
 
-    // 서로의 UID를 알파벳 순으로 정렬해 조합 (누가 누르든 항상 동일한 1:1 방 ID가 생성됨)
-    const privateChannelId = `🔒_${[myUid, friendUid].sort().join("_")}`;
+    // 보안 강화: 예측 불가능한 랜덤 채널 토큰을 Firebase에 저장하고 공유
+    const pairKey = [myUid, friendUid].sort().join("_");
+    const privateChannelRef = database.ref(`privateChannels/${pairKey}`);
+
+    let channelToken;
+    const existingSnap = await privateChannelRef.once('value');
+    const existing = existingSnap.val();
+
+    if (existing && existing.token && existing.expiresAt > Date.now()) {
+        channelToken = existing.token;
+    } else {
+        const randomBytes = new Uint8Array(16);
+        crypto.getRandomValues(randomBytes);
+        channelToken = Array.from(randomBytes).map(b => b.toString(16).padStart(2,'0')).join('');
+        await privateChannelRef.set({
+            token: channelToken,
+            expiresAt: Date.now() + 3600000,
+            participants: [myUid, friendUid]
+        });
+    }
+
+    const privateChannelId = `🔒_${channelToken}`;
 
     closeFriendsModal();
     alert(textData[currentLang].privateChannelAlert(`Friend(${friendUid.substring(0,8)})`));
 
-    // 숨어있는 topic 입력창에 비밀 채널 ID를 강제 주입 후 시작 버튼 강제 클릭 트리거
     const topicInput = document.getElementById('topic-input');
     topicInput.value = privateChannelId;
     document.getElementById('join-btn').click();
