@@ -700,8 +700,12 @@
 
         <div id="participants-box">
             <div class="part-title" id="part-title-label">Active Channel Participants</div>
+            <!-- 내 동물 닉네임 표시 태그 -->
+            <div id="my-animal-tag" style="display:none; font-size:12px; color:rgba(255,255,255,0.4); text-align:center; margin-bottom:8px; letter-spacing:0.5px;">
+                나는 <span id="my-animal-label" style="color:var(--accent-color); font-weight:600;"></span>
+            </div>
             <div class="part-list" id="part-list-container">
-                </div>
+            </div>
         </div>
 
         <button id="join-btn" disabled>Start Talk</button>
@@ -1598,6 +1602,13 @@
             roomParticipants = [];
             sessionParticipants = []; // 세션 전체 참여자 기록 (먼저 나간 사람도 보존)
             agoraToFirebaseUid = {}; // 매핑 초기화
+            uidToAnimal = {}; // 동물 맵 초기화
+            animalIndex = 0;
+
+            // 내 동물 닉네임 배정 및 표시
+            const myAnimal = assignAnimal(myUid);
+            document.getElementById('my-animal-label').innerText = `${myAnimal.emoji} ${myAnimal.label}`;
+            document.getElementById('my-animal-tag').style.display = "block";
 
             // 내 Agora UID → Firebase UID 매핑을 채널 경로에 등록 (상대방이 참조용)
             if (firebaseUser) {
@@ -1819,21 +1830,20 @@
             await client.leave();
 
             isJoined = false;
-            uidToAnimal = {}; // 동물 닉네임 초기화
-            animalIndex = 0;
             document.getElementById('join-btn').style.display = "block";
             document.getElementById('join-btn').disabled = false;
             document.getElementById('leave-btn').style.display = "none";
             document.getElementById('report-btn').style.display = "none";
             document.getElementById('participants-box').style.display = "none";
             document.getElementById('max-people-group').style.display = "flex";
+            document.getElementById('my-animal-tag').style.display = "none"; // 내 동물 태그 숨김
             
             const topicInput = document.getElementById('topic-input');
             topicInput.disabled = false;
             topicInput.value = "";
             document.getElementById('matching-status').innerText = "";
 
-            // 피어 배지 전송 타겟 리스트박스 렌더링 구성
+            // 피어 배지 전송 타겟 리스트박스 렌더링 구성 (uidToAnimal 초기화 전에 호출!)
             setupVoteTargetsUI();
 
             // AI 대화 요약본 분석 브리핑 레이아웃 활성화
@@ -1843,6 +1853,10 @@
 
             // 실제 AI 요약 호출 (비동기 — 모달은 즉시 열림)
             requestAISummary();
+
+            // 모달 렌더 후 동물 맵 초기화
+            uidToAnimal = {};
+            animalIndex = 0;
 
         } catch (error) { console.error("Error occurred while leaving room:", error); }
     };
