@@ -104,15 +104,15 @@
         }
         input:focus { border-color: var(--accent-color); box-shadow: 0 0 15px var(--accent-glow); outline: none; }
         
-        .select-group {
-         width: 100%;
-         background: transparent; border: none;
-         padding: 0 4px; display: flex; justify-content: flex-start; align-items: center; gap: 8px;
-         margin-top: -16px;
-         margin-bottom: 28px;
-        }
-        .select-group label { font-size: 11px; color: rgba(255,255,255,0.35); }
-        select { background: transparent; color: rgba(255,255,255,0.45); border: none; padding: 2px 4px; cursor: pointer; outline: none; font-size: 11px; }
+ .select-group {
+    width: 100%;
+    background: transparent; border: none;
+    padding: 0 4px; display: flex; justify-content: center; align-items: center; gap: 8px;
+    margin-top: -40px;
+    margin-bottom: 28px;
+}
+.select-group label { font-size: 11px; color: rgba(255,255,255,0.35); }
+select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 6px; cursor: pointer; outline: none; font-size: 11px; }
         button { width: 100%; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 12px; border: none; transition: all 0.2s ease; }
         
         /* ── 인증 섹션 ── */
@@ -743,7 +743,7 @@
 
     <div id="user-action-buttons">
     <button id="btn-talk-again" style="margin: 0; display: none;">🗣️ 또 대화하기</button>
-    <button id="toggle-rep-btn" style="display: none;">📊 내 평판 대시보드</button>
+    <button id="toggle-rep-btn" style="display: none;">📊 내 평판</button>
     <button id="logout-btn" style="display: none;">로그아웃</button>
           </div>
 
@@ -992,8 +992,8 @@
         ko: {
             title: "Boundless Talk",
             subtitle: "지금껏 없던 대화를 경험하세요!",
-            placeholder: "어떤 주제로 대화해볼래요? (예: 사랑, 일상, 고민상담...)",
-            maxPeopleLabel: "최대 참여 인원:",
+            placeholder: "어떤 이야기할래요? (예: 사랑, 일상, 고민상담...)",
+            maxPeopleLabel: "최대 인원:",
             startBtn: "대화 시작하기",
             joinBtn: "연결 및 대화 중...",
             leaveBtn: "대화방 나가기",
@@ -1183,7 +1183,7 @@
         
         // 토글 버튼 텍스트 다국어 처리
         if (currentLang === 'ko') {
-            document.getElementById('toggle-rep-btn').innerText = isRepOpen ? "📊 평판 대시보드 접기" : "📊 내 평판 대시보드";
+            document.getElementById('toggle-rep-btn').innerText = isRepOpen ? "📊 평판 접기" : "📊 내 평판";
         } else {
             document.getElementById('toggle-rep-btn').innerText = isRepOpen ? "📊 Hide Reputation Profile" : "📊 View My Reputation";
         }
@@ -1285,10 +1285,10 @@
         
         if (repSection.style.display === "none") {
             repSection.style.display = "block";
-            btn.innerText = (currentLang === 'ko') ? "📊 평판 대시보드 접기" : "📊 Hide Reputation Profile";
+            btn.innerText = (currentLang === 'ko') ? "📊 내 평판 접기" : "📊 Hide My Reputation";
         } else {
             repSection.style.display = "none";
-            btn.innerText = (currentLang === 'ko') ? "📊 내 평판 대시보드" : "📊 View My Reputation";
+            btn.innerText = (currentLang === 'ko') ? "📊 내 평판" : "📊 View My Reputation";
         }
     });
     // ── 이메일 로그인 토글 ──
