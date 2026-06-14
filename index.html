@@ -837,6 +837,7 @@
     let localAudioTrack = null;
     let isJoined = false;
     let currentChannelName = "";
+    let safeAgoraChannelId = ""; // 전역으로 저장 — 저장/조회 시 항상 동일한 값 보장
     let myUid = null;
     let signalTimer = null;
 
@@ -1606,8 +1607,8 @@
         // 💡 UI 표시용 한글 채널 이름 설정
         currentChannelName = finalTopic;
         
-        // 🚨 아고라(Agora) 서버 전용 안전한 영문/숫자 암호화 이름 생성 (한글 튕김 버그 원천 차단)
-        const safeAgoraChannelId = encodeURIComponent(finalTopic).replace(/%/g, "_").slice(0, 64);
+        // 🚨 전역 변수에 저장 — 저장/조회 시 항상 동일값 보장
+        safeAgoraChannelId = encodeURIComponent(finalTopic).replace(/%/g, "_").slice(0, 64);
 
         document.getElementById('channel-debug').innerText = `Channel Name: ${currentChannelName}`;
 
@@ -1680,8 +1681,7 @@
 
             // Agora UID → Firebase UID 조회
             if (!agoraToFirebaseUid[user.uid]) {
-                const safeId = encodeURIComponent(currentChannelName).replace(/%/g,'_').slice(0,64);
-                const snap = await database.ref(`channels/${safeId}/members/${user.uid}`).once('value');
+                const snap = await database.ref(`channels/${safeAgoraChannelId}/members/${user.uid}`).once('value');
                 const fbUid = snap.val();
                 if (fbUid) {
                     agoraToFirebaseUid[user.uid] = fbUid;
@@ -1761,6 +1761,7 @@
             if (!isJoined || !currentChannelName) return;
             try {
                 const res = await fetch(`${SIGNAL_SERVER_URL}${currentChannelName}`, { cache: 'no-store' });
+                if (res.status === 404) return; // 수신 신호 없음 — 정상, 무시
                 if (res.status === 200) {
                     const data = await res.json();
                     if (data && data.targetUid === String(myUid)) {
