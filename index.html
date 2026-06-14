@@ -712,6 +712,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 인트로 화면 -->
     <div id="intro-screen">
+        <button onclick="toggleLangFromIntro()" style="position:absolute; top:20px; right:20px; background:transparent; border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); padding:6px 14px; font-size:12px; font-weight:600; border-radius:20px; cursor:pointer; width:auto; margin:0;" id="intro-lang-btn">EN</button>
         <div class="intro-title">BOUNDLESS TALK</div>
         <p class="intro-desc" id="intro-desc">국적도, 나이도, 신분도, 성별도<br><strong>아무런 장벽이 없는 대화</strong>.<br><br>세상 어딘가의 누군가와<br>오직 <strong>주제</strong>로만 연결되는 순간.<br><br>경험해본 적 없는<br><strong>설레는 대화</strong>를 시작해볼까요?</p>
         <div style="margin-bottom: 40px;">
@@ -2496,6 +2497,13 @@ async function connectToFriend(friendUid) {
 }
 
 // ── 인트로 화면 제어 ──
+    function toggleLangFromIntro() {
+        // 메인 언어 토글 버튼 클릭과 동일하게 동작
+        document.getElementById('lang-toggle-btn').click();
+        // 인트로 안 버튼 텍스트도 동기화
+        document.getElementById('intro-lang-btn').innerText = currentLang === 'ko' ? 'EN' : 'KO';
+    }
+
     function startFromIntro() {
         const intro = document.getElementById('intro-screen');
         intro.classList.add('hide');
