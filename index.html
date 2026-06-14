@@ -1600,15 +1600,26 @@
             myUid = await client.join(AGORA_APP_ID, safeAgoraChannelId, null, agoraUid);
             isJoined = true;
             roomParticipants = [];
-            sessionParticipants = []; // 세션 전체 참여자 기록 (먼저 나간 사람도 보존)
-            agoraToFirebaseUid = {}; // 매핑 초기화
-            uidToAnimal = {}; // 동물 맵 초기화
+            sessionParticipants = [];
+            agoraToFirebaseUid = {};
+            uidToAnimal = {};
             animalIndex = 0;
 
-            // 내 동물 닉네임 배정 및 표시
-            const myAnimal = assignAnimal(myUid);
+            // 내 동물은 별도로 고정 배정 (animalIndex 소비 안 함 — 상대방 슬롯과 겹치지 않게)
+            const MY_ANIMALS = [
+                { emoji: "🐼", name: "판다" }, { emoji: "🦄", name: "유니콘" },
+                { emoji: "🐬", name: "돌고래" }, { emoji: "🦋", name: "나비" },
+            ];
+            const myAnimalBase = MY_ANIMALS[Math.floor(Math.random() * MY_ANIMALS.length)];
+            const myColorList = ["보라", "분홍", "하늘", "민트"];
+            const myColor = myColorList[Math.floor(Math.random() * myColorList.length)];
+            const myAnimal = { emoji: myAnimalBase.emoji, label: `${myColor} ${myAnimalBase.name}` };
+            uidToAnimal[myUid] = myAnimal;
+
+            // 내 동물 표시 + 입장 알림
             document.getElementById('my-animal-label').innerText = `${myAnimal.emoji} ${myAnimal.label}`;
             document.getElementById('my-animal-tag').style.display = "block";
+            alert(`${currentLang === 'ko' ? `🐾 당신은 오늘 [${myAnimal.emoji} ${myAnimal.label}]입니다!\n상대방도 고유한 동물로 표시됩니다.` : `🐾 You are [${myAnimal.emoji} ${myAnimal.label}] today!\nPeers will also have unique animal names.`}`);
 
             // 내 Agora UID → Firebase UID 매핑을 채널 경로에 등록 (상대방이 참조용)
             if (firebaseUser) {
@@ -1634,7 +1645,7 @@
             topicInput.disabled = true;
 
             renderParticipantsUI();
-            alert(textData[currentLang].alertJoin(currentChannelName, maxPeople));
+            // 입장 알림은 동물 배정 alert로 대체됨
 
         } catch (error) {
             console.error("Agora room entry crashed:", error);
