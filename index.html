@@ -2701,6 +2701,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             hideRoomScreen();
             document.getElementById('join-btn').style.display = "block";
             document.getElementById('join-btn').disabled = false;
+            document.getElementById('join-btn').innerText = textData[currentLang].startBtn;
             document.getElementById('leave-btn').style.display = "none";
             document.getElementById('report-btn').style.display = "none";
             document.getElementById('participants-box').style.display = "none";
