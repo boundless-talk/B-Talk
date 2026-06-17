@@ -2392,7 +2392,7 @@ setTimeout(() => toast.remove(), 4000);
         document.getElementById('room-screen').classList.add('active');
     }
 
-    function hideRoomScreen() {
+    async function hideRoomScreen() {
         document.getElementById('room-screen').classList.remove('active');
         document.getElementById('topic-input').style.visibility = 'visible';
         stopSubtitleRecognition();
@@ -2403,7 +2403,14 @@ setTimeout(() => toast.remove(), 4000);
         document.getElementById('subtitle-lang-row').style.display = 'none';
         document.getElementById('subtitle-list').style.display = 'none';
         document.getElementById('subtitle-list').innerHTML = '';
-        if (currentChannelName) database.ref('activeTopics/' + currentChannelName).remove();
+        if (currentChannelName) {
+    const safeId = encodeURIComponent(currentChannelName).replace(/%/g, "_").slice(0, 64);
+    const membersSnap = await database.ref('channels/' + safeId + '/members').once('value');
+    const memberCount = Object.keys(membersSnap.val() || {}).length;
+    if (memberCount <= 1) {
+        database.ref('activeTopics/' + safeId).remove();
+    }
+}
     }
 
     // ── 번역 자막 시스템 (Whisper) ──
