@@ -2404,12 +2404,11 @@ setTimeout(() => toast.remove(), 4000);
         document.getElementById('subtitle-list').style.display = 'none';
         document.getElementById('subtitle-list').innerHTML = '';
         if (currentChannelName) {
-    const safeId = encodeURIComponent(currentChannelName).replace(/%/g, "_").slice(0, 64);
-    const membersSnap = await database.ref('channels/' + safeId + '/members').once('value');
-    const memberCount = Object.keys(membersSnap.val() || {}).length;
-    if (memberCount <= 0) {
-        database.ref('activeTopics/' + safeId).remove();
-    }
+    const membersSnap = await database.ref('channels/' + safeAgoraChannelId + '/members').once('value');
+const memberCount = Object.keys(membersSnap.val() || {}).length;
+if (memberCount === 0) {
+    database.ref('activeTopics/' + safeAgoraChannelId).remove();
+}
 }
         database.ref('activeTopics').once('value').then(snap => {
     const data = snap.val() || {};
