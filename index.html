@@ -2504,11 +2504,14 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     async function translateSubtitleText(text, from, to) {
         try {
-            const url = 'https://api.mymemory.translated.net/get?q='
-                + encodeURIComponent(text) + '&langpair=' + from + '|' + to;
+            const url = 'https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + from + '|' + to + '&de=freesia9353@gmail.com';
             const res = await fetch(url);
             const data = await res.json();
-            if (data.responseStatus === 200) return data.responseData.translatedText;
+            if (data.responseStatus === 200) {
+    const translated = data.responseData.translatedText;
+    if (translated && !translated.includes('MYMEMORY WARNING')) return translated;
+}
+return text;
             return text;
         } catch(e) { return text; }
     }
