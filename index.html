@@ -2788,7 +2788,7 @@ return text;
             formData.append('audioData', fullBlob);
             formData.append('lang', currentLang);
 
-            const res = await fetch('/.netlify/functions/summarize', {
+            const res = await fetch(TOKEN_SERVER_URL + '/summarize', {
                 method: 'POST',
                 body: formData
             });
