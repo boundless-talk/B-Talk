@@ -1462,7 +1462,11 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             // 실시간 대화 주제 태그
 database.ref('activeTopics').on('value', (snap) => {
     const data = snap.val() || {};
-    const topics = [...new Set(Object.values(data).map(ch => ch.topic).filter(Boolean))];
+    const topics = [];
+    Object.values(data).forEach(channelUsers => {
+        const entry = Object.values(channelUsers || {})[0];
+        if (entry && entry.topic && !topics.includes(entry.topic)) topics.push(entry.topic);
+    });
     
     const bar = document.getElementById('live-topics-bar');
     const tagsEl = document.getElementById('live-topics-tags');
@@ -2220,8 +2224,8 @@ setTimeout(() => toast.remove(), 4000);
                 // 퇴장 시 자동 삭제
                 database.ref(`channels/${safeAgoraChannelId}/members/${myUid}`).onDisconnect().remove();
                 if (finalTopic && !finalTopic.startsWith('🔒_')) {
-    database.ref('activeTopics/' + safeAgoraChannelId).set({ topic: finalTopic, ts: firebase.database.ServerValue.TIMESTAMP });
-    database.ref('activeTopics/' + safeAgoraChannelId).onDisconnect().remove();
+    database.ref('activeTopics/' + safeAgoraChannelId + '/' + myUid).set({ topic: finalTopic, ts: firebase.database.ServerValue.TIMESTAMP });
+database.ref('activeTopics/' + safeAgoraChannelId + '/' + myUid).onDisconnect().remove();
 }
             }
 
@@ -2423,12 +2427,8 @@ setTimeout(() => toast.remove(), 4000);
         document.getElementById('subtitle-lang-row').style.display = 'none';
         document.getElementById('subtitle-list').style.display = 'none';
         document.getElementById('subtitle-list').innerHTML = '';
-        if (currentChannelName) {
-    const membersSnap = await database.ref('channels/' + safeAgoraChannelId + '/members').once('value');
-const memberCount = Object.keys(membersSnap.val() || {}).length;
-if (memberCount === 0) {
-    database.ref('activeTopics/' + safeAgoraChannelId).remove();
-}
+        if (currentChannelName && auth.currentUser) {
+    database.ref('activeTopics/' + safeAgoraChannelId + '/' + auth.currentUser.uid).remove();
 }
         database.ref('activeTopics').once('value').then(snap => {
     const data = snap.val() || {};
@@ -2799,7 +2799,7 @@ return text;
             // 대화방 나가기 → 다시 대기자로 등록
             const _cu = auth.currentUser;
             if (_cu) database.ref('waiting/' + _cu.uid).set(true);
-            if (_cu) await database.ref(`channels/${safeAgoraChannelId}/members/${_cu.uid}`).remove();
+            
             hideRoomScreen();
             document.getElementById('join-btn').style.display = "block";
             document.getElementById('join-btn').disabled = false;
