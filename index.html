@@ -4,19 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>B-TALK</title>
-<script>
-  (function() {
-    var ua = navigator.userAgent || '';
-    var isKakao = /KAKAOTALK/i.test(ua);
-    var isAndroid = /Android/i.test(ua);
-    if (isKakao && isAndroid) {
-      var url = location.href;
-      location.href = 'intent://' + url.replace(/https?:\/\//, '') +
-        '#Intent;scheme=https;package=com.android.chrome;end';
-    }
-  })();
-</script>
-
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -730,18 +717,17 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             flex: 1;
         }
         .icebreaker-box {
-            background: rgba(0,229,255,0.04);
-            border: 1px solid rgba(0,229,255,0.14);
-            border-radius: 12px;
-            padding: 12px 16px;
-            text-align: center;
+            background: rgba(0,229,255,0.05);
+            border-radius: 10px;
+            padding: 14px 16px;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            align-items: flex-start;
+            gap: 12px;
         }
         .icebreaker-emoji {
             font-size: 20px;
             flex-shrink: 0;
+            margin-top: 1px;
             animation: wave-hand 0.6s ease-in-out 0.8s 3;
         }
         @keyframes wave-hand {
@@ -753,16 +739,15 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: rgba(0,229,255,0.5);
-            margin-bottom: 3px;
+            color: rgba(0,229,255,0.48);
+            margin-bottom: 4px;
         }
         .icebreaker-text {
-            font-size: 13px;
-            font-weight: 500;
-            color: rgba(255,255,255,0.85);
+            font-size: 14px;
+            font-weight: 400;
+            color: rgba(255,255,255,0.82);
             line-height: 1.5;
             white-space: pre-line;
-            text-align: left;
         }
         .icebreaker-sub {
             display: none;
