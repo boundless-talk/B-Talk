@@ -2481,17 +2481,29 @@ database.ref('activeTopics/' + safeAgoraChannelId + '/' + myUid).onDisconnect().
         ]
     };
     let convoTipIndex = 0;
+    let convoTipTimer = null;
 
     function nextConvoTip() {
         const tips = CONVO_TIPS[currentLang] || CONVO_TIPS.ko;
         convoTipIndex = (convoTipIndex + 1) % tips.length;
-        document.getElementById('convo-tip-text').textContent = tips[convoTipIndex];
+        const el = document.getElementById('convo-tip-text');
+        el.style.opacity = '0';
+        setTimeout(() => {
+            el.textContent = tips[convoTipIndex];
+            el.style.opacity = '1';
+        }, 200);
     }
 
     function initConvoTip() {
         const tips = CONVO_TIPS[currentLang] || CONVO_TIPS.ko;
         convoTipIndex = Math.floor(Math.random() * tips.length);
         document.getElementById('convo-tip-text').textContent = tips[convoTipIndex];
+        if (convoTipTimer) clearInterval(convoTipTimer);
+        convoTipTimer = setInterval(nextConvoTip, 5000);
+    }
+
+    function stopConvoTip() {
+        if (convoTipTimer) { clearInterval(convoTipTimer); convoTipTimer = null; }
     }
 
     const ICEBREAKERS = {
@@ -2534,6 +2546,7 @@ database.ref('activeTopics/' + safeAgoraChannelId + '/' + myUid).onDisconnect().
     async function hideRoomScreen() {
         document.getElementById('room-screen').classList.remove('active');
         document.getElementById('topic-input').style.visibility = 'visible';
+        stopConvoTip();
         stopSubtitleRecognition();
         stopSubtitleListener();
         subtitlesEnabled = false;
