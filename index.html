@@ -753,6 +753,24 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .icebreaker-sub {
             display: none;
         }
+        .convo-tip-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 11px 14px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            transition: background 0.15s ease;
+        }
+        .convo-tip-box:active { background: rgba(255,255,255,0.05); }
+        .convo-tip-icon { font-size: 15px; color: rgba(255,255,255,0.25); flex-shrink: 0; margin-top: 1px; }
+        .convo-tip-inner { flex: 1; }
+        .convo-tip-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 4px; }
+        .convo-tip-text { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+        .convo-tip-hint { font-size: 10px; color: rgba(255,255,255,0.18); margin-top: 5px; }
         .room-participants-section {
             display: flex;
             flex-direction: column;
@@ -1170,6 +1188,14 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <span id="icebreaker-emoji" style="display:none;"></span>
                 <div class="icebreaker-sub" id="icebreaker-sub" style="display:none;"></div>
             </div>
+            <div class="convo-tip-box" id="convo-tip-box" onclick="nextConvoTip()">
+                <i class="ti ti-bulb convo-tip-icon" aria-hidden="true"></i>
+                <div class="convo-tip-inner">
+                    <div class="convo-tip-label" id="convo-tip-label">대화 팁</div>
+                    <div class="convo-tip-text" id="convo-tip-text"></div>
+                    <div class="convo-tip-hint" id="convo-tip-hint">탭하면 다음 팁 →</div>
+                </div>
+            </div>
             <div class="subtitle-section" id="subtitle-section">
                 <div class="subtitle-ctrl">
                     <button class="subtitle-toggle-btn" id="subtitle-toggle-btn" onclick="toggleSubtitles()">💬 번역 자막</button>
@@ -1266,16 +1292,27 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     // 동물 닉네임 시스템 — UID 해시 기반으로 결정론적 배정 (어느 기기에서 봐도 동일)
     const ANIMALS = [
-        { emoji: "🦊", name: "여우" }, { emoji: "🐻", name: "곰" },
-        { emoji: "🐯", name: "호랑이" }, { emoji: "🐧", name: "펭귄" },
-        { emoji: "🦁", name: "사자" }, { emoji: "🐸", name: "개구리" },
-        { emoji: "🐨", name: "코알라" }, { emoji: "🐺", name: "늑대" },
-        { emoji: "🦝", name: "너구리" }, { emoji: "🐮", name: "소" },
-        { emoji: "🐼", name: "판다" }, { emoji: "🦄", name: "유니콘" },
-        { emoji: "🐬", name: "돌고래" }, { emoji: "🦋", name: "나비" },
-        { emoji: "🦊", name: "여우" }, { emoji: "🐙", name: "문어" },
+        { emoji: "🦊", ko: "여우",   en: "Fox"      },
+        { emoji: "🐻", ko: "곰",     en: "Bear"     },
+        { emoji: "🐯", ko: "호랑이", en: "Tiger"    },
+        { emoji: "🐧", ko: "펭귄",   en: "Penguin"  },
+        { emoji: "🦁", ko: "사자",   en: "Lion"     },
+        { emoji: "🐸", ko: "개구리", en: "Frog"     },
+        { emoji: "🐨", ko: "코알라", en: "Koala"    },
+        { emoji: "🐺", ko: "늑대",   en: "Wolf"     },
+        { emoji: "🦝", ko: "너구리", en: "Raccoon"  },
+        { emoji: "🐮", ko: "소",     en: "Cow"      },
+        { emoji: "🐼", ko: "판다",   en: "Panda"    },
+        { emoji: "🦄", ko: "유니콘", en: "Unicorn"  },
+        { emoji: "🐬", ko: "돌고래", en: "Dolphin"  },
+        { emoji: "🦋", ko: "나비",   en: "Butterfly"},
+        { emoji: "🦊", ko: "여우",   en: "Fox"      },
+        { emoji: "🐙", ko: "문어",   en: "Octopus"  },
     ];
-    const COLORS = ["파란", "빨간", "초록", "보라", "노란", "주황", "하늘", "민트", "분홍", "하얀"];
+    const COLORS = {
+        ko: ["파란", "빨간", "초록", "보라", "노란", "주황", "하늘", "민트", "분홍", "하얀"],
+        en: ["Blue",  "Red",  "Green", "Purple", "Yellow", "Orange", "Sky", "Mint", "Pink", "White"]
+    };
     let uidToAnimal = {};
 
     // UID 문자열을 숫자로 해시 → 항상 같은 UID = 항상 같은 동물
@@ -1291,8 +1328,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         if (uidToAnimal[uid]) return uidToAnimal[uid];
         const hash = hashUid(String(uid));
         const animal = ANIMALS[hash % ANIMALS.length];
-        const color = COLORS[(hash >>> 4) % COLORS.length];
-        uidToAnimal[uid] = { emoji: animal.emoji, label: `${color} ${animal.name}` };
+        const colorList = COLORS[currentLang] || COLORS.ko;
+        const color = colorList[(hash >>> 4) % colorList.length];
+        const name = currentLang === 'en' ? animal.en : animal.ko;
+        uidToAnimal[uid] = { emoji: animal.emoji, label: `${color} ${name}` };
         return uidToAnimal[uid];
     }
 
@@ -1375,7 +1414,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         icebrkLabel: "Icebreaker",
         roomPartTitle: "Participants",
         roomLeaveBtn: "🚪 LEAVE",
-        roomReportBtn: "🚨 Report",
+        roomReportBtn: "🚨 REPORT",
         roomWaiting: "Waiting for others...",
         waitingNone: "No one is looking for a conversation partner right now.",
         waitingOne: "1 person is also looking for a conversation partner!",
@@ -1395,10 +1434,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             toggleBtn: "EN",
             opt3: "3명", opt4: "4명 (권장)", opt6: "6명",
             repTitle: "대화지수",
-            badgeManner: "나이스", badgeLogic: "논리", badgeHumor: "펀", badgeEmpathy: "따뜻", badgePassion: "열정",
+            badgeManner: "친절", badgeLogic: "논리", badgeHumor: "유머", badgeEmpathy: "공감", badgePassion: "열정",
             mTitle: "대화 분석 리포트",
             mDesc: "AI가 요약한 대화 내용을 파악하고 함께 대화한 상대방에게 배지를 선물해 보세요.",
-            vManner: "나이스했어요", vLogic: "논리적이었어요", vHumor: "펀했어요", vEmpathy: "따뜻했어요", vPassion: "열정적이었어요", vSkip: "닫기 및 건너뛰기",
+            vManner: "친절했어요", vLogic: "논리적이었어요", vHumor: "유머러스했어요", vEmpathy: "공감을 잘해줬어요", vPassion: "열정적이었어요", vSkip: "닫기 및 건너뛰기",
             aiLoading: "AI가 대화 요약본을 추출하는 중...",
             aiHeadline: "오늘의 대화 핵심 쟁점 분석 결과",
             aiSample: "• 참여자들이 설정한 주제에 부합하는 소통이 정상적으로 이루어졌습니다.<br>• 외모나 조건 없는 목소리 기반의 긍정적 티키타카가 감지되었습니다.<br>• 상호 평판 배지 수여가 가능합니다.",
@@ -2045,6 +2084,7 @@ database.ref('activeTopics').on('value', (snap) => {
 
     document.getElementById('lang-toggle-btn').addEventListener('click', () => {
         currentLang = (currentLang === "en") ? "ko" : "en";
+        uidToAnimal = {};
         // 언어 토글 버튼 텍스트 업데이트
         document.getElementById('lang-toggle-btn').innerText = currentLang === 'ko' ? 'EN' : 'KO';
         // 인트로 화면 언어 업데이트
@@ -2055,12 +2095,15 @@ database.ref('activeTopics').on('value', (snap) => {
         updateUI();
         if (isJoined) {
             renderParticipantsUI();
-            // icebreaker 텍스트를 새 언어로 재추첨
             const list = ICEBREAKERS[currentLang] || ICEBREAKERS.ko;
             const pick = list[Math.floor(Math.random() * list.length)];
             document.getElementById('icebreaker-emoji').textContent = pick.emoji;
             document.getElementById('icebreaker-text').textContent = pick.text;
             document.getElementById('icebreaker-sub').textContent = pick.sub;
+            const tips = CONVO_TIPS[currentLang] || CONVO_TIPS.ko;
+            document.getElementById('convo-tip-text').textContent = tips[convoTipIndex % tips.length];
+            document.getElementById('convo-tip-label').textContent = currentLang === 'ko' ? '대화 팁' : 'Conversation tip';
+            document.getElementById('convo-tip-hint').textContent = currentLang === 'ko' ? '탭하면 다음 팁 →' : 'Tap for next tip →';
         }
     });
 
@@ -2415,6 +2458,42 @@ database.ref('activeTopics/' + safeAgoraChannelId + '/' + myUid).onDisconnect().
     }
 
     // ── 대화방 화면 제어 ──
+    const CONVO_TIPS = {
+        ko: [
+            "상대방 말이 끝나면 '그렇구나' 한 마디로 공감을 먼저 표현해보세요",
+            "'왜요?' 한 마디면 대화가 훨씬 깊어져요",
+            "내 경험을 짧게 하나 꺼내보세요. 대화가 자연스럽게 이어져요",
+            "침묵이 어색하면 주제를 바꿔도 완전 괜찮아요",
+            "칭찬은 대화를 부드럽게 만드는 가장 쉬운 방법이에요",
+            "YES/NO 질문보다 '어떻게 생각해요?'가 대화를 더 길게 만들어요",
+            "상대방 이름(닉네임)을 한 번 불러주면 친근감이 확 올라가요",
+            "모르는 건 솔직하게 '저는 잘 모르는데 어떻게 생각해요?' 해도 돼요",
+        ],
+        en: [
+            "Start with 'That's interesting!' to show you're listening",
+            "Ask 'Why do you think that?' to go deeper in any conversation",
+            "Share a short story from your own experience to keep it flowing",
+            "It's totally fine to change the topic if you feel stuck",
+            "A simple compliment goes a long way to warm things up",
+            "Try open questions like 'How do you feel about that?' instead of yes/no",
+            "Use their nickname once — it instantly feels more personal",
+            "Saying 'I'm not sure, what do you think?' is always a great move",
+        ]
+    };
+    let convoTipIndex = 0;
+
+    function nextConvoTip() {
+        const tips = CONVO_TIPS[currentLang] || CONVO_TIPS.ko;
+        convoTipIndex = (convoTipIndex + 1) % tips.length;
+        document.getElementById('convo-tip-text').textContent = tips[convoTipIndex];
+    }
+
+    function initConvoTip() {
+        const tips = CONVO_TIPS[currentLang] || CONVO_TIPS.ko;
+        convoTipIndex = Math.floor(Math.random() * tips.length);
+        document.getElementById('convo-tip-text').textContent = tips[convoTipIndex];
+    }
+
     const ICEBREAKERS = {
         ko: [
             { emoji: "👋", text: '"만나서 반가워요!" 라고\n인사해보시겠어요?', sub: "낯선 만남도 첫 인사 한 마디면 금방 가까워져요 😊" },
@@ -2438,6 +2517,8 @@ database.ref('activeTopics/' + safeAgoraChannelId + '/' + myUid).onDisconnect().
         document.getElementById('icebreaker-emoji').textContent = pick.emoji;
         document.getElementById('icebreaker-text').textContent = pick.text;
         document.getElementById('icebreaker-sub').textContent = pick.sub;
+
+        initConvoTip();
 
         const lang = textData[currentLang];
         document.getElementById('room-header-label').textContent = lang.roomHeaderLabel;
@@ -2734,11 +2815,11 @@ return text;
             if (!data) return;
 
             const badgeNames = {
-                manner:  currentLang === 'ko' ? "나이스" : "NICE",
+                manner:  currentLang === 'ko' ? "친절" : "NICE",
                 logic:   currentLang === 'ko' ? "논리" : "LOGIC",
-                empathy: currentLang === 'ko' ? "따뜻" : "WARM",
+                empathy: currentLang === 'ko' ? "공감" : "WARM",
                 passion: currentLang === 'ko' ? "열정" : "BOLD",
-                humor:  currentLang === 'ko' ? "펀" : "FUN"
+                humor:  currentLang === 'ko' ? "유머" : "FUN"
             };
             alert(currentLang === 'ko'
                 ? `✨ 다른 참여자가 나에게 [${badgeNames[data.badgeType]}] 배지를 선물했습니다!`
