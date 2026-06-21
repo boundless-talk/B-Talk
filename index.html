@@ -1219,7 +1219,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <button class="speech-style-btn" id="modal-btn-casual" onclick="selectStyleAndJoin('casual')" style="flex:1; padding:14px 8px; font-size:14px;">👋 친구처럼</button>
                 <button class="speech-style-btn" id="modal-btn-polite" onclick="selectStyleAndJoin('polite')" style="flex:1; padding:14px 8px; font-size:14px;">🤝 정중하게</button>
             </div>
-            <button onclick="selectStyleAndJoin(null)" style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:12px; cursor:pointer; width:auto; padding:4px; margin:0;">건너뛰기</button>
+            <button id="speech-style-skip-btn" onclick="selectStyleAndJoin(null)" style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:12px; cursor:pointer; width:auto; padding:4px; margin:0;">건너뛰기</button>
         </div>
     </div>
 
@@ -2037,6 +2037,8 @@ database.ref('activeTopics').on('value', (snap) => {
         if (ssmDesc) ssmDesc.textContent = currentLang === 'ko' ? '선택하지 않아도 입장할 수 있어요' : 'You can skip this and join anyway';
         if (btnCasual) btnCasual.textContent = lang.speechStyleCasual;
         if (btnPolite) btnPolite.textContent = lang.speechStylePolite;
+        const skipBtn = document.getElementById('speech-style-skip-btn');
+        if (skipBtn) skipBtn.textContent = isKo ? '건너뛰기' : 'Skip';
         updateRoomParticipants();
 
         // 자막 버튼 텍스트 언어 동기화
