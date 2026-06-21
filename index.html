@@ -492,6 +492,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .target-btn {
             background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
             color: #fff; padding: 12px; border-radius: 8px; text-align: left; font-size: 13.5px; cursor: pointer; transition: all 0.2s;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
         .target-btn:hover { background: rgba(0,229,255,0.08); border-color: var(--accent-color); color: var(--accent-color); }
         .target-btn.selected { background: rgba(0,229,255,0.15); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; }
@@ -501,6 +502,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
             color: #fff; padding: 12px; border-radius: 8px; font-size: 14px;
             text-align: center; cursor: pointer; transition: all 0.2s; width: 100%; margin: 0;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
         .badge-vote-btn:hover:not(:disabled) { background: rgba(0,229,255,0.08); border-color: var(--accent-color); color: var(--accent-color); }
         .badge-vote-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -3152,12 +3154,15 @@ return text;
             btn.dataset.uid = uid;
             const animal = uidToAnimal[uid] || { emoji: "👤", label: `참여자 ${index + 1}` };
             btn.innerText = `${animal.emoji} ${animal.label}`;
-            btn.onclick = () => {
+            const selectTarget = (e) => {
+                e.preventDefault();
                 document.querySelectorAll('#vote-target-container .target-btn').forEach(b => b.classList.remove('selected'));
                 btn.classList.add('selected');
                 selectedVoteTarget = uid;
                 toggleVoteBadgeButtons(true);
             };
+            btn.addEventListener('touchstart', selectTarget, { passive: false });
+            btn.onclick = selectTarget;
             container.appendChild(btn);
         });
     }
