@@ -242,10 +242,10 @@
     margin-bottom: 28px;
 }
 .select-group label { font-size: 11px; color: rgba(255,255,255,0.35); }
-.speech-style-group { width:100%; margin-bottom:18px; text-align:center; }
-.speech-style-label { font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:8px; letter-spacing:0.5px; }
-.speech-style-btns { display:flex; gap:8px; justify-content:center; }
-.speech-style-btn { flex:1; max-width:160px; padding:10px 8px; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.5); transition:all 0.2s; width:auto; margin:0; }
+.speech-style-group { width:100%; margin-bottom:14px; text-align:center; }
+.speech-style-label { font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:6px; letter-spacing:0.3px; }
+.speech-style-btns { display:flex; gap:6px; justify-content:center; }
+.speech-style-btn { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.5); transition:all 0.2s; width:auto; margin:0; }
 .speech-style-btn.active { background:rgba(0,229,255,0.12); border-color:rgba(0,229,255,0.5); color:#00e5ff; }
 .speech-style-badge { font-size:10px; padding:2px 7px; border-radius:10px; margin-left:5px; background:rgba(0,229,255,0.1); color:rgba(0,229,255,0.7); border:1px solid rgba(0,229,255,0.2); vertical-align:middle; }
 select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 6px; cursor: pointer; outline: none; font-size: 11px; }
@@ -1133,10 +1133,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         </div>
 
         <div class="speech-style-group" id="speech-style-group">
-            <div class="speech-style-label" id="speech-style-label">대화 스타일</div>
+            <div class="speech-style-label" id="speech-style-label">어떤 스타일로 대화할래요?</div>
             <div class="speech-style-btns">
                 <button class="speech-style-btn" id="btn-casual" onclick="selectSpeechStyle('casual')">👋 친구처럼</button>
-                <button class="speech-style-btn" id="btn-polite" onclick="selectSpeechStyle('polite')">🤝 예의 있게</button>
+                <button class="speech-style-btn" id="btn-polite" onclick="selectSpeechStyle('polite')">🤝 정중하게</button>
             </div>
         </div>
         <div id="matching-status"></div>
@@ -1511,9 +1511,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         roomLeaveBtn: "🚪 LEAVE",
         roomReportBtn: "🚨 REPORT",
         roomWaiting: "Waiting for others...",
-        speechStyleLabel: "Conversation Style",
-        speechStyleCasual: "👋 Friendly Chat",
-        speechStylePolite: "🤝 Polite Chat",
+        speechStyleLabel: "How would you like to chat?",
+        speechStyleCasual: "👋 Friendly",
+        speechStylePolite: "🤝 Polite",
         speechStyleBadgeCasual: "Casual",
         speechStyleBadgePolite: "Polite",
         waitingNone: "No one is looking for a conversation partner right now.",
@@ -1605,9 +1605,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         roomLeaveBtn: "🚪 대화방 나가기",
         roomReportBtn: "🚨 신고하기",
         roomWaiting: "다른 참여자를 기다리는 중...",
-        speechStyleLabel: "대화 스타일",
+        speechStyleLabel: "어떤 스타일로 대화할래요?",
         speechStyleCasual: "👋 친구처럼",
-        speechStylePolite: "🤝 예의 있게",
+        speechStylePolite: "🤝 정중하게",
         speechStyleBadgeCasual: "반말",
         speechStyleBadgePolite: "존댓말",
         waitingNone: "현재 대화 상대를 찾는 중인 사람이 없어요.",
