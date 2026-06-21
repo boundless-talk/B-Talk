@@ -2227,6 +2227,10 @@ database.ref('activeTopics').on('value', (snap) => {
         if (rawTopic.startsWith("🔒_")) {
             finalTopic = rawTopic; // 친구 1:1 방은 AI를 거치지 않고 다이렉트 패스
             document.getElementById('matching-status').innerText = (currentLang === 'ko') ? "🔒 1:1 비밀 채널 개설 완료!" : "🔒 Private Channel Connected!";
+            document.getElementById('matching-status').innerText = (currentLang === 'ko') ? "🔒 1:1 비밀 채널 개설 완료!" : "🔒 Private Channel Connected!";
+// 아래 두 줄 추가
+document.getElementById('max-people-group').style.display = "none";
+document.getElementById('max-people-group').style.visibility = "hidden";
         } else {
             finalTopic = rawTopic.trim().toLowerCase(); // AI 없이 입력 키워드 직접 사용
             document.getElementById('matching-status').innerText = "";
