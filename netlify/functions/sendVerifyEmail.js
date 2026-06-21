@@ -1,4 +1,4 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
@@ -10,11 +10,16 @@ exports.handler = async (event) => {
         return { statusCode: 400, body: JSON.stringify({ error: 'email and code required' }) };
     }
 
-    if (!process.env.RESEND_API_KEY) {
+    if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
         return { statusCode: 500, body: JSON.stringify({ error: 'Email not configured' }) };
     }
 
-    const resend = new Resend(process.env.RESEND_API_KEY);
+    const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_PASS }
+    });
 
     const html = `
 <!DOCTYPE html>
@@ -54,8 +59,8 @@ exports.handler = async (event) => {
 </html>`;
 
     try {
-        await resend.emails.send({
-            from: 'BOUNDLESS TALK <onboarding@resend.dev>',
+        await transporter.sendMail({
+            from: `"BOUNDLESS TALK" <${process.env.GMAIL_USER}>`,
             to: email,
             subject: `[BOUNDLESS TALK] 이메일 인증 코드: ${code}`,
             html
