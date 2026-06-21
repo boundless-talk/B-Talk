@@ -2087,7 +2087,12 @@ database.ref('activeTopics').on('value', (snap) => {
         }
     });
 
-    document.getElementById('logout-btn').addEventListener('click', () => {
+    document.getElementById('logout-btn').addEventListener('click', async () => {
+        const user = auth.currentUser;
+        if (user) {
+            await database.ref('users/' + user.uid + '/presence').set({ online: false, last_changed: firebase.database.ServerValue.TIMESTAMP });
+            await database.ref('waiting/' + user.uid).remove();
+        }
         auth.signOut();
     });
 
