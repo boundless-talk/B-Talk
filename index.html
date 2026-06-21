@@ -2440,8 +2440,7 @@ database.ref('activeTopics').on('value', (snap) => {
 document.getElementById('max-people-group').style.display = "none";
 document.getElementById('max-people-group').style.visibility = "hidden";
         } else {
-            finalTopic = rawTopic.trim().toLowerCase(); // AI 없이 입력 키워드 직접 사용
-            document.getElementById('matching-status').innerText = "";
+            finalTopic = await getAIMatchedTopic(rawTopic);
         }
 
         // 💡 UI 표시용 한글 채널 이름 설정
