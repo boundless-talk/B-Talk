@@ -244,7 +244,15 @@
 .select-group label { font-size: 11px; color: rgba(255,255,255,0.35); }
 .speech-style-group { width:100%; margin-bottom:14px; text-align:center; }
 .speech-style-label { font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:6px; letter-spacing:0.3px; }
-.speech-style-btns { display:flex; gap:6px; justify-content:center; }
+.consent-item { display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(255,255,255,0.75); cursor:pointer; }
+        .consent-item input[type="checkbox"] { appearance:none; width:18px; height:18px; min-width:18px; border:1.5px solid rgba(255,255,255,0.25); border-radius:5px; background:transparent; cursor:pointer; transition:all 0.2s; position:relative; }
+        .consent-item input[type="checkbox"]:checked { background:#00e5ff; border-color:#00e5ff; }
+        .consent-item input[type="checkbox"]:checked::after { content:'✓'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#0d0e12; font-size:12px; font-weight:700; }
+        .consent-view-btn { background:transparent; border:none; color:rgba(0,229,255,0.6); font-size:11px; cursor:pointer; padding:0 4px; text-decoration:underline; width:auto; margin:0; }
+        .consent-view-btn:hover { color:#00e5ff; }
+        #consent-confirm-btn:not(:disabled) { background:rgba(0,229,255,0.15); color:#00e5ff; border-color:rgba(0,229,255,0.5); cursor:pointer; }
+        #consent-confirm-btn:not(:disabled):hover { background:rgba(0,229,255,0.25); }
+        .speech-style-btns { display:flex; gap:6px; justify-content:center; }
 .speech-style-btn { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.5); transition:all 0.2s; width:auto; margin:0; }
 .speech-style-btn.active { background:rgba(0,229,255,0.12); border-color:rgba(0,229,255,0.5); color:#00e5ff; }
 .speech-style-badge { font-size:10px; padding:2px 7px; border-radius:10px; margin-left:5px; background:rgba(0,229,255,0.1); color:rgba(0,229,255,0.7); border:1px solid rgba(0,229,255,0.2); vertical-align:middle; }
@@ -1342,6 +1350,38 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         </div>
     </div>
 
+    <!-- 약관 동의 모달 -->
+    <div class="modal-overlay" id="consent-modal">
+        <div class="modal-content" style="max-width:360px;">
+            <h3 id="consent-title" style="font-size:17px; margin-bottom:6px; letter-spacing:1px;">시작하기 전에</h3>
+            <p id="consent-subtitle" style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:20px;">모두 동의하셔야 이용할 수 있어요.</p>
+            <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:22px;">
+                <label class="consent-item">
+                    <input type="checkbox" id="consent-age" onchange="updateConsentBtn()">
+                    <span id="consent-age-label">만 14세 이상입니다</span>
+                </label>
+                <label class="consent-item">
+                    <input type="checkbox" id="consent-terms" onchange="updateConsentBtn()">
+                    <span><span id="consent-terms-label">이용약관</span>에 동의합니다 <button class="consent-view-btn" onclick="openAboutPage('terms')" id="consent-terms-view">보기</button></span>
+                </label>
+                <label class="consent-item">
+                    <input type="checkbox" id="consent-privacy" onchange="updateConsentBtn()">
+                    <span><span id="consent-privacy-label">개인정보처리방침</span>에 동의합니다 <button class="consent-view-btn" onclick="openAboutPage('privacy')" id="consent-privacy-view">보기</button></span>
+                </label>
+                <label class="consent-item">
+                    <input type="checkbox" id="consent-guidelines" onchange="updateConsentBtn()">
+                    <span><span id="consent-guidelines-label">커뮤니티 가이드라인</span>에 동의합니다 <button class="consent-view-btn" onclick="openAboutPage('guidelines')" id="consent-guidelines-view">보기</button></span>
+                </label>
+                <label class="consent-item">
+                    <input type="checkbox" id="consent-safety" onchange="updateConsentBtn()">
+                    <span><span id="consent-safety-label">안전 정책</span>을 확인했습니다 <button class="consent-view-btn" onclick="openAboutPage('safety')" id="consent-safety-view">보기</button></span>
+                </label>
+            </div>
+            <button id="consent-confirm-btn" onclick="confirmConsent()" disabled style="width:100%; padding:14px; border-radius:12px; background:rgba(0,229,255,0.15); color:rgba(255,255,255,0.3); border:1px solid rgba(0,229,255,0.2); font-size:15px; font-weight:600; cursor:not-allowed; transition:all 0.2s;" id="consent-confirm-label">동의하고 시작하기</button>
+            <button onclick="document.getElementById('consent-modal').classList.remove('active')" style="width:100%; margin-top:10px; background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:13px; cursor:pointer; padding:8px;" id="consent-cancel-label">취소</button>
+        </div>
+    </div>
+
     <!-- About 메뉴 모달 -->
     <div class="modal-overlay" id="about-modal">
         <div class="modal-content" style="max-width:320px;">
@@ -1910,6 +1950,20 @@ database.ref('activeTopics').on('value', (snap) => {
         const inqSubmit = document.getElementById('inquiry-submit-btn');
         const inqCancel = document.getElementById('inquiry-cancel-btn');
         if (inqTitle) inqTitle.textContent = currentLang === 'ko' ? '✉️ 문의하기' : '✉️ Contact Us';
+
+        // 약관 동의 모달 다국어
+        const isKo = currentLang === 'ko';
+        const ct = document.getElementById('consent-title'); if(ct) ct.textContent = isKo ? '시작하기 전에' : 'Before You Start';
+        const cs = document.getElementById('consent-subtitle'); if(cs) cs.textContent = isKo ? '모두 동의하셔야 이용할 수 있어요.' : 'You must agree to all items to continue.';
+        const ca = document.getElementById('consent-age-label'); if(ca) ca.textContent = isKo ? '만 14세 이상입니다' : 'I am 14 years of age or older';
+        const ctl = document.getElementById('consent-terms-label'); if(ctl) ctl.textContent = isKo ? '이용약관' : 'Terms of Service';
+        const cpl = document.getElementById('consent-privacy-label'); if(cpl) cpl.textContent = isKo ? '개인정보처리방침' : 'Privacy Policy';
+        const cgl = document.getElementById('consent-guidelines-label'); if(cgl) cgl.textContent = isKo ? '커뮤니티 가이드라인' : 'Community Guidelines';
+        const csl = document.getElementById('consent-safety-label'); if(csl) csl.textContent = isKo ? '안전 정책' : 'Safety Policy';
+        const ccb = document.getElementById('consent-confirm-btn'); if(ccb) ccb.textContent = isKo ? '동의하고 시작하기' : 'Agree & Continue';
+        ['consent-terms-view','consent-privacy-view','consent-guidelines-view','consent-safety-view'].forEach(id => {
+            const el = document.getElementById(id); if(el) el.textContent = isKo ? '보기' : 'View';
+        });
         if (inqDesc) inqDesc.innerHTML = currentLang === 'ko' ? '불편한 점이나 건의 사항을 보내주세요.<br>이메일로 답변해드립니다.' : 'Send us your feedback or questions.<br>We\'ll reply via email.';
         if (inqText) inqText.placeholder = currentLang === 'ko' ? '문의 내용을 입력해주세요...' : 'Enter your message...';
         if (inqSubmit) inqSubmit.textContent = currentLang === 'ko' ? '보내기' : 'Send';
@@ -2038,15 +2092,45 @@ database.ref('activeTopics').on('value', (snap) => {
 
     // 구글 로그인: 기본은 Popup 방식 (authDomain과 사이트 도메인이 달라도 안정적으로 동작).
     // Popup이 차단되는 인앱 브라우저(카카오, 인스타 등) WebView에서는 Redirect로 자동 전환.
+    let pendingLoginAction = null;
+
+    function requireConsent(action) {
+        if (localStorage.getItem('btalk_consent_v1') === 'agreed') {
+            action();
+            return;
+        }
+        pendingLoginAction = action;
+        ['consent-age','consent-terms','consent-privacy','consent-guidelines','consent-safety'].forEach(id => {
+            document.getElementById(id).checked = false;
+        });
+        updateConsentBtn();
+        document.getElementById('consent-modal').classList.add('active');
+    }
+
+    function updateConsentBtn() {
+        const allChecked = ['consent-age','consent-terms','consent-privacy','consent-guidelines','consent-safety']
+            .every(id => document.getElementById(id).checked);
+        const btn = document.getElementById('consent-confirm-btn');
+        btn.disabled = !allChecked;
+    }
+
+    function confirmConsent() {
+        localStorage.setItem('btalk_consent_v1', 'agreed');
+        document.getElementById('consent-modal').classList.remove('active');
+        if (pendingLoginAction) { pendingLoginAction(); pendingLoginAction = null; }
+    }
+
     document.getElementById('google-login-btn').addEventListener('click', () => {
-        auth.signInWithPopup(provider).catch((error) => {
-            if (error && (error.code === 'auth/popup-blocked' ||
-                          error.code === 'auth/operation-not-supported-in-this-environment' ||
-                          error.code === 'auth/popup-closed-by-user')) {
-                auth.signInWithRedirect(provider).catch((e) => console.error(e));
-            } else {
-                console.error(error);
-            }
+        requireConsent(() => {
+            auth.signInWithPopup(provider).catch((error) => {
+                if (error && (error.code === 'auth/popup-blocked' ||
+                              error.code === 'auth/operation-not-supported-in-this-environment' ||
+                              error.code === 'auth/popup-closed-by-user')) {
+                    auth.signInWithRedirect(provider).catch((e) => console.error(e));
+                } else {
+                    console.error(error);
+                }
+            });
         });
     });
 
@@ -2075,29 +2159,29 @@ database.ref('activeTopics').on('value', (snap) => {
     let signupFormOpen = false;
 
     document.getElementById('email-login-btn-main').addEventListener('click', () => {
-        loginFormOpen = !loginFormOpen;
-        document.getElementById('login-form-panel').classList.toggle('open', loginFormOpen);
-        // 회원가입 폼은 닫기
-        if (loginFormOpen && signupFormOpen) {
-            signupFormOpen = false;
-            document.getElementById('signup-form-panel').classList.remove('open');
-        }
+        requireConsent(() => {
+            loginFormOpen = !loginFormOpen;
+            document.getElementById('login-form-panel').classList.toggle('open', loginFormOpen);
+            if (loginFormOpen && signupFormOpen) {
+                signupFormOpen = false;
+                document.getElementById('signup-form-panel').classList.remove('open');
+            }
+        });
     });
 
     document.getElementById('email-signup-btn-main').addEventListener('click', () => {
+        requireConsent(() => {
         signupFormOpen = !signupFormOpen;
         document.getElementById('signup-form-panel').classList.toggle('open', signupFormOpen);
-        // 로그인 폼은 닫기
         if (signupFormOpen && loginFormOpen) {
             loginFormOpen = false;
             document.getElementById('login-form-panel').classList.remove('open');
         }
         if (signupFormOpen) {
-        // ✨ [코드 추가] 새 가입을 진행하므로, 기존에 남아있던 유저 세션을 깨끗이 지웁니다.
         auth.signOut().catch(err => console.log("기존 세션 정리 중 예외 발생:", err));
-
         resetSignupSteps();
     }
+        }); // requireConsent end
     });
 
     // ── 이메일 로그인 제출 ──
