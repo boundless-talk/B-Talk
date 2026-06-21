@@ -1312,7 +1312,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             </div>
             <div class="subtitle-section" id="subtitle-section">
                 <div class="subtitle-ctrl">
-                    <button class="subtitle-toggle-btn" id="subtitle-toggle-btn" onclick="toggleSubtitles()">💬 번역 자막</button>
+                    <button class="subtitle-toggle-btn" id="subtitle-toggle-btn" onclick="toggleSubtitles()">💬 번역</button>
                     <div class="subtitle-lang-row" id="subtitle-lang-row">
                         <select class="subtitle-lang-select" id="my-lang-select">
                             <option value="ko">한국어</option>
@@ -2043,9 +2043,9 @@ database.ref('activeTopics').on('value', (snap) => {
         const stBtn = document.getElementById('subtitle-toggle-btn');
         if (stBtn) {
             if (subtitlesEnabled) {
-                stBtn.textContent = currentLang === 'ko' ? '💬 자막 켜짐 ●' : '💬 Subtitles ON ●';
+                stBtn.textContent = currentLang === 'ko' ? '💬 번역 켜짐 ●' : '💬 Translate ON ●';
             } else {
-                stBtn.textContent = currentLang === 'ko' ? '💬 번역 자막' : '💬 Subtitles';
+                stBtn.textContent = currentLang === 'ko' ? '💬 번역' : '💬 Translate';
             }
         }
 
@@ -2946,7 +2946,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         stopSubtitleListener();
         subtitlesEnabled = false;
         document.getElementById('subtitle-toggle-btn').classList.remove('on');
-        document.getElementById('subtitle-toggle-btn').textContent = '💬 번역 자막';
+        document.getElementById('subtitle-toggle-btn').textContent = '💬 번역';
         document.getElementById('subtitle-lang-row').style.display = 'none';
         document.getElementById('subtitle-list').style.display = 'none';
         document.getElementById('subtitle-list').innerHTML = '';
@@ -2973,14 +2973,14 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             mySubtitleLang = document.getElementById('my-lang-select').value;
             targetSubtitleLang = document.getElementById('target-lang-select').value;
             btn.classList.add('on');
-            btn.textContent = isKo ? '💬 자막 켜짐 ●' : '💬 Subtitles ON ●';
+            btn.textContent = isKo ? '💬 자막 켜짐 ●' : '💬 Translate ON ●';
             langRow.style.display = 'flex';
             list.style.display = 'flex';
             startWhisperRecognition();
             listenSubtitles();
         } else {
             btn.classList.remove('on');
-            btn.textContent = '💬 번역 자막';
+            btn.textContent = '💬 번역';
             langRow.style.display = 'none';
             list.style.display = 'none';
             stopSubtitleRecognition();
