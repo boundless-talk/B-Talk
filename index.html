@@ -383,9 +383,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             transition: all 0.2s;
         }
         #logout-btn:hover {
-            border-color: rgba(255, 255, 255, 0.3);
-            color: #fff;
-            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            background: rgba(0,229,255,0.05);
         }
 
         #join-btn { background-color: var(--accent-color); color: #000000; font-size: 16px; box-shadow: 0 4px 15px var(--accent-glow); }
@@ -395,8 +395,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         #leave-btn { background-color: transparent; color: var(--danger-color); border: 1px solid rgba(255,59,48,0.3); display: none; }
         #leave-btn:hover:not(:disabled) { background-color: rgba(255,59,48,0.05); border-color: var(--danger-color); transform: translateY(-1px); }
 
-        #report-btn { background-color: #ff9500; color: #ffffff; display: none; box-shadow: 0 4px 12px rgba(255,149,0,0.15); }
-        #report-btn:hover:not(:disabled) { background-color: #e08400; transform: translateY(-1px); }
+        #report-btn { background-color: var(--danger-color); color: #ffffff; display: none; box-shadow: 0 4px 12px rgba(255,59,48,0.15); }
+        #report-btn:hover:not(:disabled) { background-color: #e02020; transform: translateY(-1px); }
 
         /* 대화방 활성화 시 매칭 상태 및 참여자 그리드 */
         #matching-status {
@@ -501,9 +501,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     transition: all 0.2s;
 }
 #btn-talk-again:hover {
-    border-color: #34c759;
-    color: #34c759;
-    background: rgba(52, 199, 89, 0.05);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    background: rgba(0,229,255,0.05);
 
     #user-action-buttons {
     display: flex;
@@ -818,7 +818,21 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             padding: 13px;
             border-radius: 10px;
             background: transparent;
-            border: 1px solid rgba(255,59,48,0.35);
+            border: 1px solid rgba(0,229,255,0.25);
+            color: var(--accent-color);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 0;
+        }
+        .room-leave-btn:hover { background: rgba(0,229,255,0.07); border-color: var(--accent-color); }
+        .room-report-btn {
+            flex: 1;
+            padding: 13px;
+            border-radius: 10px;
+            background: rgba(255,59,48,0.08);
+            border: 1px solid rgba(255,59,48,0.28);
             color: var(--danger-color);
             font-size: 13px;
             font-weight: 600;
@@ -826,21 +840,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             transition: all 0.2s;
             margin: 0;
         }
-        .room-leave-btn:hover { background: rgba(255,59,48,0.07); border-color: var(--danger-color); }
-        .room-report-btn {
-            flex: 1;
-            padding: 13px;
-            border-radius: 10px;
-            background: rgba(255,149,0,0.08);
-            border: 1px solid rgba(255,149,0,0.28);
-            color: #ff9500;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            margin: 0;
-        }
-        .room-report-btn:hover { background: rgba(255,149,0,0.16); }
+        .room-report-btn:hover { background: rgba(255,59,48,0.16); }
 
         /* ── 번역 자막 ── */
         .subtitle-section { width: 100%; max-width: 520px; padding: 0 4px; }
