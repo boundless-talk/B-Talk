@@ -242,6 +242,12 @@
     margin-bottom: 28px;
 }
 .select-group label { font-size: 11px; color: rgba(255,255,255,0.35); }
+.speech-style-group { width:100%; margin-bottom:18px; text-align:center; }
+.speech-style-label { font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:8px; letter-spacing:0.5px; }
+.speech-style-btns { display:flex; gap:8px; justify-content:center; }
+.speech-style-btn { flex:1; max-width:160px; padding:10px 8px; border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.5); transition:all 0.2s; width:auto; margin:0; }
+.speech-style-btn.active { background:rgba(0,229,255,0.12); border-color:rgba(0,229,255,0.5); color:#00e5ff; }
+.speech-style-badge { font-size:10px; padding:2px 7px; border-radius:10px; margin-left:5px; background:rgba(0,229,255,0.1); color:rgba(0,229,255,0.7); border:1px solid rgba(0,229,255,0.2); vertical-align:middle; }
 select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 6px; cursor: pointer; outline: none; font-size: 11px; }
         button { width: 100%; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 12px; border: none; transition: all 0.2s ease; }
 
@@ -1126,6 +1132,13 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <input type="text" id="topic-input" placeholder="Enter a topic (e.g., tesla, love)">
         </div>
 
+        <div class="speech-style-group" id="speech-style-group">
+            <div class="speech-style-label" id="speech-style-label">대화 스타일</div>
+            <div class="speech-style-btns">
+                <button class="speech-style-btn" id="btn-casual" onclick="selectSpeechStyle('casual')">👋 친구처럼</button>
+                <button class="speech-style-btn" id="btn-polite" onclick="selectSpeechStyle('polite')">🤝 예의 있게</button>
+            </div>
+        </div>
         <div id="matching-status"></div>
         <div id="debug-log" style="display:none;font-size:11px;color:#ff6b6b;margin-top:8px;word-break:break-all;max-width:100%;text-align:left;padding:0 10px;"></div>
 
@@ -1354,6 +1367,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     let safeAgoraChannelId = ""; // 전역으로 저장 — 저장/조회 시 항상 동일한 값 보장
     let myUid = null;
     let myAnimalGlobal = null;
+    let selectedSpeechStyle = null; // 'casual' | 'polite' | null
+    let speechStyleMap = {}; // uid → 'casual' | 'polite'
     let signalTimer = null;
 
     // 다중 참여자 목록 추적 (본인 제외)
@@ -1496,6 +1511,11 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         roomLeaveBtn: "🚪 LEAVE",
         roomReportBtn: "🚨 REPORT",
         roomWaiting: "Waiting for others...",
+        speechStyleLabel: "Conversation Style",
+        speechStyleCasual: "👋 Friendly Chat",
+        speechStylePolite: "🤝 Polite Chat",
+        speechStyleBadgeCasual: "Casual",
+        speechStyleBadgePolite: "Polite",
         waitingNone: "No one is looking for a conversation partner right now.",
         waitingOne: "1 person is also looking for a conversation partner!",
         waitingMany: (n) => `${n} people are looking for a conversation partner!`,
@@ -1585,6 +1605,11 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         roomLeaveBtn: "🚪 대화방 나가기",
         roomReportBtn: "🚨 신고하기",
         roomWaiting: "다른 참여자를 기다리는 중...",
+        speechStyleLabel: "대화 스타일",
+        speechStyleCasual: "👋 친구처럼",
+        speechStylePolite: "🤝 예의 있게",
+        speechStyleBadgeCasual: "반말",
+        speechStyleBadgePolite: "존댓말",
         waitingNone: "현재 대화 상대를 찾는 중인 사람이 없어요.",
         waitingOne: "1명이 대화 상대를 찾고 있어요!",
         waitingMany: (n) => `${n}명이 대화 상대를 찾고 있어요!`,
@@ -1867,6 +1892,13 @@ database.ref('activeTopics').on('value', (snap) => {
         document.getElementById('room-part-title').innerText = lang.roomPartTitle;
         document.getElementById('room-leave-btn').innerText = lang.roomLeaveBtn;
         document.getElementById('room-report-btn').innerText = lang.roomReportBtn;
+        // 대화 스타일 버튼 언어 업데이트
+        const ssLabel = document.getElementById('speech-style-label');
+        const btnCasual = document.getElementById('btn-casual');
+        const btnPolite = document.getElementById('btn-polite');
+        if (ssLabel) ssLabel.textContent = lang.speechStyleLabel;
+        if (btnCasual) btnCasual.textContent = lang.speechStyleCasual;
+        if (btnPolite) btnPolite.textContent = lang.speechStylePolite;
         updateRoomParticipants();
 
         // 자막 버튼 텍스트 언어 동기화
@@ -2441,8 +2473,14 @@ setTimeout(() => toast.remove(), 10000);
                 // 퇴장 시 자동 삭제
                 database.ref(`channels/${safeAgoraChannelId}/members/${myUid}`).onDisconnect().remove();
                 if (finalTopic && !finalTopic.startsWith('🔒_')) {
-    database.ref('activeTopics/' + safeAgoraChannelId + '/' + auth.currentUser.uid).set({ topic: finalTopic, ts: firebase.database.ServerValue.TIMESTAMP });
+    database.ref('activeTopics/' + safeAgoraChannelId + '/' + auth.currentUser.uid).set({ topic: finalTopic, style: selectedSpeechStyle, ts: firebase.database.ServerValue.TIMESTAMP });
 database.ref('activeTopics/' + safeAgoraChannelId + '/' + auth.currentUser.uid).onDisconnect().remove();
+// 채널 참여자 스타일 리스닝
+database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
+    const data = snap.val() || {};
+    Object.entries(data).forEach(([uid, val]) => { if (val && val.style) speechStyleMap[uid] = val.style; });
+    updateRoomParticipants();
+});
 }
             }
 
@@ -2457,6 +2495,7 @@ database.ref('activeTopics/' + safeAgoraChannelId + '/' + auth.currentUser.uid).
             startVolumeIndicator(); // 발화자 감지 시작
 
             document.getElementById('join-btn').style.display = "none";
+            document.getElementById('speech-style-group').style.display = "none";
             document.getElementById('leave-btn').style.display = "inline-block";
             document.getElementById('report-btn').style.display = "inline-block";
             document.getElementById('participants-box').style.display = "block";
@@ -2499,6 +2538,7 @@ database.ref('activeTopics/' + safeAgoraChannelId + '/' + auth.currentUser.uid).
             document.getElementById('join-btn').disabled = false;
             document.getElementById('join-btn').style.display = "block";
             document.getElementById('join-btn').innerText = textData[currentLang].startBtn;
+            document.getElementById('speech-style-group').style.display = "block";
             document.getElementById('leave-btn').style.display = "none";
             document.getElementById('report-btn').style.display = "none";
             document.getElementById('participants-box').style.display = "none";
@@ -2906,7 +2946,8 @@ return text;
             meEl.className = 'part-item';
             meEl.id = 'room-part-me';
             const meLabel = currentLang === 'ko' ? '(나)' : '(You)';
-            meEl.innerHTML = `<span class="animal-avatar">${myAnimalGlobal.emoji}</span><span class="animal-name">${myAnimalGlobal.label} ${meLabel}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
+            const myStyleBadge = selectedSpeechStyle ? `<span class="speech-style-badge">${textData[currentLang]['speechStyleBadge' + (selectedSpeechStyle === 'casual' ? 'Casual' : 'Polite')]}</span>` : '';
+            meEl.innerHTML = `<span class="animal-avatar">${myAnimalGlobal.emoji}</span><span class="animal-name">${myAnimalGlobal.label} ${meLabel}${myStyleBadge}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
             list.appendChild(meEl);
         }
 
@@ -2921,7 +2962,9 @@ return text;
                 const el = document.createElement('div');
                 el.className = 'part-item';
                 el.id = `room-part-${uid}`;
-                el.innerHTML = `<span class="animal-avatar">${animal.emoji}</span><span class="animal-name">${animal.label}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
+                const style = speechStyleMap[uid];
+                const styleBadge = style ? `<span class="speech-style-badge">${textData[currentLang]['speechStyleBadge' + (style === 'casual' ? 'Casual' : 'Polite')]}</span>` : '';
+                el.innerHTML = `<span class="animal-avatar">${animal.emoji}</span><span class="animal-name">${animal.label}${styleBadge}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
                 list.appendChild(el);
             });
         }
@@ -3071,6 +3114,7 @@ return text;
             document.getElementById('join-btn').style.display = "block";
             document.getElementById('join-btn').disabled = false;
             document.getElementById('join-btn').innerText = textData[currentLang].startBtn;
+            document.getElementById('speech-style-group').style.display = "block";
             document.getElementById('leave-btn').style.display = "none";
             document.getElementById('report-btn').style.display = "none";
             document.getElementById('participants-box').style.display = "none";
@@ -3110,6 +3154,7 @@ return text;
             hideRoomScreen();
             document.getElementById('join-btn').style.display = "block";
             document.getElementById('join-btn').disabled = false;
+            document.getElementById('speech-style-group').style.display = "block";
             document.getElementById('leave-btn').style.display = "none";
             document.getElementById('report-btn').style.display = "none";
             try { document.getElementById('participants-box').style.display = "none"; } catch(e) {}
@@ -3641,6 +3686,12 @@ async function respondInvite(response) {
 }
 
 // ── 인트로 화면 제어 ──
+    function selectSpeechStyle(style) {
+        selectedSpeechStyle = style;
+        document.getElementById('btn-casual').classList.toggle('active', style === 'casual');
+        document.getElementById('btn-polite').classList.toggle('active', style === 'polite');
+    }
+
     function toggleLangFromIntro() {
         // 메인 언어 토글 버튼 클릭과 동일하게 동작
         document.getElementById('lang-toggle-btn').click();
