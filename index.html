@@ -2576,9 +2576,6 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             startVolumeIndicator(); // 발화자 감지 시작
 
             document.getElementById('join-btn').style.display = "none";
-            document.getElementById('leave-btn').style.display = "inline-block";
-            document.getElementById('report-btn').style.display = "inline-block";
-            document.getElementById('participants-box').style.display = "block";
             const maxPeopleGroup = document.getElementById('max-people-group');
             maxPeopleGroup.style.display = "none";
             maxPeopleGroup.style.visibility = "hidden";
