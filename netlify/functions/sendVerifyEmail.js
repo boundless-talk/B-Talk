@@ -1,17 +1,30 @@
 const nodemailer = require('nodemailer');
 
+// 💡 추가된 부분: 브라우저 무사 통과를 위한 출입증(헤더)
+const headers = {
+    'Access-Control-Allow-Origin': 'https://boundless-talk.github.io',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+};
+
 exports.handler = async (event) => {
+    // 💡 추가된 부분: 브라우저가 POST 전송 전 '미리 찔러보기(OPTIONS)'를 할 때 통과시켜 줌
+    if (event.httpMethod === 'OPTIONS') {
+        return { statusCode: 200, headers: headers, body: '' };
+    }
+
+    // (여기서부터는 기존 작성하신 로직과 100% 동일하며, return에 headers만 추가됨)
     if (event.httpMethod !== 'POST') {
-        return { statusCode: 405, body: 'Method Not Allowed' };
+        return { statusCode: 405, headers: headers, body: 'Method Not Allowed' };
     }
 
     const { email, code } = JSON.parse(event.body || '{}');
     if (!email || !code) {
-        return { statusCode: 400, body: JSON.stringify({ error: 'email and code required' }) };
+        return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'email and code required' }) };
     }
 
     if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
-        return { statusCode: 500, body: JSON.stringify({ error: 'Email not configured' }) };
+        return { statusCode: 500, headers: headers, body: JSON.stringify({ error: 'Email not configured' }) };
     }
 
     const transporter = nodemailer.createTransport({
@@ -65,9 +78,9 @@ exports.handler = async (event) => {
             subject: `[BOUNDLESS TALK] 이메일 인증 코드: ${code}`,
             html
         });
-        return { statusCode: 200, body: JSON.stringify({ ok: true }) };
+        return { statusCode: 200, headers: headers, body: JSON.stringify({ ok: true }) };
     } catch (err) {
         console.error('sendVerifyEmail error:', err.message);
-        return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+        return { statusCode: 500, headers: headers, body: JSON.stringify({ error: err.message }) };
     }
 };
