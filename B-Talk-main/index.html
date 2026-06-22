@@ -1738,9 +1738,21 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 database.ref('activeTopics').on('value', (snap) => {
     const data = snap.val() || {};
     const topics = [];
-    Object.values(data).forEach(channelUsers => {
-        const entry = Object.values(channelUsers || {})[0];
-        if (entry && entry.topic && !topics.includes(entry.topic)) topics.push(entry.topic);
+    const STALE_MS = 30 * 60 * 1000; // 30분 이상 된 항목은 유령 방으로 간주
+    const now = Date.now();
+
+    Object.entries(data).forEach(([channelId, channelUsers]) => {
+        const users = Object.entries(channelUsers || {});
+        // 채널 내 모든 유저 항목이 만료됐으면 Firebase에서 삭제
+        const allStale = users.every(([, u]) => !u.ts || (now - u.ts) > STALE_MS);
+        if (allStale) {
+            database.ref('activeTopics/' + channelId).remove();
+            return;
+        }
+        const entry = users.find(([, u]) => u.ts && (now - u.ts) <= STALE_MS);
+        if (entry && entry[1].topic && !topics.includes(entry[1].topic)) {
+            topics.push(entry[1].topic);
+        }
     });
     
     const bar = document.getElementById('live-topics-bar');
