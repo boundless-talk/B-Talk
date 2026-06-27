@@ -2777,7 +2777,6 @@ document.getElementById('max-people-group').style.visibility = "hidden";
             myUid = await client.join(AGORA_APP_ID, safeAgoraChannelId, agoraToken, 0);
             dbg('9. join 성공');
             isJoined = true;
-            startFreeTimer();
             // 대화 시작 → 대기자 목록에서 제거
             if (firebaseUser) database.ref('waiting/' + firebaseUser.uid).remove();
             document.getElementById('waiting-count-bar').style.display = 'none';
@@ -2901,7 +2900,9 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
 
             if (!roomParticipants.includes(user.uid)) {
                 roomParticipants.push(user.uid);
-                renderParticipantsUI(); // 일단 Agora UID로 먼저 렌더
+                renderParticipantsUI();
+                // 첫 번째 상대방 입장 시 7분 타이머 시작
+                if (roomParticipants.length === 1) startFreeTimer();
             }
 
             // Agora UID → Firebase UID 조회
