@@ -4518,10 +4518,14 @@ async function submitSuspendAppeal() {
     const uid = sessionStorage.getItem('suspendedUid');
     const text = document.getElementById('suspend-appeal-textarea').value.trim();
     if (!text) { alert('이의신청 내용을 입력해 주세요.'); return; }
+    if (!uid) { alert('사용자 정보를 찾을 수 없습니다.'); return; }
     try {
-        await database.ref(`appeals/${uid || 'unknown'}`).set({
-            type: 'suspend', text, submittedAt: Date.now()
+        const res = await fetch('https://b-talk.netlify.app/.netlify/functions/submitAppeal', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ uid, type: 'suspend', text })
         });
+        if (!res.ok) throw new Error('서버 오류');
         document.getElementById('suspend-appeal-done').style.display = 'block';
         document.getElementById('suspend-appeal-textarea').disabled = true;
     } catch(e) {
