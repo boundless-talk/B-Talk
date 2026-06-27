@@ -13,7 +13,8 @@ if (!admin.apps.length) {
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 const db = admin.database();
-const bucket = admin.storage().bucket();
+let bucket;
+try { bucket = admin.storage().bucket(); } catch(e) { console.error('[BUCKET INIT ERROR]', e.message); }
 
 const CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
@@ -51,6 +52,7 @@ exports.handler = async function(event, context) {
             // 1. Storage 저장 + Gemini 분석 (실패해도 신고 내역은 저장)
             if (hasAudio) {
                 try {
+                    if (!bucket) throw new Error('Storage bucket not initialized');
                     const timestamp = Date.now();
                     const storagePath = `reports/${reportedUid}/${timestamp}.webm`;
                     const file = bucket.file(storagePath);
