@@ -3420,8 +3420,9 @@ return text;
 
     // 9. 신고 모달 팝업 및 AI 1분 분석 유해 검사 제출 로직
     document.getElementById('report-btn').onclick = function() {
-        if (roomParticipants.length === 0) {
-            alert(currentLang === 'ko' ? "신고할 원격 참여자가 방에 없습니다." : "No active participants to report.");
+        const reportTargets = sessionParticipants.length > 0 ? sessionParticipants : roomParticipants.map(uid => agoraToFirebaseUid[uid]).filter(Boolean);
+        if (reportTargets.length === 0) {
+            alert(currentLang === 'ko' ? "신고할 참여자가 없습니다." : "No participants to report.");
             return;
         }
 
@@ -3430,7 +3431,7 @@ return text;
         selectedReportTarget = null;
         document.getElementById('rep-m-submit').disabled = true;
 
-        roomParticipants.forEach((uid, index) => {
+        reportTargets.forEach((uid, index) => {
             const btn = document.createElement('button');
             btn.className = "target-btn";
             const animal = uidToAnimal[uid] || { emoji: "👤", label: `참여자 ${index + 1}` };
