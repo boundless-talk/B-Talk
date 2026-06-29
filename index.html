@@ -1036,7 +1036,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 인트로 화면 -->
     <div id="intro-screen">
-        <button onclick="toggleLangFromIntro()" style="position:absolute; top:20px; right:20px; background:transparent; border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); padding:6px 14px; font-size:12px; font-weight:600; border-radius:20px; cursor:pointer; width:auto; margin:0;" id="intro-lang-btn">EN</button>
+        <button onclick="toggleLangFromIntro()" style="position:absolute; top:20px; right:20px; background:transparent; border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); padding:6px 14px; font-size:12px; font-weight:600; border-radius:20px; cursor:pointer; width:auto; margin:0;" id="intro-lang-btn">KO</button>
         <div style="position:relative; display:flex; align-items:center; justify-content:center;">
             <img src="logo-transparent.png" alt="" style="position:absolute; width:220px; height:220px; opacity:0.45; clip-path:inset(0 0 30% 0); pointer-events:none;">
             <div class="intro-title" style="position:relative; z-index:1; white-space:nowrap; font-size:clamp(18px, 6vw, 38px); letter-spacing:clamp(3px, 1.5vw, 8px);">BOUNDLESS TALK</div>
@@ -1052,7 +1052,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 인트로 두 번째 화면 -->
     <div id="intro-screen-2" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:var(--bg-gradient); z-index:5000; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:40px 30px; overflow-y:auto;">
-        <button onclick="toggleLangFromIntro()" style="position:absolute; top:20px; right:20px; background:transparent; border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); padding:6px 14px; font-size:12px; font-weight:600; border-radius:20px; cursor:pointer; width:auto; margin:0;" id="intro2-lang-btn">EN</button>
+        <button onclick="toggleLangFromIntro()" style="position:absolute; top:20px; right:20px; background:transparent; border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.6); padding:6px 14px; font-size:12px; font-weight:600; border-radius:20px; cursor:pointer; width:auto; margin:0;" id="intro2-lang-btn">KO</button>
         <div style="max-width:400px; width:100%;">
             <div class="intro-title" style="font-size:22px; letter-spacing:4px; margin-bottom:28px;">HOW IT WORKS</div>
             <div id="intro2-steps" style="text-align:left; margin-bottom:36px; display:flex; flex-direction:column; gap:18px;">
@@ -1067,7 +1067,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     </div>
 
     <div class="lang-container">
-        <button id="lang-toggle-btn" class="lang-btn">EN</button>
+        <button id="lang-toggle-btn" class="lang-btn">KO</button>
     </div>
 
 
@@ -1174,9 +1174,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
        <div id="participants-box" style="display:none;">
        <div class="part-title" id="part-title-label">Active Channel Participants</div>
-            <!-- 내 동물 닉네임 표시 태그 -->
+            <!-- 내 닉네임 표시 태그 -->
             <div id="my-animal-tag" style="display:none; font-size:12px; color:rgba(255,255,255,0.4); text-align:center; margin-bottom:8px; letter-spacing:0.5px;">
-                나는 <span id="my-animal-label" style="color:var(--accent-color); font-weight:600;"></span>
+                You: <span id="my-animal-label" style="color:var(--accent-color); font-weight:600;"></span>
             </div>
             <div class="part-list" id="part-list-container">
             </div>
@@ -1227,6 +1227,16 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <button id="inquiry-submit-btn" onclick="submitInquiry()" style="flex:1; background:var(--accent-color); color:#000; font-weight:700; font-size:14px; padding:12px; border-radius:10px; border:none; cursor:pointer; margin:0;">보내기</button>
                 <button id="inquiry-cancel-btn" onclick="document.getElementById('inquiry-modal').classList.remove('active')" style="flex:0.4; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.5); font-size:14px; padding:12px; border-radius:10px; border:none; cursor:pointer; margin:0;">취소</button>
             </div>
+        </div>
+    </div>
+
+    <!-- 닉네임 입력 모달 (대화 시작 전) -->
+    <div class="modal-overlay" id="join-nickname-modal">
+        <div class="modal-content" style="max-width:340px;">
+            <h3 style="font-size:17px; margin-bottom:6px;" id="join-nick-title">What's your nickname?</h3>
+            <p style="font-size:12px; margin-bottom:18px; color:rgba(255,255,255,0.35);" id="join-nick-desc">This is how others will see you in the conversation.</p>
+            <input type="text" id="join-nickname-input" placeholder="Enter nickname (max 16 chars)" maxlength="16" style="margin-bottom:16px;">
+            <button id="join-nick-confirm-btn" style="background:var(--accent-color); color:#000; font-weight:700; margin:0;">Continue</button>
         </div>
     </div>
 
@@ -1433,52 +1443,52 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 7분 결제 모달 -->
     <div id="payment-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.7); align-items:center; justify-content:center;">
-        <div style="background:#1a1a2e; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:28px 24px 20px; width:90%; max-width:340px;">
+        <div style="background:#1a1a2e; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:28px 24px 20px; width:90%; max-width:340px; margin:auto; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
             <div style="font-size:26px; text-align:center; margin-bottom:10px;">💬</div>
-            <div style="font-size:17px; font-weight:700; color:rgba(255,255,255,0.92); text-align:center; margin-bottom:6px;" id="pay-modal-title">끊기기엔 아까운 대화 아닌가요? 😊</div>
-            <div style="font-size:12px; color:rgba(255,255,255,0.4); text-align:center; margin-bottom:20px;">조금만 더 이어가 보세요</div>
+            <div style="font-size:17px; font-weight:700; color:rgba(255,255,255,0.92); text-align:center; margin-bottom:6px;" id="pay-modal-title">Too good to stop now? 😊</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.4); text-align:center; margin-bottom:20px;">Keep the conversation going</div>
 
-            <!-- 월간 구독 -->
+            <!-- Monthly Plan -->
             <div class="pay-plan-btn" id="pay-monthly" style="border:1.5px solid #00e5ff; background:rgba(0,229,255,0.06); border-radius:14px; padding:14px 16px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;">
                 <div>
-                    <div style="font-size:10px; background:rgba(0,229,255,0.15); color:#00e5ff; border-radius:6px; padding:2px 7px; display:inline-block; margin-bottom:4px;">인기</div>
-                    <div style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.9);">월간 구독</div>
-                    <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px;">한 달 동안 무제한 통화</div>
+                    <div style="font-size:10px; background:rgba(0,229,255,0.15); color:#00e5ff; border-radius:6px; padding:2px 7px; display:inline-block; margin-bottom:4px;">Popular</div>
+                    <div style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.9);">Monthly Plan</div>
+                    <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px;">Unlimited calls for a month</div>
                 </div>
                 <div style="text-align:right;">
-                    <div style="font-size:16px; font-weight:700; color:#00e5ff;">4,900원</div>
-                    <div style="font-size:10px; color:rgba(255,255,255,0.35);">/ 월</div>
+                    <div style="font-size:16px; font-weight:700; color:#00e5ff;">$3.99</div>
+                    <div style="font-size:10px; color:rgba(255,255,255,0.35);">/ mo</div>
                 </div>
             </div>
 
-            <!-- 주간 구독 -->
+            <!-- Weekly Plan -->
             <div class="pay-plan-btn" id="pay-weekly" style="border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:14px 16px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;">
                 <div>
-                    <div style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.88);">주간 구독</div>
-                    <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px;">7일 동안 무제한 통화</div>
+                    <div style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.88);">Weekly Plan</div>
+                    <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px;">Unlimited calls for 7 days</div>
                 </div>
                 <div style="text-align:right;">
-                    <div style="font-size:16px; font-weight:700; color:rgba(255,255,255,0.9);">1,900원</div>
-                    <div style="font-size:10px; color:rgba(255,255,255,0.35);">/ 주</div>
+                    <div style="font-size:16px; font-weight:700; color:rgba(255,255,255,0.9);">$1.49</div>
+                    <div style="font-size:10px; color:rgba(255,255,255,0.35);">/ wk</div>
                 </div>
             </div>
 
-            <!-- 분당 과금 -->
+            <!-- Pay Per Minute -->
             <div class="pay-plan-btn" id="pay-permin" style="border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:14px 16px; margin-bottom:6px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;">
                 <div>
-                    <div style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.88);">분당 과금</div>
-                    <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px;">부담되면 딱 오늘만 써봐도 돼요</div>
+                    <div style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.88);">Pay Per Minute</div>
+                    <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px;">Just try it for today</div>
                 </div>
                 <div style="text-align:right;">
-                    <div style="font-size:16px; font-weight:700; color:rgba(255,255,255,0.9);">50원</div>
-                    <div style="font-size:10px; color:rgba(255,255,255,0.35);">/ 분</div>
+                    <div style="font-size:16px; font-weight:700; color:rgba(255,255,255,0.9);">$0.05</div>
+                    <div style="font-size:10px; color:rgba(255,255,255,0.35);">/ min</div>
                 </div>
             </div>
 
             <hr style="border:none; border-top:1px solid rgba(255,255,255,0.07); margin:6px 0 8px;">
-            <button id="pay-modal-leave" style="width:100%; padding:11px; background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:12px; cursor:pointer; border-radius:10px;">대화 종료하기</button>
+            <button id="pay-modal-leave" style="width:100%; padding:11px; background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:12px; cursor:pointer; border-radius:10px;">End conversation</button>
             <div style="font-size:11px; color:rgba(255,255,255,0.2); text-align:center; margin-top:6px;">
-                <span id="pay-countdown">60</span>초 후 자동으로 대화가 종료됩니다
+                Call ends in <span id="pay-countdown">60</span>s
             </div>
         </div>
     </div>
@@ -1516,7 +1526,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     provider.setCustomParameters({ prompt: 'select_account' });
 
     // 2. Global State Management
-    let currentLang = "ko";
+    let currentLang = "en";
     const AGORA_APP_ID = "71b6f8c1cb424be1b2b5480d447e69e2";
     const TOKEN_SERVER_URL = "https://b-talk-0gi0.onrender.com";
     const SIGNAL_SERVER_URL = "https://kvdb.io/YAPuhyeXZWiNidFcsstzqK/";
@@ -1529,6 +1539,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     let safeAgoraChannelId = ""; // 전역으로 저장 — 저장/조회 시 항상 동일한 값 보장
     let myUid = null;
     let myAnimalGlobal = null;
+    let myNickname = ""; // 사용자 입력 닉네임
+    let nicknameConfirmed = false; // 닉네임 입력 후 join 진행 플래그
+    let uidToNickname = {}; // uid → nickname (Firebase에서 수신)
     let selectedSpeechStyle = null; // 'casual' | 'polite' | null
     let speechStyleMap = {}; // uid → 'casual' | 'polite'
     let speechStyleConfirmed = false; // 모달 선택 후 join 진행 플래그
@@ -2548,6 +2561,7 @@ database.ref('activeTopics').on('value', (snap) => {
         updateRoomParticipants();
         // 언어 토글 버튼 텍스트 업데이트
         document.getElementById('lang-toggle-btn').innerText = currentLang === 'ko' ? 'EN' : 'KO';
+        ['intro-lang-btn','intro2-lang-btn'].forEach(id => { const el = document.getElementById(id); if(el) el.innerText = currentLang === 'ko' ? 'EN' : 'KO'; });
         // 인트로 화면 언어 업데이트
         const introDescEl = document.getElementById('intro-desc');
         const introBtnEl = document.getElementById('intro-start-btn');
@@ -2701,6 +2715,22 @@ database.ref('activeTopics').on('value', (snap) => {
             return;
         }
 
+        // 닉네임 입력 모달 표시 (닉네임 미확정 시)
+        if (!nicknameConfirmed) {
+            const modal = document.getElementById('join-nickname-modal');
+            const input = document.getElementById('join-nickname-input');
+            const titleEl = document.getElementById('join-nick-title');
+            const descEl = document.getElementById('join-nick-desc');
+            const btnEl = document.getElementById('join-nick-confirm-btn');
+            titleEl.textContent = currentLang === 'ko' ? '닉네임을 입력하세요' : "What's your nickname?";
+            descEl.textContent = currentLang === 'ko' ? '대화 상대에게 보여질 이름입니다.' : 'This is how others will see you in the conversation.';
+            btnEl.textContent = currentLang === 'ko' ? '계속' : 'Continue';
+            input.placeholder = currentLang === 'ko' ? '닉네임 입력 (최대 16자)' : 'Enter nickname (max 16 chars)';
+            if (myNickname) input.value = myNickname;
+            modal.classList.add('active');
+            return;
+        }
+
         // 스타일 선택 모달 표시 (건너뛰기/선택 후 재호출됨)
         if (!speechStyleConfirmed) {
             document.getElementById('modal-btn-casual').classList.remove('active');
@@ -2709,6 +2739,7 @@ database.ref('activeTopics').on('value', (snap) => {
             return;
         }
         speechStyleConfirmed = false;
+        nicknameConfirmed = false;
         isJoining = true;
 
         const maxPeople = parseInt(document.getElementById('max-people-select').value);
@@ -2784,20 +2815,13 @@ document.getElementById('max-people-group').style.visibility = "hidden";
             sessionParticipants = [];
             agoraToFirebaseUid = {};
             uidToAnimal = {};
+            uidToNickname = {};
 
-            // 내 동물 배정 (Firebase UID 해시 기반 — 상대방이 보는 내 동물과 항상 일치)
-            const myAnimal = assignAnimal(firebaseUser ? firebaseUser.uid : myUid);
-            myAnimalGlobal = myAnimal;
-            document.getElementById('my-animal-label').innerText = `${myAnimal.emoji} ${myAnimal.label}`;
+            // 내 닉네임 표시
+            document.getElementById('my-animal-label').innerText = myNickname || 'Anonymous';
             document.getElementById('my-animal-tag').style.display = "block";
-           const toastMsg = currentLang === 'ko'
-    ? `🐾 당신은 오늘 [${myAnimal.emoji} ${myAnimal.label}]입니다!\n상대방도 고유한 동물로 표시됩니다.`
-    : `🐾 You are [${myAnimal.emoji} ${myAnimal.label}] today!\nPeers will also have unique animal names.`;
-const toast = document.createElement('div');
-toast.style.cssText = 'position:fixed;top:30px;left:50%;transform:translateX(-50%);background:rgba(0,229,255,0.12);border:1px solid rgba(0,229,255,0.4);color:#fff;padding:14px 22px;border-radius:16px;font-size:14px;z-index:9999;text-align:center;white-space:pre-line;backdrop-filter:blur(10px);';
-toast.textContent = toastMsg;
-document.body.appendChild(toast);
-setTimeout(() => toast.remove(), 10000);
+            // 내 UID → 닉네임 매핑 로컬 등록 (참여자 렌더링 시 사용)
+            if (firebaseUser) uidToNickname[firebaseUser.uid] = myNickname || 'Anonymous';
 
             // 내 Agora UID → Firebase UID 매핑을 채널 경로에 등록 (상대방이 참조용)
             if (firebaseUser) {
@@ -2806,7 +2830,7 @@ setTimeout(() => toast.remove(), 10000);
                 database.ref(`channels/${safeAgoraChannelId}/members/${myUid}`).onDisconnect().remove();
                 if (finalTopic && !finalTopic.startsWith('🔒_')) {
     const myTopicRef = database.ref('activeTopics/' + safeAgoraChannelId + '/' + auth.currentUser.uid);
-    myTopicRef.set({ topic: finalTopic, style: selectedSpeechStyle, ts: firebase.database.ServerValue.TIMESTAMP });
+    myTopicRef.set({ topic: finalTopic, style: selectedSpeechStyle, nickname: myNickname || 'Anonymous', ts: firebase.database.ServerValue.TIMESTAMP });
     myTopicRef.onDisconnect().remove();
     // 2분마다 ts 갱신 (비정상 종료 감지용 — 5분 stale 기준보다 짧게)
     if (window._heartbeatInterval) clearInterval(window._heartbeatInterval);
@@ -2822,7 +2846,10 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         database.ref('activeTopics/' + safeAgoraChannelId).remove();
         return;
     }
-    Object.entries(data).forEach(([uid, val]) => { if (val && val.style) speechStyleMap[uid] = val.style; });
+    Object.entries(data).forEach(([uid, val]) => {
+        if (val && val.style) speechStyleMap[uid] = val.style;
+        if (val && val.nickname) uidToNickname[uid] = val.nickname;
+    });
     updateRoomParticipants();
 });
 }
@@ -2951,18 +2978,19 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             return;
         }
 
-        roomParticipants.forEach((uid) => {
-            const animal = assignAnimal(uid);
+        roomParticipants.forEach((uid, index) => {
+            const fbUid = agoraToFirebaseUid[uid] || uid;
+            const nickname = uidToNickname[fbUid] || uidToNickname[uid] || `User ${index + 1}`;
             const el = document.createElement('div');
             el.className = "part-item";
             el.id = `part-${uid}`;
             const avatarSpan = document.createElement('span');
             avatarSpan.className = 'animal-avatar';
-            avatarSpan.textContent = animal.emoji;
+            avatarSpan.textContent = '👤';
 
             const nameSpan = document.createElement('span');
             nameSpan.className = 'animal-name';
-            nameSpan.textContent = animal.label;
+            nameSpan.textContent = nickname;
 
             const speakingBar = document.createElement('span');
             speakingBar.className = 'speaking-bar';
@@ -3305,19 +3333,20 @@ return text;
         const list = document.getElementById('subtitle-list');
         if (!list) return;
         const cu = auth.currentUser;
-        const animal = assignAnimal(isSelf ? (cu ? cu.uid : uid) : uid);
+        const resolvedUid = isSelf ? (cu ? cu.uid : uid) : uid;
+        const nickname = isSelf ? (myNickname || 'Me') : (uidToNickname[resolvedUid] || uidToNickname[uid] || 'User');
         const item = document.createElement('div');
         item.className = 'subtitle-item';
 
         if (isSelf) {
             item.innerHTML =
-                '<div class="subtitle-speaker">' + animal.emoji + ' ' + animal.label
+                '<div class="subtitle-speaker">👤 ' + nickname
                 + (currentLang === 'ko' ? ' (나)' : ' (me)') + '</div>'
                 + '<div class="subtitle-self-text">' + original + '</div>';
         } else {
             const showOriginal = translated && original !== translated;
             item.innerHTML =
-                '<div class="subtitle-speaker">' + animal.emoji + ' ' + animal.label + '</div>'
+                '<div class="subtitle-speaker">👤 ' + nickname + '</div>'
                 + (showOriginal ? '<div class="subtitle-original">' + original + '</div>' : '')
                 + '<div class="subtitle-translated">' + (translated || original) + '</div>';
         }
@@ -3334,13 +3363,14 @@ return text;
         list.innerHTML = '';
 
         // 내 항목 먼저 표시
-        if (myAnimalGlobal) {
+        {
             const meEl = document.createElement('div');
             meEl.className = 'part-item';
             meEl.id = 'room-part-me';
             const meLabel = currentLang === 'ko' ? '(나)' : '(You)';
             const myStyleBadge = selectedSpeechStyle ? `<span class="speech-style-badge">${textData[currentLang]['speechStyleBadge' + (selectedSpeechStyle === 'casual' ? 'Casual' : 'Polite')]}</span>` : '';
-            meEl.innerHTML = `<span class="animal-avatar">${myAnimalGlobal.emoji}</span><span class="animal-name">${myAnimalGlobal.label} ${meLabel}${myStyleBadge}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
+            const displayName = myNickname || 'Me';
+            meEl.innerHTML = `<span class="animal-avatar">👤</span><span class="animal-name">${displayName} ${meLabel}${myStyleBadge}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
             list.appendChild(meEl);
         }
 
@@ -3350,15 +3380,15 @@ return text;
             waitEl.textContent = currentLang === 'ko' ? '다른 참여자를 기다리는 중...' : 'Waiting for others...';
             list.appendChild(waitEl);
         } else {
-            roomParticipants.forEach((uid) => {
-                const animal = assignAnimal(uid);
+            roomParticipants.forEach((uid, index) => {
                 const el = document.createElement('div');
                 el.className = 'part-item';
                 el.id = `room-part-${uid}`;
                 const fbUid = agoraToFirebaseUid[uid] || uid;
+                const nickname = uidToNickname[fbUid] || uidToNickname[uid] || `User ${index + 1}`;
                 const style = speechStyleMap[fbUid];
                 const styleBadge = style ? `<span class="speech-style-badge">${textData[currentLang]['speechStyleBadge' + (style === 'casual' ? 'Casual' : 'Polite')]}</span>` : '';
-                el.innerHTML = `<span class="animal-avatar">${animal.emoji}</span><span class="animal-name">${animal.label}${styleBadge}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
+                el.innerHTML = `<span class="animal-avatar">👤</span><span class="animal-name">${nickname}${styleBadge}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
                 list.appendChild(el);
             });
         }
@@ -3439,8 +3469,8 @@ return text;
         reportTargets.forEach((uid, index) => {
             const btn = document.createElement('button');
             btn.className = "target-btn";
-            const animal = uidToAnimal[uid] || { emoji: "👤", label: `참여자 ${index + 1}` };
-            btn.innerText = `${animal.emoji} ${animal.label}`;
+            const nickname = uidToNickname[uid] || `User ${index + 1}`;
+            btn.innerText = `👤 ${nickname}`;
             btn.onclick = () => {
                 document.querySelectorAll('#report-target-container .target-btn').forEach(b => b.classList.remove('selected'));
                 btn.classList.add('selected');
@@ -3691,8 +3721,8 @@ return text;
             const btn = document.createElement('button');
             btn.className = "target-btn";
             btn.dataset.uid = uid;
-            const animal = uidToAnimal[uid] || { emoji: "👤", label: `참여자 ${index + 1}` };
-            btn.innerText = `${animal.emoji} ${animal.label}`;
+            const nickname = uidToNickname[uid] || `User ${index + 1}`;
+            btn.innerText = `👤 ${nickname}`;
             btn.addEventListener('pointerdown', () => {
                 document.querySelectorAll('#vote-target-container .target-btn').forEach(b => b.classList.remove('selected'));
                 btn.classList.add('selected');
@@ -4456,6 +4486,22 @@ B-TALK은 이용자 간 연결을 위한 플랫폼만을 제공합니다. 대화
     function selectSpeechStyle(style) {
         selectedSpeechStyle = style;
     }
+
+    // 닉네임 모달 confirm
+    document.getElementById('join-nick-confirm-btn').addEventListener('click', function() {
+        const val = document.getElementById('join-nickname-input').value.trim();
+        if (!val) {
+            alert(currentLang === 'ko' ? '닉네임을 입력해 주세요.' : 'Please enter a nickname.');
+            return;
+        }
+        myNickname = val;
+        document.getElementById('join-nickname-modal').classList.remove('active');
+        nicknameConfirmed = true;
+        document.getElementById('join-btn').click();
+    });
+    document.getElementById('join-nickname-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') document.getElementById('join-nick-confirm-btn').click();
+    });
 
     function selectStyleAndJoin(style) {
         selectedSpeechStyle = style;
