@@ -243,6 +243,8 @@
         .stats-sub-top strong { color: #fff; }
         .stats-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-top: 2px; }
         .stats-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #00e5ff, #7b61ff); transition: width 0.5s ease; }
+        #rank-info-popup { display: none; }
+        #rank-info-popup.active { display: block; }
 
         #main-container {
             width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center;
@@ -1226,7 +1228,15 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <button id="logout-btn" style="display: none;">LOGOUT</button>
     </div>
    <div class="reputation-board" id="reputation-section" style="display: none;">
-        <div class="stats-rank-row" id="stats-rank-row">RANK: <span id="rank-label">—</span></div>
+        <div class="stats-rank-row" id="stats-rank-row">RANK: <span id="rank-label">—</span> <button onclick="document.getElementById('rank-info-popup').classList.toggle('active')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);border-radius:50%;width:16px;height:16px;font-size:9px;cursor:pointer;padding:0;margin-left:4px;vertical-align:middle;line-height:1;">?</button></div>
+        <div id="rank-info-popup" style="display:none;background:rgba(20,20,30,0.97);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px 14px;margin:6px 0 4px;text-align:left;font-size:11px;color:rgba(255,255,255,0.6);line-height:1.8;">
+            <div style="font-weight:700;color:rgba(255,255,255,0.8);margin-bottom:6px;" id="rank-info-title">Rank is based on total badges received</div>
+            <div>👋 NEWCOMER — 0–9</div>
+            <div>🌱 RISING TALKER — 10–49</div>
+            <div>🥈 SILVER TALKER — 50–99</div>
+            <div>🥇 GOLD TALKER — 100–199</div>
+            <div>🏆 LEGEND TALKER — 200+</div>
+        </div>
         <div class="stats-grid">
             <div class="stats-main-badge">
                 <div class="stats-main-emoji" id="main-badge-emoji">👍</div>
@@ -2142,6 +2152,20 @@ database.ref('activeTopics').on('value', (snap) => {
 
         // 토글 버튼 텍스트 고정
         document.getElementById('toggle-rep-btn').innerText = currentLang === 'ko' ? "📊 대화스탯" : "📊 TALK STATS";
+
+        // 랭크 팝업 다국어
+        const rankInfoTitle = document.getElementById('rank-info-title');
+        if (rankInfoTitle) rankInfoTitle.textContent = currentLang === 'ko' ? '총 배지 수 기준으로 랭크가 결정됩니다' : 'Rank is based on total badges received';
+        const rankInfoPopup = document.getElementById('rank-info-popup');
+        if (rankInfoPopup) {
+            const rows = rankInfoPopup.querySelectorAll('div:not(#rank-info-title)');
+            const ko = ['👋 뉴비 — 0–9', '🌱 떠오르는 토커 — 10–49', '🥈 실버 토커 — 50–99', '🥇 골드 토커 — 100–199', '🏆 레전드 토커 — 200+'];
+            const en = ['👋 NEWCOMER — 0–9', '🌱 RISING TALKER — 10–49', '🥈 SILVER TALKER — 50–99', '🥇 GOLD TALKER — 100–199', '🏆 LEGEND TALKER — 200+'];
+            const labels = currentLang === 'ko' ? ko : en;
+            rows.forEach((r, i) => { if (labels[i]) r.textContent = labels[i]; });
+        }
+        const rankRow = document.getElementById('stats-rank-row');
+        if (rankRow) rankRow.childNodes[0].textContent = currentLang === 'ko' ? '랭크: ' : 'RANK: ';
 
         if (appTitle) appTitle.innerText = lang.title;
         if (appSubtitle) appSubtitle.innerText = lang.subtitle;
