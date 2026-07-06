@@ -1228,7 +1228,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <button id="logout-btn" style="display: none;">LOGOUT</button>
     </div>
    <div class="reputation-board" id="reputation-section" style="display: none;">
-        <div class="stats-rank-row" id="stats-rank-row">RANK: <span id="rank-label">—</span> <button onclick="document.getElementById('rank-info-popup').classList.toggle('active')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);border-radius:50%;width:16px;height:16px;font-size:9px;cursor:pointer;padding:0;margin-left:4px;vertical-align:middle;line-height:1;">?</button></div>
+        <div class="stats-rank-row" id="stats-rank-row">RANK: <span id="rank-label">—</span> <button onclick="const p=document.getElementById('rank-info-popup');p.style.display=p.style.display==='none'?'block':'none';" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);border-radius:50%;width:16px;height:16px;font-size:9px;cursor:pointer;padding:0;margin-left:4px;vertical-align:middle;line-height:1;">?</button></div>
         <div id="rank-info-popup" style="display:none;background:rgba(20,20,30,0.97);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:12px 14px;margin:6px 0 4px;text-align:left;font-size:11px;color:rgba(255,255,255,0.6);line-height:1.8;">
             <div style="font-weight:700;color:rgba(255,255,255,0.8);margin-bottom:6px;" id="rank-info-title">Rank is based on total badges received</div>
             <div>👋 NEWCOMER — 0–9</div>
