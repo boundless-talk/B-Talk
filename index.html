@@ -1550,6 +1550,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     let myNickname = ""; // 사용자 입력 닉네임
     let nicknameConfirmed = false; // 닉네임 입력 후 join 진행 플래그
     let uidToNickname = {}; // uid → nickname (Firebase에서 수신)
+    let uidToIsGuest = {}; // uid → boolean (게스트 여부)
     let selectedSpeechStyle = null; // 'casual' | 'polite' | null
     let speechStyleMap = {}; // uid → 'casual' | 'polite'
     let speechStyleConfirmed = false; // 모달 선택 후 join 진행 플래그
@@ -2802,7 +2803,7 @@ document.getElementById('max-people-group').style.visibility = "hidden";
         currentChannelName = finalTopic;
 
         // 🚨 전역 변수에 저장 — 저장/조회 시 항상 동일값 보장
-        safeAgoraChannelId = encodeURIComponent(finalTopic).replace(/%/g, "_").slice(0, 60) + (isGuest ? "_gst" : "");
+        safeAgoraChannelId = encodeURIComponent(finalTopic).replace(/%/g, "_").slice(0, 64);
 
     
 
@@ -2857,6 +2858,7 @@ document.getElementById('max-people-group').style.visibility = "hidden";
             agoraToFirebaseUid = {};
             uidToAnimal = {};
             uidToNickname = {};
+            uidToIsGuest = {};
 
             // 내 닉네임 표시
             document.getElementById('my-animal-label').innerText = myNickname || 'Anonymous';
@@ -2871,7 +2873,7 @@ document.getElementById('max-people-group').style.visibility = "hidden";
                 database.ref(`channels/${safeAgoraChannelId}/members/${myUid}`).onDisconnect().remove();
                 if (finalTopic && !finalTopic.startsWith('🔒_')) {
     const myTopicRef = database.ref('activeTopics/' + safeAgoraChannelId + '/' + auth.currentUser.uid);
-    myTopicRef.set({ topic: finalTopic, style: selectedSpeechStyle, nickname: myNickname || 'Anonymous', ts: firebase.database.ServerValue.TIMESTAMP });
+    myTopicRef.set({ topic: finalTopic, style: selectedSpeechStyle, nickname: myNickname || 'Anonymous', guest: isGuest, ts: firebase.database.ServerValue.TIMESTAMP });
     myTopicRef.onDisconnect().remove();
     // 2분마다 ts 갱신 (비정상 종료 감지용 — 5분 stale 기준보다 짧게)
     if (window._heartbeatInterval) clearInterval(window._heartbeatInterval);
@@ -2890,6 +2892,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
     Object.entries(data).forEach(([uid, val]) => {
         if (val && val.style) speechStyleMap[uid] = val.style;
         if (val && val.nickname) uidToNickname[uid] = val.nickname;
+        if (val) uidToIsGuest[uid] = !!val.guest;
     });
     updateRoomParticipants();
 });
@@ -3022,6 +3025,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         roomParticipants.forEach((uid, index) => {
             const fbUid = agoraToFirebaseUid[uid] || uid;
             const nickname = uidToNickname[fbUid] || uidToNickname[uid] || `User ${index + 1}`;
+            const guestFlag = uidToIsGuest[fbUid] || uidToIsGuest[uid];
             const el = document.createElement('div');
             el.className = "part-item";
             el.id = `part-${uid}`;
@@ -3032,6 +3036,12 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             const nameSpan = document.createElement('span');
             nameSpan.className = 'animal-name';
             nameSpan.textContent = nickname;
+            if (guestFlag) {
+                const gTag = document.createElement('span');
+                gTag.textContent = 'Guest';
+                gTag.style.cssText = 'font-size:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.4);border-radius:10px;padding:1px 7px;margin-left:6px;font-weight:500;vertical-align:middle;';
+                nameSpan.appendChild(gTag);
+            }
 
             const speakingBar = document.createElement('span');
             speakingBar.className = 'speaking-bar';
@@ -3427,9 +3437,11 @@ return text;
                 el.id = `room-part-${uid}`;
                 const fbUid = agoraToFirebaseUid[uid] || uid;
                 const nickname = uidToNickname[fbUid] || uidToNickname[uid] || `User ${index + 1}`;
+                const guestFlag = uidToIsGuest[fbUid] || uidToIsGuest[uid];
+                const guestBadge = guestFlag ? `<span style="font-size:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.4);border-radius:10px;padding:1px 7px;margin-left:6px;font-weight:500;">Guest</span>` : '';
                 const style = speechStyleMap[fbUid];
                 const styleBadge = style ? `<span class="speech-style-badge">${textData[currentLang]['speechStyleBadge' + (style === 'casual' ? 'Casual' : 'Polite')]}</span>` : '';
-                el.innerHTML = `<span class="animal-avatar">👤</span><span class="animal-name">${nickname}${styleBadge}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
+                el.innerHTML = `<span class="animal-avatar">👤</span><span class="animal-name">${nickname}${guestBadge}${styleBadge}</span><span class="speaking-bar"><span></span><span></span><span></span><span></span></span>`;
                 list.appendChild(el);
             });
         }
