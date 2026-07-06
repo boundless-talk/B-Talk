@@ -2005,18 +2005,23 @@ database.ref('activeTopics').on('value', (snap) => {
                 document.getElementById('bar-empathy').style.width = (empathy / maxVal * 100) + '%';
                 document.getElementById('bar-passion').style.width = (passion / maxVal * 100) + '%';
 
-                // 최고값 배지를 메인 카드에 표시
+                // 최고값 배지를 메인 카드에 표시, 서브 그리드에서 해당 배지 숨김
                 const allBadges = [
-                    { key: 'manner',  val: manner,  emoji: '👍', labelId: 'label-manner'  },
-                    { key: 'logic',   val: logic,   emoji: '🧠', labelId: 'label-logic'   },
-                    { key: 'humor',   val: humor,   emoji: '🤣', labelId: 'label-humor'   },
-                    { key: 'empathy', val: empathy, emoji: '🤗', labelId: 'label-empathy' },
-                    { key: 'passion', val: passion, emoji: '🔥', labelId: 'label-passion' },
+                    { key: 'manner',  val: manner,  emoji: '👍', labelId: 'label-manner',  scoreId: 'score-manner',  barId: 'bar-manner'  },
+                    { key: 'logic',   val: logic,   emoji: '🧠', labelId: 'label-logic',   scoreId: 'score-logic',   barId: 'bar-logic'   },
+                    { key: 'humor',   val: humor,   emoji: '🤣', labelId: 'label-humor',   scoreId: 'score-humor',   barId: 'bar-humor'   },
+                    { key: 'empathy', val: empathy, emoji: '🤗', labelId: 'label-empathy', scoreId: 'score-empathy', barId: 'bar-empathy' },
+                    { key: 'passion', val: passion, emoji: '🔥', labelId: 'label-passion', scoreId: 'score-passion', barId: 'bar-passion' },
                 ];
                 const top = allBadges.reduce((a, b) => b.val > a.val ? b : a);
                 document.getElementById('main-badge-emoji').textContent = top.emoji;
                 document.getElementById('main-badge-label').textContent = document.getElementById(top.labelId).innerText;
                 document.getElementById('main-badge-value').textContent = top.val;
+                // 서브 배지: 최고값 제외하고 나머지만 표시
+                allBadges.forEach(b => {
+                    const el = document.getElementById(b.scoreId).closest('.stats-sub-badge');
+                    if (el) el.style.display = b.key === top.key ? 'none' : '';
+                });
 
                 // 랭크 계산
                 const total = manner + logic + humor + empathy + passion;
