@@ -3830,6 +3830,10 @@ return text;
 
     async function executeVote(badgeType) {
         if (!selectedVoteTarget) return;
+        if (uidToIsGuest[selectedVoteTarget]) {
+            alert(currentLang === 'ko' ? '게스트 유저에게는 배지를 보낼 수 없습니다.' : 'You cannot send badges to guest users.');
+            return;
+        }
 
         try {
             // 모바일에서 auth 토큰 만료 방지: 강제 갱신
