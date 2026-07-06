@@ -215,14 +215,34 @@
         .lang-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(0,229,255,0.05); }
 
         .reputation-board {
-            background: var(--card-bg); border: 1px solid var(--card-border);
-            padding: 15px 16px; border-radius: 16px; margin-bottom: 25px; text-align: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2); backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(0,229,255,0.25);
+            padding: 16px; border-radius: 20px; margin-bottom: 25px;
+            box-shadow: 0 0 24px rgba(0,229,255,0.08), 0 4px 20px rgba(0,0,0,0.3);
             width: 100%; max-width: 400px;
         }
-        .reputation-title { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.4); margin-bottom: 10px; }
-        .badge-list { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
-.badge-item { font-size: 11px; background: rgba(255,255,255,0.04); padding: 6px 8px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); font-weight: 500; white-space: nowrap; }
+        .stats-rank-row { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.45); text-align: center; margin-bottom: 12px; }
+        .stats-rank-row span { color: #ffd166; font-weight: 800; }
+        .stats-grid { display: flex; gap: 10px; align-items: stretch; }
+        .stats-main-badge {
+            flex: 0 0 auto; width: 110px;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 14px; padding: 12px 8px; text-align: center;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        .stats-main-emoji { font-size: 32px; line-height: 1; }
+        .stats-main-label { font-size: 10px; letter-spacing: 1px; color: rgba(255,255,255,0.45); font-weight: 700; }
+        .stats-main-value { font-size: 26px; font-weight: 800; color: #fff; line-height: 1; }
+        .stats-sub-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .stats-sub-badge {
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; padding: 8px 10px;
+            display: flex; flex-direction: column; gap: 5px;
+        }
+        .stats-sub-top { font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600; }
+        .stats-sub-top strong { color: #fff; }
+        .stats-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-top: 2px; }
+        .stats-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #00e5ff, #7b61ff); transition: width 0.5s ease; }
 
         #main-container {
             width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center;
@@ -1058,7 +1078,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <div class="intro2-step"><span class="intro2-num">02</span><p id="intro2-s2">원하는 <strong>주제</strong>와 대화하고픈 <strong>최대 인원</strong>을 선택하세요.<br><span style="font-size:12px; color:rgba(255,255,255,0.4);">그 이하여도 대화는 시작됩니다.</span></p></div>
                 <div class="intro2-step"><span class="intro2-num">03</span><p id="intro2-s3">주제가 망설여진다면 <strong>현재 대화 중인 방</strong>에 참여해보세요.</p></div>
                 <div class="intro2-step"><span class="intro2-num">04</span><p id="intro2-s4">대화가 즐거웠던 유저는 <strong>친구를 맺어</strong> 다음에 또 대화해보세요.</p></div>
-                <div class="intro2-step"><span class="intro2-num">05</span><p id="intro2-s6">대화가 끝나면 상대방에게 <strong>대화지수 배지</strong>를 보낼 수 있어요.<br><span style="font-size:12px; color:rgba(255,255,255,0.4);">매너, 논리, 유머, 공감, 열정 중 하나를 선택하세요.</span></p></div>
+                <div class="intro2-step"><span class="intro2-num">05</span><p id="intro2-s6">대화가 끝나면 상대방에게 <strong>대화스탯 배지</strong>를 보낼 수 있어요.<br><span style="font-size:12px; color:rgba(255,255,255,0.4);">매너, 논리, 유머, 공감, 열정 중 하나를 선택하세요.</span></p></div>
                 <div class="intro2-step"><span class="intro2-num">06</span><p id="intro2-s7"><strong>7분간</strong> 즐겁게 대화하세요.<br><span style="font-size:12px; color:rgba(255,255,255,0.4);">더 긴 대화는 구독 서비스를 이용해주세요.</span></p></div>
                 <div class="intro2-step"><span class="intro2-num">07</span><p id="intro2-s5">악성 유저가 있다면 <strong>신고</strong>해주세요.<br><span style="font-size:12px; color:rgba(255,255,255,0.4);">경고 → 24시간 정지 → 영구정지 순으로 처리됩니다.</span></p></div>
             </div>
@@ -1202,17 +1222,36 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <div id="user-action-buttons">
     <button id="btn-talk-again" style="margin: 0; display: none;">🗣️ 또 대화하기</button>
-    <button id="toggle-rep-btn" style="display: none;">📊 대화지수</button>
+    <button id="toggle-rep-btn" style="display: none;">📊 대화스탯</button>
     <button id="logout-btn" style="display: none;">로그아웃</button>
     </div>
    <div class="reputation-board" id="reputation-section" style="display: none;">
-        <div class="reputation-title" id="rep-title">TALK INDEX</div>
-        <div class="badge-list">
-            <div class="badge-item">👍 <span id="label-manner">NICE</span>: <strong id="score-manner">0</strong></div>
-            <div class="badge-item">🧠 <span id="label-logic">LOGIC</span>: <strong id="score-logic">0</strong></div>
-            <div class="badge-item">🤣 <span id="label-humor">FUN</span>: <strong id="score-humor">0</strong></div>
-            <div class="badge-item">🤗 <span id="label-empathy">WARM</span>: <strong id="score-empathy">0</strong></div>
-            <div class="badge-item">🔥 <span id="label-passion">BOLD</span>: <strong id="score-passion">0</strong></div>
+        <div class="stats-rank-row">RANK: <span id="rank-label">—</span></div>
+        <div class="stats-grid">
+            <div class="stats-main-badge">
+                <div class="stats-main-emoji">👍</div>
+                <div class="stats-main-label"><span id="label-manner">NICE</span></div>
+                <div class="stats-main-value" id="score-manner">0</div>
+                <div class="stats-bar"><div class="stats-bar-fill" id="bar-manner" style="width:0%"></div></div>
+            </div>
+            <div class="stats-sub-grid">
+                <div class="stats-sub-badge">
+                    <div class="stats-sub-top">🧠 <span id="label-logic">LOGIC</span>: <strong id="score-logic">0</strong></div>
+                    <div class="stats-bar"><div class="stats-bar-fill" id="bar-logic" style="width:0%"></div></div>
+                </div>
+                <div class="stats-sub-badge">
+                    <div class="stats-sub-top">🤣 <span id="label-humor">FUN</span>: <strong id="score-humor">0</strong></div>
+                    <div class="stats-bar"><div class="stats-bar-fill" id="bar-humor" style="width:0%"></div></div>
+                </div>
+                <div class="stats-sub-badge">
+                    <div class="stats-sub-top">🤗 <span id="label-empathy">WARM</span>: <strong id="score-empathy">0</strong></div>
+                    <div class="stats-bar"><div class="stats-bar-fill" id="bar-empathy" style="width:0%"></div></div>
+                </div>
+                <div class="stats-sub-badge">
+                    <div class="stats-sub-top">🔥 <span id="label-passion">BOLD</span>: <strong id="score-passion">0</strong></div>
+                    <div class="stats-bar"><div class="stats-bar-fill" id="bar-passion" style="width:0%"></div></div>
+                </div>
+            </div>
         </div>
     </div>
     <div style="text-align:center; margin-top:10px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
@@ -1630,7 +1669,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             alertJoin: (topic, max) => `Joined [${topic}] channel! (${max} people max) Waiting for peers...`,
             toggleBtn: "한국어",
             opt3: "3 members", opt4: "4 members (recommended)", opt6: "6 members",
-            repTitle: "TALK INDEX",
+            repTitle: "TALK STATS",
             badgeManner: "NICE", badgeLogic: "LOGIC", badgeHumor: "FUN", badgeEmpathy: "WARM", badgePassion: "BOLD",
             mTitle: "Conversation Report",
             mDesc: "Check out what AI noted, and gift a peer badge!",
@@ -1728,7 +1767,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             alertJoin: (topic, max) => `[${topic}] 채널에 입장했습니다! (정원 ${max}명) 다른 사람을 기다리는 중...`,
             toggleBtn: "EN",
             opt3: "3명", opt4: "4명 (권장)", opt6: "6명",
-            repTitle: "대화지수",
+            repTitle: "대화스탯",
             badgeManner: "친절", badgeLogic: "논리", badgeHumor: "유머", badgeEmpathy: "공감", badgePassion: "열정",
             mTitle: "대화 분석 리포트",
             mDesc: "AI가 요약한 대화 내용을 파악하고 함께 대화한 상대방에게 배지를 선물해 보세요.",
@@ -1746,7 +1785,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             reportTitle: "🚨 불량 유저 신고하기",
             reportDesc: "신고 대상을 선택해 주세요. 신고 시점 기준 '최근 1분간'의 실시간 음성 스트림 결합 데이터가 AI 유해성 감별 백엔드로 전송됩니다.",
             reportSuccess: "신고 완료. 유해 발언이 확인되면 즉시 강력 영구 처분이 단행됩니다.",
-            badgeSuccess: "상대방에게 대화지수를 성공적으로 전달했습니다!",
+            badgeSuccess: "상대방에게 대화스탯를 성공적으로 전달했습니다!",
             emailPlaceholder: "이메일 주소 (예: test@naver.com)",
             passwordPlaceholder: "비밀번호 (8자리 이상)",
             emailLogin: "로그인",
@@ -1780,7 +1819,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         intro2S3: `주제가 망설여진다면 <strong>현재 대화 중인 주제</strong>로 이야기에 참여해보세요.`,
         intro2S4: `마음이 맞았다면 <strong>친구를 맺어</strong>보세요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">다음에도 같은 목소리를 다시 만날 수 있습니다. 친구를 맺지 않으면 다시 언제 만날지 몰라요.</span>`,
         intro2S5: `좋은 대화는 모두가 함께 만듭니다.<br>불편한 사용자는 <strong>신고</strong>해 주세요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">경고 → 24시간 정지 → 영구정지 순으로 처리됩니다.</span>`,
-        intro2S6: `대화가 끝나면 상대방에게 <strong>대화지수 배지</strong>를 보낼 수 있어요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">매너, 논리, 유머, 공감, 열정 중 하나를 선택하세요.</span>`,
+        intro2S6: `대화가 끝나면 상대방에게 <strong>대화스탯 배지</strong>를 보낼 수 있어요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">매너, 논리, 유머, 공감, 열정 중 하나를 선택하세요.</span>`,
         intro2S7: `<strong>7분간</strong> 즐겁게 대화하세요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">더 긴 대화는 구독 서비스를 이용해주세요.</span>`,
         talkAgainBtn: "🗣️ 또 대화하기",
         guestLoginBtn: "👀 게스트로 체험하기",
@@ -1943,11 +1982,34 @@ database.ref('activeTopics').on('value', (snap) => {
             // 평판 데이터 연동 (배지 수 누적 리스닝)
             database.ref('users/' + user.uid + '/badges').on('value', (snapshot) => {
                 const badges = snapshot.val() || {};
-                document.getElementById('score-manner').innerText = badges.manner || 0;
-                document.getElementById('score-logic').innerText = badges.logic || 0;
-                document.getElementById('score-humor').innerText = badges.humor || 0;
-                document.getElementById('score-empathy').innerText = badges.empathy || 0;
-                document.getElementById('score-passion').innerText = badges.passion || 0;
+                const manner  = badges.manner  || 0;
+                const logic   = badges.logic   || 0;
+                const humor   = badges.humor   || 0;
+                const empathy = badges.empathy || 0;
+                const passion = badges.passion || 0;
+                document.getElementById('score-manner').innerText  = manner;
+                document.getElementById('score-logic').innerText   = logic;
+                document.getElementById('score-humor').innerText   = humor;
+                document.getElementById('score-empathy').innerText = empathy;
+                document.getElementById('score-passion').innerText = passion;
+
+                // 프로그레스 바 업데이트
+                const maxVal = Math.max(manner, logic, humor, empathy, passion, 1);
+                document.getElementById('bar-manner').style.width  = (manner  / maxVal * 100) + '%';
+                document.getElementById('bar-logic').style.width   = (logic   / maxVal * 100) + '%';
+                document.getElementById('bar-humor').style.width   = (humor   / maxVal * 100) + '%';
+                document.getElementById('bar-empathy').style.width = (empathy / maxVal * 100) + '%';
+                document.getElementById('bar-passion').style.width = (passion / maxVal * 100) + '%';
+
+                // 랭크 계산
+                const total = manner + logic + humor + empathy + passion;
+                let rank;
+                if      (total >= 200) rank = '🏆 LEGEND TALKER';
+                else if (total >= 100) rank = '🥇 GOLD TALKER';
+                else if (total >= 50)  rank = '🥈 SILVER TALKER';
+                else if (total >= 10)  rank = '🌱 RISING TALKER';
+                else                   rank = '👋 NEWCOMER';
+                document.getElementById('rank-label').innerText = rank;
             });
 
             // 친구 요청 실시간 수신 리스너 시작
@@ -2057,7 +2119,7 @@ database.ref('activeTopics').on('value', (snap) => {
         if(document.getElementById('friends-m-title')) document.getElementById('friends-m-title').innerText = lang.friendsModalTitle;
 
         // 토글 버튼 텍스트 고정
-        document.getElementById('toggle-rep-btn').innerText = currentLang === 'ko' ? "📊 대화지수" : "📊 TALK INDEX";
+        document.getElementById('toggle-rep-btn').innerText = currentLang === 'ko' ? "📊 대화스탯" : "📊 TALK STATS";
 
         if (appTitle) appTitle.innerText = lang.title;
         if (appSubtitle) appSubtitle.innerText = lang.subtitle;
