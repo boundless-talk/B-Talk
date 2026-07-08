@@ -1080,16 +1080,13 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <div id="intro-screen-2" class="modal-overlay">
         <div class="modal-content" style="max-width:400px; max-height:85vh; overflow-y:auto;">
             <div class="intro-title" style="font-size:18px; letter-spacing:3px; margin-bottom:24px; text-align:center;" id="intro2-title">HOW IT WORKS</div>
-            <div id="intro2-steps" style="text-align:left; margin-bottom:28px; display:flex; flex-direction:column; gap:16px;">
-                <div class="intro2-step"><span class="intro2-num">01</span><p id="intro2-s1">간단히 <strong>로그인</strong>하세요.</p></div>
-                <div class="intro2-step"><span class="intro2-num">02</span><p id="intro2-s2">원하는 <strong>주제</strong>와 대화하고픈 <strong>최대 인원</strong>을 선택하세요.<br><span style="font-size:12px; color:rgba(255,255,255,0.4);">그 이하여도 대화는 시작됩니다.</span></p></div>
-                <div class="intro2-step"><span class="intro2-num">03</span><p id="intro2-s3">주제가 망설여진다면 <strong>현재 대화 중인 방</strong>에 참여해보세요.</p></div>
-                <div class="intro2-step"><span class="intro2-num">04</span><p id="intro2-s4">대화가 즐거웠던 유저는 <strong>친구를 맺어</strong> 다음에 또 대화해보세요.</p></div>
-                <div class="intro2-step"><span class="intro2-num">05</span><p id="intro2-s6">대화가 끝나면 상대방에게 <strong>대화스탯 배지</strong>를 보낼 수 있어요.<br><span style="font-size:12px; color:rgba(255,255,255,0.4);">매너, 논리, 유머, 공감, 열정 중 하나를 선택하세요.</span></p></div>
-                <div class="intro2-step"><span class="intro2-num">06</span><p id="intro2-s7"><strong>10분간</strong> 즐겁게 대화하세요.<br><span style="font-size:12px; color:rgba(255,255,255,0.4);">더 긴 대화는 구독 서비스를 이용해주세요.</span></p></div>
-                <div class="intro2-step"><span class="intro2-num">07</span><p id="intro2-s5">악성 유저가 있다면 <strong>신고</strong>해주세요.<br><span style="font-size:12px; color:rgba(255,255,255,0.4);">경고 → 24시간 정지 → 영구정지 순으로 처리됩니다.</span></p></div>
+            <div id="intro2-steps" style="text-align:left; margin-bottom:28px; display:flex; flex-direction:column; gap:20px;">
+                <div class="intro2-step"><span class="intro2-num">01</span><p id="intro2-s1"><strong>Pick a Topic</strong><br><span style="font-size:13px; color:rgba(255,255,255,0.5);">Enter what you want to talk about today, or join a room that's already talking.</span></p></div>
+                <div class="intro2-step"><span class="intro2-num">02</span><p id="intro2-s2"><strong>Enjoy 10 Minutes</strong><br><span style="font-size:13px; color:rgba(255,255,255,0.5);">Every conversation starts with 10 minutes of free, focused time.</span></p></div>
+                <div class="intro2-step"><span class="intro2-num">03</span><p id="intro2-s3"><strong>Connect &amp; Collect Badges</strong><br><span style="font-size:13px; color:rgba(255,255,255,0.5);">If you hit it off, add them as a friend. You can also collect unique Talk Badges based on your conversation style.</span></p></div>
+                <div class="intro2-step"><span class="intro2-num">04</span><p id="intro2-s4"><strong>Respect Each Other</strong><br><span style="font-size:13px; color:rgba(255,255,255,0.5);">Great conversations are made together. Please report anyone who makes you uncomfortable.<br><span style="color:#FF4D4D;">Warning ➔ 24h Ban ➔ Permanent Ban.</span></span></p></div>
             </div>
-            <button class="intro-start-btn" id="intro2-start-btn" onclick="startFromIntro()" style="width:100%;">확인 ✓</button>
+            <button id="intro2-start-btn" onclick="startFromIntro()" style="width:100%; padding:14px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.2); color:#fff; font-size:15px; font-weight:600; border-radius:12px; cursor:pointer; letter-spacing:0.5px; transition:all 0.2s;">Got it!</button>
         </div>
     </div>
 
@@ -1783,15 +1780,15 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             pwHintMatch: "✓ Passwords match.",
         introDesc: `Some conversations <strong>change you.</strong><br><br>Meet someone you'd <strong style="color:var(--accent-color);">never</strong> cross paths with.<br>Connected by <strong style="color:#c9a84c;">one shared topic.</strong><br><br><span style="font-size:13px; letter-spacing:1px; opacity:0.55;"><strong>No</strong> age &nbsp;·&nbsp; <strong>No</strong> gender &nbsp;·&nbsp; <strong>No</strong> nationality</span><br><br>Ready for a conversation<br><strong style="color:var(--accent-color);">unlike any</strong> you've had before?`,
         introBtn: "Get Started",
-        intro2Btn: "Ready",
+        intro2Btn: "Got it!",
         intro2Title: "HOW IT WORKS",
-        intro2S1: `Sign in <strong>quickly and easily</strong>.`,
-        intro2S2: `Enter <strong>what you want to talk about</strong> today.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">Shared interests keep the conversation going.</span>`,
-        intro2S3: `Not sure what to talk about? Join a <strong>room that's already talking</strong>.`,
-        intro2S4: `If you hit it off, <strong>add them as a friend</strong>.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">You can meet that same voice again next time. Without adding them, you may never cross paths again.</span>`,
-        intro2S5: `Great conversations are made together.<br>Please <strong>report</strong> anyone who makes it uncomfortable.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">Warning → 24h ban → permanent ban.</span>`,
-        intro2S6: `After the call, you can send a <strong>Talk Badge</strong> to your peer.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">Choose from: Nice, Logic, Fun, Warm, or Bold.</span>`,
-        intro2S7: `Enjoy your first <strong>10 minutes</strong> of conversation.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">Want to keep talking? Continue anytime with a subscription.</span>`,
+        intro2S1: `<strong>Pick a Topic</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">Enter what you want to talk about today, or join a room that's already talking.</span>`,
+        intro2S2: `<strong>Enjoy 10 Minutes</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">Every conversation starts with 10 minutes of free, focused time.</span>`,
+        intro2S3: `<strong>Connect &amp; Collect Badges</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">If you hit it off, add them as a friend. You can also collect unique Talk Badges based on your conversation style.</span>`,
+        intro2S4: `<strong>Respect Each Other</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">Great conversations are made together. Please report anyone who makes you uncomfortable.<br><span style="color:#FF4D4D;">Warning ➔ 24h Ban ➔ Permanent Ban.</span></span>`,
+        intro2S5: ``,
+        intro2S6: ``,
+        intro2S7: ``,
         talkAgainBtn: "🗣️ TALK AGAIN",
         guestLoginBtn: "👀 Try as Guest",
         addFriendBtn: "➕ ADD FRIEND",
@@ -1881,15 +1878,15 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             pwHintMatch: "✓ 비밀번호가 일치합니다.",
         introDesc: `어떤 대화는 당신을 <strong>변화시킵니다.</strong><br><br>평소라면 <strong style="color:var(--accent-color);">결코 스치지 않았을</strong> 누군가와의 만남.<br><br>오직 하나의 <strong style="color:#c9a84c;">공통된 주제</strong>로 연결됩니다.<br><br><span style="font-size:13px; letter-spacing:1px; opacity:0.55;">나이도 &nbsp;·&nbsp; 성별도 &nbsp;·&nbsp; 국적도 없이</span><br><br>지금까지 <strong style="color:var(--accent-color);">겪어본 적 없는 대화</strong>를<br>시작할 준비가 되셨나요?`,
         introBtn: "시작하기",
-        intro2Btn: "시작하기",
+        intro2Btn: "준비완료!",
         intro2Title: "이용 방법",
-        intro2S1: `간편하게 <strong>로그인</strong>하세요.`,
-        intro2S2: `오늘 <strong>하고 싶은 이야기</strong>를 입력하세요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">공통의 관심사가 대화를 이어줍니다.</span>`,
-        intro2S3: `주제가 망설여진다면 <strong>현재 대화 중인 주제</strong>로 이야기에 참여해보세요.`,
-        intro2S4: `마음이 맞았다면 <strong>친구를 맺어</strong>보세요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">다음에도 같은 목소리를 다시 만날 수 있습니다. 친구를 맺지 않으면 다시 언제 만날지 몰라요.</span>`,
-        intro2S5: `좋은 대화는 모두가 함께 만듭니다.<br>불편한 사용자는 <strong>신고</strong>해 주세요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">경고 → 24시간 정지 → 영구정지 순으로 처리됩니다.</span>`,
-        intro2S6: `대화가 끝나면 상대방에게 <strong>대화스탯 배지</strong>를 보낼 수 있어요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">매너, 논리, 유머, 공감, 열정 중 하나를 선택하세요.</span>`,
-        intro2S7: `<strong>10분간</strong> 즐겁게 대화하세요.<br><span style="font-size:12px;color:rgba(255,255,255,0.4);">더 긴 대화는 구독 서비스를 이용해주세요.</span>`,
+        intro2S1: `<strong>주제 선택</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">오늘 이야기하고 싶은 주제를 입력하거나, 이미 대화 중인 방에 참여해보세요.</span>`,
+        intro2S2: `<strong>10분 무료 대화</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">모든 대화는 10분의 무료 시간으로 시작됩니다. 집중된 대화를 경험해보세요.</span>`,
+        intro2S3: `<strong>친구 맺기 &amp; 배지 수집</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">마음이 맞으면 친구를 추가하세요. 대화 스타일에 따라 다양한 Talk Badge도 수집할 수 있어요.</span>`,
+        intro2S4: `<strong>서로를 존중하세요</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">좋은 대화는 함께 만들어 갑니다. 불편한 상대는 언제든 신고해주세요.<br><span style="color:#FF4D4D;">경고 ➔ 24시간 정지 ➔ 영구정지.</span></span>`,
+        intro2S5: ``,
+        intro2S6: ``,
+        intro2S7: ``,
         talkAgainBtn: "🗣️ 또 대화하기",
         guestLoginBtn: "👀 게스트로 체험하기",
         addFriendBtn: "➕ 친구 추가",
