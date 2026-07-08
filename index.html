@@ -1063,17 +1063,24 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 인트로 화면 -->
     <div id="intro-screen">
-        <div style="position:relative; display:flex; align-items:center; justify-content:center;">
+        <div style="position:relative; display:flex; align-items:center; justify-content:center; margin-bottom:48px;">
             <img src="logo-transparent.png" alt="" style="position:absolute; width:220px; height:220px; opacity:0.45; clip-path:inset(0 0 30% 0); pointer-events:none;">
             <div class="intro-title" style="position:relative; z-index:1; white-space:nowrap; font-size:clamp(18px, 6vw, 38px); letter-spacing:clamp(3px, 1.5vw, 8px);">BOUNDLESS TALK</div>
         </div>
-        <p class="intro-desc" id="intro-desc">국적도, 나이도, 성별도<br><strong>아무런 장벽이 없는 대화</strong>.<br><br>세상 어딘가의 누군가와<br>오직 <strong>주제</strong>로만 연결되는 순간.<br><br>경험해본 적 없는<br><strong>설레는 대화</strong>를 시작해볼까요?</p>
-        <div style="margin-bottom: 40px;">
-            <span class="intro-pulse"></span>
-            <span class="intro-pulse"></span>
-            <span class="intro-pulse"></span>
+
+        <div style="display:flex; flex-direction:column; align-items:center; gap:28px; max-width:360px; text-align:center;">
+            <p id="intro-s1-text" style="font-size:clamp(26px, 6vw, 36px); font-weight:700; color:#fff; line-height:1.25; letter-spacing:-0.5px; margin:0;">Some conversations<br>change you.</p>
+
+            <p id="intro-s2-text" style="font-size:clamp(14px, 3.5vw, 17px); color:rgba(255,255,255,0.5); line-height:1.8; margin:0;">Meet someone you'd never cross paths with.<br>Connected by one shared topic.</p>
+
+            <p id="intro-s3-text" style="font-size:12px; letter-spacing:2.5px; text-transform:uppercase; color:rgba(255,255,255,0.25); margin:0;">No age · No gender · No nationality</p>
+
+            <div style="width:1px; height:40px; background:linear-gradient(to bottom, rgba(255,255,255,0.12), transparent);"></div>
+
+            <p id="intro-s4-text" style="font-size:clamp(15px, 3.5vw, 18px); color:rgba(255,255,255,0.7); line-height:1.7; margin:0;">Ready for a conversation<br>unlike any you've had before?</p>
+
+            <button class="intro-start-btn" id="intro-start-btn" onclick="showIntro2()" style="margin-top:8px;">Get Started</button>
         </div>
-        <button class="intro-start-btn" id="intro-start-btn" onclick="showIntro2()">자세히보기</button>
     </div>
 
     <!-- 인트로 두 번째 화면 -->
