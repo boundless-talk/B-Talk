@@ -1298,6 +1298,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <div style="text-align:center; margin-top:10px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
         <button id="inquiry-btn" onclick="openInquiryModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">문의하기</button>
         <button onclick="openAboutModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">About</button>
+        <button onclick="openMainPayModal()" id="subscribe-btn" style="background:transparent; border:none; color:rgba(0,229,255,0.6); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer; font-weight:600;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(0,229,255,0.6)'">✨ Subscribe</button>
     </div>
 
 
@@ -1578,9 +1579,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
 
 
-            <hr style="border:none; border-top:1px solid rgba(255,255,255,0.07); margin:6px 0 8px;">
+            <hr id="pay-modal-hr" style="border:none; border-top:1px solid rgba(255,255,255,0.07); margin:6px 0 8px;">
             <button id="pay-modal-leave" style="width:100%; padding:11px; background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:12px; cursor:pointer; border-radius:10px;">End conversation</button>
-            <div style="font-size:11px; color:rgba(255,255,255,0.2); text-align:center; margin-top:6px;">
+            <div id="pay-countdown-row" style="font-size:11px; color:rgba(255,255,255,0.2); text-align:center; margin-top:6px;">
                 Call ends in <span id="pay-countdown">60</span>s
             </div>
         </div>
@@ -3896,6 +3897,25 @@ return text;
         clearPayCountdown();
         document.getElementById('free-time-banner').style.display = 'none';
         document.getElementById('payment-modal').style.display = 'none';
+    }
+
+    function openMainPayModal() {
+        const modal = document.getElementById('payment-modal');
+        const leaveBtn = document.getElementById('pay-modal-leave');
+        const countdownRow = document.getElementById('pay-countdown-row');
+        const hr = document.getElementById('pay-modal-hr');
+        if (leaveBtn) leaveBtn.style.display = 'none';
+        if (countdownRow) countdownRow.style.display = 'none';
+        if (hr) hr.style.display = 'none';
+        modal.style.display = 'flex';
+        modal.onclick = (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                if (leaveBtn) leaveBtn.style.display = '';
+                if (countdownRow) countdownRow.style.display = '';
+                if (hr) hr.style.display = '';
+            }
+        };
     }
 
     function showPaymentModal() {
