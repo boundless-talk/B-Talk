@@ -3900,6 +3900,13 @@ return text;
     }
 
     function openMainPayModal() {
+        const user = auth.currentUser;
+        if (!user || user.isAnonymous) {
+            alert(currentLang === 'ko'
+                ? '구독은 Google 로그인 후 이용할 수 있습니다.'
+                : 'Please sign in with Google to subscribe.');
+            return;
+        }
         const modal = document.getElementById('payment-modal');
         const leaveBtn = document.getElementById('pay-modal-leave');
         const countdownRow = document.getElementById('pay-countdown-row');
