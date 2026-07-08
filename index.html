@@ -1541,7 +1541,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 6분 경고 배너 -->
     <div id="free-time-banner" style="display:none; position:fixed; top:16px; left:50%; transform:translateX(-50%); z-index:9000; background:rgba(20,20,35,0.95); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:8px 16px; font-size:12px; color:rgba(255,255,255,0.6); white-space:nowrap;">
-        🎁 <span id="free-time-label">Free time left</span> <span id="free-time-countdown" style="font-weight:700; color:#00e5ff; letter-spacing:0.5px;">10:00</span>
+        <span id="free-time-banner-text">🎁 첫 10분은 무료입니다. 마음껏 대화를 즐겨보세요.</span>
     </div>
 
     <!-- 7분 결제 모달 -->
@@ -3860,25 +3860,28 @@ return text;
         const TOTAL = 600; // 10분
         let elapsed = 0;
         const banner = document.getElementById('free-time-banner');
-        const countdown = document.getElementById('free-time-countdown');
-        const label = document.getElementById('free-time-label');
+        const bannerText = document.getElementById('free-time-banner-text');
 
-        function updateBanner() {
-            const remaining = TOTAL - elapsed;
-            const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
-            const ss = String(remaining % 60).padStart(2, '0');
-            countdown.textContent = `${mm}:${ss}`;
-            label.textContent = currentLang === 'ko' ? '무료 남은 시간' : 'Free time left';
-            // 1분 이하 남으면 빨간색으로 강조
-            countdown.style.color = remaining <= 60 ? '#ff5555' : '#00e5ff';
-        }
-
+        // ① 입장 시 3초간 안내 표시 후 숨김
+        bannerText.textContent = currentLang === 'ko'
+            ? '🎁 첫 10분은 무료입니다. 마음껏 대화를 즐겨보세요.'
+            : '🎁 First 10 minutes are free. Enjoy your conversation!';
         banner.style.display = 'block';
-        updateBanner();
+        setTimeout(() => { banner.style.display = 'none'; }, 3000);
 
         freeTimerInterval = setInterval(() => {
             elapsed++;
-            updateBanner();
+            if (elapsed === 540) {
+                // ② 1분 전 — 딱 한 번 안내
+                bannerText.textContent = currentLang === 'ko'
+                    ? '💬 무료 대화가 1분 후 종료됩니다.'
+                    : '💬 Your free time ends in 1 minute.';
+                banner.style.display = 'block';
+            }
+            if (elapsed === 570) {
+                // 30초 후 배너 숨김
+                banner.style.display = 'none';
+            }
             if (elapsed >= TOTAL) {
                 clearInterval(freeTimerInterval);
                 banner.style.display = 'none';
