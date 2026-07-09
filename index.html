@@ -1489,7 +1489,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:22px;">
                 <label class="consent-item">
                     <input type="checkbox" id="consent-age" onchange="updateConsentBtn()">
-                    <span id="consent-age-label">만 14세 이상입니다</span>
+                    <span id="consent-age-label">만 18세 이상입니다</span>
                 </label>
                 <label class="consent-item">
                     <input type="checkbox" id="consent-terms" onchange="updateConsentBtn()">
@@ -2321,7 +2321,7 @@ database.ref('activeTopics').on('value', (snap) => {
         const isKo = currentLang === 'ko';
         const ct = document.getElementById('consent-title'); if(ct) ct.textContent = isKo ? '시작하기 전에' : 'Before You Start';
         const cs = document.getElementById('consent-subtitle'); if(cs) cs.textContent = isKo ? '모두 동의하셔야 이용할 수 있어요.' : 'You must agree to all items to continue.';
-        const ca = document.getElementById('consent-age-label'); if(ca) ca.textContent = isKo ? '만 14세 이상입니다' : 'I am 14 years of age or older';
+        const ca = document.getElementById('consent-age-label'); if(ca) ca.textContent = isKo ? '만 18세 이상입니다' : 'I am 18 years of age or older';
         const ctl = document.getElementById('consent-terms-label'); if(ctl) ctl.textContent = isKo ? '이용약관' : 'Terms of Service';
         const cpl = document.getElementById('consent-privacy-label'); if(cpl) cpl.textContent = isKo ? '개인정보처리방침' : 'Privacy Policy';
         const cgl = document.getElementById('consent-guidelines-label'); if(cgl) cgl.textContent = isKo ? '커뮤니티 가이드라인' : 'Community Guidelines';
