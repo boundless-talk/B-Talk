@@ -27,6 +27,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-messaging-compat.js"></script>
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.18.0.js"></script>
     <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
@@ -1403,6 +1404,23 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     </div>
 
     <!-- 친구 요청 수신 배너 -->
+    <!-- 혼자 대기 중 → 인연 레이더 켜두기 배너 -->
+    <div id="waitlist-banner" style="display:none; position:fixed; bottom:80px; left:50%; transform:translateX(-50%); width:90%; max-width:360px; background:rgba(15,15,22,0.97); border:1px solid rgba(0,229,255,0.2); border-radius:16px; padding:16px; z-index:900; box-shadow:0 8px 32px rgba(0,0,0,0.5);">
+        <div style="font-size:13px; font-weight:700; color:var(--accent-color); margin-bottom:6px;">📡 <span id="wl-title">지금은 이 주제를 공유할 사람이 없네요.</span></div>
+        <div style="font-size:11.5px; color:rgba(255,255,255,0.55); line-height:1.5; margin-bottom:12px;" id="wl-desc">24시간 동안 레이더를 켜둘게요. 누군가 같은 키워드를 입력하면 바로 신호를 보내드릴게요.</div>
+        <div style="display:flex; gap:8px;">
+            <button id="wl-enable-btn" onclick="subscribeWaitlist()" style="flex:1; background:var(--accent-color); color:#000; border:none; border-radius:8px; padding:9px; font-size:12px; font-weight:700; cursor:pointer;">📡 인연의 신호 켜두기</button>
+            <button onclick="document.getElementById('waitlist-banner').style.display='none'" style="background:transparent; border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.4); border-radius:8px; padding:9px 12px; font-size:12px; cursor:pointer;">닫기</button>
+        </div>
+    </div>
+
+    <!-- User B 대기 카운트다운 -->
+    <div id="waitlist-countdown" style="display:none; position:fixed; bottom:80px; left:50%; transform:translateX(-50%); width:90%; max-width:360px; background:rgba(15,15,22,0.97); border:1px solid rgba(180,100,255,0.25); border-radius:16px; padding:16px; z-index:900; box-shadow:0 8px 32px rgba(0,0,0,0.5); text-align:center;">
+        <div style="font-size:13px; font-weight:700; color:#b46fff; margin-bottom:6px;">🌌 당신이 보낸 신호가 은하수를 건너고 있어요.</div>
+        <div style="font-size:11.5px; color:rgba(255,255,255,0.55); line-height:1.5; margin-bottom:10px;">이 키워드를 기다리던 상대에게 알림을 보냈습니다.<br>잠시만 나가지 말고 기다려 주세요.</div>
+        <div id="wl-countdown-timer" style="font-size:32px; font-weight:800; color:#fff; letter-spacing:2px;">3:00</div>
+    </div>
+
     <div id="friend-request-banner">
         <div class="frb-top">
             <div class="frb-title">💌 친구 요청이 왔어요!</div>
@@ -1676,6 +1694,151 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     const database = firebase.database();
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
+
+    // ── FCM 초기화 ──────────────────────────────────────────
+    const FCM_VAPID_KEY = 'BP6PHmLRXOfuipR_pFfM-lwP_6AUBbIpwvrHiTr28oSjkL40VqgwXfUJgyTybbMx45vmSi5S7GujHW3Z8r-mmmQ';
+    let messaging = null;
+    let waitlistTopic = null;     // 현재 대기 등록한 토픽
+    let aloneTimer = null;        // 혼자 30초 타이머
+    let countdownInterval = null; // 3분 카운트다운
+
+    async function initMessaging() {
+        if (messaging) return messaging;
+        try {
+            if ('serviceWorker' in navigator) {
+                const reg = await navigator.serviceWorker.register('/sw.js');
+                messaging = firebase.messaging();
+                await messaging.getToken({ vapidKey: FCM_VAPID_KEY, serviceWorkerRegistration: reg });
+            }
+        } catch (e) {
+            console.warn('FCM init failed:', e.message);
+        }
+        return messaging;
+    }
+
+    // 서비스 워커 등록 (앱 로드 시)
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+        // SW로부터 PUSH_JOIN 메시지 수신 → 자동 토픽 입장
+        navigator.serviceWorker.addEventListener('message', e => {
+            if (e.data && e.data.type === 'PUSH_JOIN' && e.data.topic) {
+                autoJoinFromPush(e.data.topic);
+            }
+        });
+    }
+
+    // URL ?join= 파라미터 감지 → 푸시 알림 클릭 시 자동 입장
+    (function checkPushJoinParam() {
+        const params = new URLSearchParams(window.location.search);
+        const joinTopic = params.get('join');
+        if (joinTopic) {
+            window._pushJoinTopic = joinTopic;
+            window.history.replaceState({}, '', '/');
+        }
+    })();
+
+    function autoJoinFromPush(topic) {
+        const topicInput = document.getElementById('topic-input');
+        if (topicInput) {
+            topicInput.value = topic;
+            topicInput.dispatchEvent(new Event('input'));
+        }
+        const joinBtn = document.getElementById('join-btn');
+        if (joinBtn && !joinBtn.disabled) joinBtn.click();
+    }
+
+    // 인연 레이더 구독 (FCM 토큰 → Firebase waitlist 저장)
+    async function subscribeWaitlist() {
+        if (!waitlistTopic || !auth.currentUser) return;
+        const btn = document.getElementById('wl-enable-btn');
+        if (btn) { btn.disabled = true; btn.textContent = '처리 중...'; }
+        try {
+            const perm = await Notification.requestPermission();
+            if (perm !== 'granted') {
+                alert(currentLang === 'ko' ? '알림 권한을 허용해 주세요.' : 'Please allow notifications.');
+                if (btn) { btn.disabled = false; btn.textContent = '📡 인연의 신호 켜두기'; }
+                return;
+            }
+            await initMessaging();
+            const reg = await navigator.serviceWorker.ready;
+            const token = await firebase.messaging().getToken({ vapidKey: FCM_VAPID_KEY, serviceWorkerRegistration: reg });
+            if (!token) throw new Error('FCM token empty');
+
+            const uid = auth.currentUser.uid;
+            await database.ref(`waitlist/${waitlistTopic}/${uid}`).set({
+                fcmToken: token,
+                timestamp: Date.now(),
+                expiresAt: Date.now() + 86400000
+            });
+
+            document.getElementById('waitlist-banner').style.display = 'none';
+            const msg = currentLang === 'ko'
+                ? '✅ 24시간 레이더가 켜졌어요! 누군가 오면 바로 알려드릴게요.'
+                : '✅ Radar is on! We\'ll notify you when someone matches.';
+            alert(msg);
+        } catch (e) {
+            console.error('subscribeWaitlist error:', e);
+            alert(currentLang === 'ko' ? '알림 설정에 실패했어요: ' + e.message : 'Failed: ' + e.message);
+            if (btn) { btn.disabled = false; btn.textContent = '📡 인연의 신호 켜두기'; }
+        }
+    }
+
+    // 혼자 있을 때 30초 후 배너 표시
+    function startAloneTimer(topic) {
+        clearAloneTimer();
+        if (!topic || topic.startsWith('🔒_')) return;
+        waitlistTopic = topic;
+        aloneTimer = setTimeout(() => {
+            if (isJoined && roomParticipants.length === 0) {
+                document.getElementById('waitlist-banner').style.display = 'block';
+            }
+        }, 30000);
+    }
+
+    function clearAloneTimer() {
+        if (aloneTimer) { clearTimeout(aloneTimer); aloneTimer = null; }
+        document.getElementById('waitlist-banner').style.display = 'none';
+    }
+
+    // User B: 대기자에게 FCM 발송 후 3분 카운트다운
+    async function notifyWaitlistAndCountdown(topic) {
+        if (!topic || topic.startsWith('🔒_')) return;
+        try {
+            const res = await fetch(`${TOKEN_SERVER_URL}/push/notify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ keyword: topic })
+            });
+            const data = await res.json();
+            if (data.notified && data.notified > 0) startCountdown();
+        } catch (e) {
+            console.warn('push/notify failed:', e.message);
+        }
+    }
+
+    function startCountdown() {
+        const box = document.getElementById('waitlist-countdown');
+        const timerEl = document.getElementById('wl-countdown-timer');
+        if (!box || !timerEl) return;
+        box.style.display = 'block';
+        let secs = 180;
+        clearInterval(countdownInterval);
+        countdownInterval = setInterval(() => {
+            secs--;
+            const m = Math.floor(secs / 60);
+            const s = secs % 60;
+            timerEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+            if (secs <= 0) {
+                clearInterval(countdownInterval);
+                box.style.display = 'none';
+            }
+        }, 1000);
+    }
+
+    function stopCountdown() {
+        clearInterval(countdownInterval);
+        document.getElementById('waitlist-countdown').style.display = 'none';
+    }
 
     // 2. Global State Management
     let currentLang = "en";
@@ -2134,6 +2297,13 @@ database.ref('activeTopics').on('value', (snap) => {
             document.getElementById("btn-talk-again").style.display = "inline-block";
             // 로그인 시 이전 세션의 잔류 상태 메시지 초기화
             document.getElementById("matching-status").innerText = "";
+
+            // 푸시 알림 클릭으로 진입한 경우 자동 입장
+            if (window._pushJoinTopic) {
+                const t = window._pushJoinTopic;
+                window._pushJoinTopic = null;
+                setTimeout(() => autoJoinFromPush(t), 800);
+            }
 
 
             // 평판 데이터 연동 (배지 수 누적 리스닝)
@@ -3243,6 +3413,10 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             renderParticipantsUI();
             showRoomScreen(finalTopic);
 
+            // 대기자 알림 발송 (User B 역할) + 혼자일 때 레이더 배너 (User A 역할)
+            notifyWaitlistAndCountdown(finalTopic);
+            startAloneTimer(finalTopic);
+
             isJoining = false;
 
         } catch (error) {
@@ -3294,7 +3468,11 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             if (!roomParticipants.includes(user.uid)) {
                 roomParticipants.push(user.uid);
                 renderParticipantsUI();
-                if (roomParticipants.length === 1) startFreeTimer();
+                if (roomParticipants.length === 1) {
+                    startFreeTimer();
+                    clearAloneTimer();  // 상대방 입장 → 레이더 배너 숨김
+                    stopCountdown();    // 카운트다운 종료
+                }
             }
 
             try { if (user.audioTrack) user.audioTrack.play(); } catch(e) { console.warn('audioTrack.play failed:', e.message); }
@@ -4128,6 +4306,8 @@ return text;
 
     document.getElementById('leave-btn').onclick = async function() {
         try {
+            clearAloneTimer();
+            stopCountdown();
             clearFreeTimer();
             stopRollingAudioRecorder();
             if (window._heartbeatInterval) { clearInterval(window._heartbeatInterval); window._heartbeatInterval = null; }
