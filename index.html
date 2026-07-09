@@ -3331,6 +3331,8 @@ document.getElementById('max-people-group').style.visibility = "hidden";
                 console.error("Token fetch failed:", e);
                 throw new Error("토큰 서버 연결 실패. 잠시 후 다시 시도해 주세요.");
             }
+            hadPeer = false;
+            waitlistTopic = finalTopic.startsWith('🔒_') ? null : finalTopic;
             dbg('8. Agora join 시도');
             myUid = await client.join(AGORA_APP_ID, safeAgoraChannelId, agoraToken, 0);
             dbg('9. join 성공');
@@ -3406,8 +3408,6 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             showRoomScreen(finalTopic);
 
             // 대기자 알림 발송 (User B 역할)
-            hadPeer = false;
-            waitlistTopic = finalTopic.startsWith('🔒_') ? null : finalTopic;
             notifyWaitlistAndCountdown(finalTopic);
 
             isJoining = false;
