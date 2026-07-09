@@ -1408,9 +1408,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <div id="waitlist-banner" style="display:none; position:fixed; bottom:80px; left:50%; transform:translateX(-50%); width:90%; max-width:360px; background:rgba(15,15,22,0.97); border:1px solid rgba(0,229,255,0.2); border-radius:16px; padding:16px; z-index:9500; box-shadow:0 8px 32px rgba(0,0,0,0.5);">
         <div style="font-size:13px; font-weight:700; color:var(--accent-color); margin-bottom:6px;">📡 <span id="wl-title">지금은 이 주제를 공유할 사람이 없네요.</span></div>
         <div style="font-size:11.5px; color:rgba(255,255,255,0.55); line-height:1.5; margin-bottom:12px;" id="wl-desc">24시간 동안 레이더를 켜둘게요. 누군가 같은 키워드를 입력하면 바로 신호를 보내드릴게요.</div>
-        <div style="display:flex; gap:8px;">
-            <button id="wl-enable-btn" onclick="subscribeWaitlist()" style="flex:1; background:var(--accent-color); color:#000; border:none; border-radius:8px; padding:9px; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap;">📡 인연의 신호 켜두기</button>
-            <button onclick="document.getElementById('waitlist-banner').style.display='none'" style="background:transparent; border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.4); border-radius:8px; padding:9px 12px; font-size:12px; cursor:pointer; white-space:nowrap;">닫기</button>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <button id="wl-enable-btn" onclick="subscribeWaitlist()" style="flex:3; background:var(--accent-color); color:#000; border:none; border-radius:8px; padding:12px; font-size:13px; font-weight:700; cursor:pointer; white-space:nowrap;"></button>
+            <button id="wl-close-btn" onclick="document.getElementById('waitlist-banner').style.display='none'" style="flex:1; background:transparent; border:1px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.4); border-radius:8px; padding:9px 8px; font-size:11px; cursor:pointer; white-space:nowrap;"></button>
         </div>
     </div>
 
@@ -1993,6 +1993,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         callBtn: "Call",
         editNickname: "✏️ Rename",
         unfriend: "🚫 Unfriend",
+        wlTitle: "No one to share this topic with right now.",
+        wlDesc: "We'll keep the radar on for 24 hours. If someone enters the same keyword, we'll send you a signal right away.",
+        wlEnable: "📡 Turn on Connection Radar",
+        wlClose: "Close",
         friendAdded: "🎉 Added to your friend list!",
         privateChannelAlert: (name) => `Connecting to private channel with ${name}...`,
         roomHeaderLabel: "Conversation Topic",
@@ -2093,6 +2097,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         callBtn: "연결",
         editNickname: "✏️ 이름 변경",
         unfriend: "🚫 친구 끊기",
+        wlTitle: "지금은 이 주제를 공유할 사람이 없네요.",
+        wlDesc: "24시간 동안 레이더를 켜둘게요. 누군가 같은 키워드를 입력하면 바로 신호를 보내드릴게요.",
+        wlEnable: "📡 인연의 신호 켜두기",
+        wlClose: "닫기",
         friendAdded: "🎉 친구 목록에 추가되었습니다!",
         privateChannelAlert: (name) => `${name} 님과의 비밀 채널로 연결합니다...`,
         roomHeaderLabel: "대화 주제",
@@ -2455,6 +2463,12 @@ database.ref('activeTopics').on('value', (snap) => {
         const s7 = document.getElementById('intro2-s7'); if (s7) s7.innerHTML = lang.intro2S7;
         if(document.getElementById('label-add-friend')) document.getElementById('label-add-friend').innerText = lang.addFriendBtn;
         if(document.getElementById('friends-m-title')) document.getElementById('friends-m-title').innerText = lang.friendsModalTitle;
+
+        // 인연 레이더 배너 다국어
+        const wlTitle = document.getElementById('wl-title'); if (wlTitle) wlTitle.textContent = lang.wlTitle;
+        const wlDesc = document.getElementById('wl-desc'); if (wlDesc) wlDesc.textContent = lang.wlDesc;
+        const wlEnableBtn = document.getElementById('wl-enable-btn'); if (wlEnableBtn && !wlEnableBtn.disabled) wlEnableBtn.textContent = lang.wlEnable;
+        const wlCloseBtn = document.getElementById('wl-close-btn'); if (wlCloseBtn) wlCloseBtn.textContent = lang.wlClose;
 
         // 토글 버튼 텍스트 고정
         document.getElementById('toggle-rep-btn').innerText = currentLang === 'ko' ? "📊 대화스탯" : "📊 TALK STATS";
