@@ -734,6 +734,12 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     font-size: 11px; cursor: pointer; margin: 0; width: auto;
 }
 .friend-edit-btn:hover { border-color: var(--accent-color); color: var(--accent-color); }
+.friend-unfriend-btn {
+    background: transparent; border: 1px solid rgba(255,59,48,0.25);
+    color: rgba(255,59,48,0.5); padding: 4px 9px; border-radius: 6px;
+    font-size: 11px; cursor: pointer; margin: 0; width: auto;
+}
+.friend-unfriend-btn:hover { border-color: var(--danger-color); color: var(--danger-color); }
 .friend-action-group { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
 
 /* 동물 닉네임 참여자 카드 */
@@ -4573,8 +4579,14 @@ function loadFriendsList() {
             editBtn.textContent = '✏️ 이름 변경';
             editBtn.onclick = () => editFriendNickname(friendUid);
 
+            const unfriendBtn = document.createElement('button');
+            unfriendBtn.className = 'friend-unfriend-btn';
+            unfriendBtn.textContent = '🚫 친구 끊기';
+            unfriendBtn.onclick = () => unfriendUser(friendUid);
+
             actionGroup.appendChild(callBtn);
             actionGroup.appendChild(editBtn);
+            actionGroup.appendChild(unfriendBtn);
 
             el.appendChild(friendInfo);
             el.appendChild(actionGroup);
@@ -4609,6 +4621,24 @@ function closeFriendsModal() {
     if (activePresenceRefs.length > 0) {
         activePresenceRefs.forEach(ref => ref.off());
         activePresenceRefs = []; // 배열 비우기
+    }
+}
+
+async function unfriendUser(friendUid) {
+    if (!auth.currentUser) return;
+    const myUid = auth.currentUser.uid;
+    const confirm = window.confirm(currentLang === 'ko' ? '친구를 끊으시겠어요? 상대방 목록에서도 삭제됩니다.' : 'Remove this friend? They will also be removed from your list.');
+    if (!confirm) return;
+    try {
+        await database.ref(`users/${myUid}/friends/${friendUid}`).remove();
+        await database.ref(`users/${friendUid}/friends/${myUid}`).remove();
+        document.getElementById(`friend-item-${friendUid}`)?.remove();
+        const container = document.getElementById('friends-list-container');
+        if (container && container.children.length === 0) {
+            container.innerHTML = `<div style="padding: 20px; text-align: center; font-size: 13px; color: rgba(255,255,255,0.4);">${textData[currentLang].noFriends}</div>`;
+        }
+    } catch(e) {
+        alert(currentLang === 'ko' ? '오류가 발생했어요.' : 'An error occurred.');
     }
 }
 
