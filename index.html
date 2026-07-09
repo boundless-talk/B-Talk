@@ -234,6 +234,7 @@
         .stats-main-emoji { font-size: 32px; line-height: 1; }
         .stats-main-label { font-size: 10px; letter-spacing: 1px; color: rgba(255,255,255,0.45); font-weight: 700; }
         .stats-main-value { font-size: 26px; font-weight: 800; color: #fff; line-height: 1; }
+        .stats-main-badge .stats-bar { width: 100%; margin-top: 6px; }
         .stats-sub-grid { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .stats-sub-badge {
             background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
@@ -2160,6 +2161,7 @@ database.ref('activeTopics').on('value', (snap) => {
                 document.getElementById('main-badge-emoji').textContent = top.emoji;
                 document.getElementById('main-badge-label').textContent = document.getElementById(top.labelId).innerText;
                 document.getElementById('main-badge-value').textContent = top.val;
+                document.getElementById('main-badge-bar').style.width = '100%';
                 // 서브 배지: 최고값 제외하고 나머지만 표시
                 allBadges.forEach(b => {
                     const el = document.getElementById(b.scoreId).closest('.stats-sub-badge');
