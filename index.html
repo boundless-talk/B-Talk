@@ -1320,8 +1320,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     </div>
     <div style="text-align:center; margin-top:10px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
         <button id="inquiry-btn" onclick="openInquiryModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">문의하기</button>
-        <button onclick="openAboutModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">About</button>
-        <button onclick="openMainPayModal()" id="subscribe-btn" style="background:transparent; border:none; color:rgba(0,229,255,0.6); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer; font-weight:600;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(0,229,255,0.6)'">Go Unlimited ✨</button>
+        <button onclick="openAboutModal()" id="about-nav-btn" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">About</button>
+        <button onclick="openMainPayModal()" id="subscribe-btn" style="background:transparent; border:none; color:rgba(0,229,255,0.6); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer; font-weight:600;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(0,229,255,0.6)'">Go Premium ✨</button>
     </div>
 
 
@@ -1597,7 +1597,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <div>
                     <div style="font-size:10px; background:rgba(0,229,255,0.15); color:#00e5ff; border-radius:6px; padding:2px 7px; display:inline-block; margin-bottom:4px;">Popular</div>
                     <div style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.9);">Monthly Plan</div>
-                    <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px;">Unlimited calls for a month</div>
+                    <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px;" id="pay-monthly-desc">Unlimited calls for a month</div>
+                    <div id="pay-event-badge" style="font-size:10px; color:#ffcc00; margin-top:5px;">🎉 지금 구독하면 첫 달 무제한 대화! <span id="pay-event-dday" style="background:rgba(255,204,0,0.15); border-radius:4px; padding:1px 5px;"></span><br><span style="color:rgba(255,255,255,0.3); font-size:9px;">※ 이벤트 종료 후 가입자는 일 2시간 제공됩니다</span></div>
                 </div>
                 <div style="text-align:right;">
                     <div style="font-size:16px; font-weight:700; color:#00e5ff;">$4.99</div>
@@ -2456,6 +2457,17 @@ database.ref('activeTopics').on('value', (snap) => {
     });
 
     // 4. UI 갱신 & 다국어 바인딩 매핑 로직
+    function updateEventDDay() {
+        const el = document.getElementById('pay-event-dday');
+        if (!el) return;
+        const end = new Date('2026-08-31T23:59:59');
+        const now = new Date();
+        const diff = Math.ceil((end - now) / (1000 * 60 * 60 * 24));
+        if (diff > 0) el.textContent = 'D-' + diff;
+        else el.style.display = 'none';
+    }
+    updateEventDDay();
+
     function updateUI() {
         const lang = textData[currentLang];
         const appTitle = document.getElementById('app-title');
@@ -2606,6 +2618,10 @@ database.ref('activeTopics').on('value', (snap) => {
         document.getElementById('rep-m-desc').innerText = lang.reportDesc;
         const rrInput = document.getElementById('report-reason-input');
         if (rrInput) rrInput.placeholder = currentLang === 'ko' ? '신고 사유를 적어주세요.' : 'Please describe the reason for your report.';
+        const subBtn = document.getElementById('subscribe-btn');
+        if (subBtn) subBtn.textContent = currentLang === 'ko' ? '프리미엄 시작 ✨' : 'Go Premium ✨';
+        const aboutNavBtn = document.getElementById('about-nav-btn');
+        if (aboutNavBtn) aboutNavBtn.textContent = currentLang === 'ko' ? '서비스소개' : 'About';
 
         // 라이브 토픽 라벨 언어 동기화
         const liveTopicsLbl = document.getElementById('live-topics-label');
