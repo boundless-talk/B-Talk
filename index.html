@@ -222,6 +222,7 @@
             padding: 16px; border-radius: 20px; margin-bottom: 25px;
             box-shadow: 0 0 24px rgba(0,229,255,0.08), 0 4px 20px rgba(0,0,0,0.3);
             width: 100%; max-width: 400px;
+            position: relative; overflow: hidden;
         }
         .stats-rank-row { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: rgba(255,255,255,0.45); text-align: center; margin-bottom: 12px; }
         .stats-rank-row span { color: #ffd166; font-weight: 800; }
@@ -1243,6 +1244,11 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <button id="logout-btn" style="display: none;">LOGOUT</button>
     </div>
    <div class="reputation-board" id="reputation-section" style="display: none;">
+        <div id="guest-stats-overlay" style="display:none; position:absolute; inset:0; z-index:5; border-radius:20px; background:rgba(13,14,18,0.55); backdrop-filter:blur(2px); align-items:center; justify-content:center; flex-direction:column; gap:6px; text-align:center; padding:20px;">
+            <div style="font-size:28px;">🔒</div>
+            <div id="gso-title" style="font-size:14px; font-weight:700; color:#fff;">회원에게만 공개됩니다</div>
+            <div id="gso-desc" style="font-size:12px; color:rgba(255,255,255,0.45); line-height:1.6;">대화를 거듭할수록 쌓이는 나만의 토크 스탯,<br>가입하면 바로 확인할 수 있어요.</div>
+        </div>
         <div class="stats-rank-row" id="stats-rank-row">RANK: <span id="rank-label">—</span> <button onclick="const p=document.getElementById('rank-info-popup');p.style.display=p.style.display==='none'?'block':'none';" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);border-radius:50%;width:16px;height:16px;font-size:9px;cursor:pointer;padding:0;margin-left:4px;vertical-align:middle;line-height:1;">?</button></div>
         <div id="rank-info-popup" style="display:none;background:rgba(15,15,22,0.98);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 10px 10px;margin:6px 0 4px;">
             <div id="rank-info-title" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);text-align:center;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">Total badges earned</div>
@@ -2409,7 +2415,7 @@ database.ref('activeTopics').on('value', (snap) => {
             if (talkControls) talkControls.style.display = "none";
             document.getElementById("btn-talk-again").style.display = "none";
 
-            document.getElementById("toggle-rep-btn").style.display = "inline-block";
+            document.getElementById("toggle-rep-btn").style.display = "none";
             if (reputationSection) reputationSection.style.display = "none";
 
             if (startBtn) startBtn.disabled = true;
@@ -2845,22 +2851,33 @@ database.ref('activeTopics').on('value', (snap) => {
 
     // 💡 새롭게 추가하는 토글 클릭 이벤트 리스너
     document.getElementById('toggle-rep-btn').addEventListener('click', () => {
-        if (isGuest) {
-            const repSection = document.getElementById('reputation-section');
-            repSection.style.display = repSection.style.display === 'none' ? 'block' : 'none';
-            if (repSection.style.display === 'block') {
-                repSection.innerHTML = `<div style="text-align:center; padding:24px 16px; color:rgba(255,255,255,0.55); font-size:13.5px; line-height:1.8;">
-                    🔒 <strong style="color:#fff;">${currentLang === 'ko' ? '회원에게만 공개됩니다' : 'Available to members only'}</strong><br>
-                    <span style="font-size:12px; color:rgba(255,255,255,0.35);">${currentLang === 'ko' ? '대화를 거듭할수록 쌓이는 나만의 스탯,<br>가입하면 확인할 수 있어요.' : 'Your personal talk stats grow with every conversation.<br>Sign up to unlock them.'}</span>
-                </div>`;
-            }
+        const repSection = document.getElementById('reputation-section');
+        const overlay = document.getElementById('guest-stats-overlay');
+        const isOpen = repSection.style.display === 'block';
+
+        if (isOpen) {
+            repSection.style.display = 'none';
             return;
         }
-        const repSection = document.getElementById('reputation-section');
-        if (repSection.style.display === "none") {
-            repSection.style.display = "block";
+
+        repSection.style.display = 'block';
+
+        if (isGuest) {
+            // 콘텐츠는 블러 처리 후 overlay 표시
+            repSection.style.filter = 'blur(4px)';
+            repSection.style.pointerEvents = 'none';
+            if (overlay) {
+                overlay.style.display = 'flex';
+                const isKo = currentLang === 'ko';
+                document.getElementById('gso-title').textContent = isKo ? '회원에게만 공개됩니다' : 'Available to members only';
+                document.getElementById('gso-desc').innerHTML = isKo
+                    ? '대화를 거듭할수록 쌓이는 나만의 토크 스탯,<br>가입하면 바로 확인할 수 있어요.'
+                    : 'Your personal talk stats grow with every conversation.<br>Sign up to unlock them.';
+            }
         } else {
-            repSection.style.display = "none";
+            repSection.style.filter = '';
+            repSection.style.pointerEvents = '';
+            if (overlay) overlay.style.display = 'none';
         }
     });
     // ── 이메일 로그인 토글 ──
@@ -4759,6 +4776,10 @@ async function editFriendNickname(friendUid) {
 
 // 2. '또 대화하기' 버튼 클릭 시 친구 목록 열기 및 실시간 렌더링
 document.getElementById('btn-talk-again').addEventListener('click', () => {
+    if (isGuest) {
+        alert(currentLang === 'ko' ? '🔒 회원 전용 기능입니다.\n가입하면 친구와 다시 대화할 수 있어요.' : '🔒 This feature is for members only.\nSign up to reconnect with friends.');
+        return;
+    }
     document.getElementById('friends-modal').classList.add('active');
     loadFriendsList();
 });
