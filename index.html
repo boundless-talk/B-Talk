@@ -75,7 +75,7 @@
         #splash-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg-gradient);
+            background: #0a0a0f;
             z-index: 6000;
             display: flex;
             flex-direction: column;
@@ -1101,7 +1101,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 스플래시 화면 -->
     <div id="splash-screen">
-        <video autoplay muted playsinline style="width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0;">
+        <video autoplay muted playsinline style="width:min(480px, 80vw); height:auto; border-radius:16px;">
             <source src="splash.mp4" type="video/mp4">
         </video>
     </div>
