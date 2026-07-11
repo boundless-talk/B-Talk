@@ -1588,6 +1588,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <!-- 7분 결제 모달 -->
     <div id="payment-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.7); align-items:center; justify-content:center;">
         <div style="background:#1a1a2e; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:28px 24px 20px; width:90%; max-width:340px; margin:auto; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
+            <button id="pay-modal-close" onclick="document.getElementById('payment-modal').style.display='none'" style="position:absolute; top:14px; right:16px; background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:20px; cursor:pointer; line-height:1;">✕</button>
             <div style="font-size:26px; text-align:center; margin-bottom:10px;">💬</div>
             <div style="font-size:17px; font-weight:700; color:rgba(255,255,255,0.92); text-align:center; margin-bottom:6px;" id="pay-modal-title">Too good to stop now? 😊</div>
             <div style="font-size:12px; color:rgba(255,255,255,0.4); text-align:center; margin-bottom:20px;">Keep the conversation going</div>
@@ -2191,6 +2192,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         if (user) {
             isGuest = user.isAnonymous;
 
+            const subBtn = document.getElementById('subscribe-btn');
+            if (subBtn) subBtn.style.display = '';
+
             // ── Google 로그인: DOB 미등록 시 확인 모달 ──
             if (!isGuest) {
                 database.ref('users/' + user.uid + '/dob').once('value').then(snap => {
@@ -2454,6 +2458,9 @@ database.ref('activeTopics').on('value', (snap) => {
 
             if (startBtn) startBtn.disabled = true;
             document.getElementById("ban-overlay").style.display = "none";
+
+            const subBtn = document.getElementById('subscribe-btn');
+            if (subBtn) subBtn.style.display = 'none';
         }
     });
 
