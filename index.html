@@ -1046,7 +1046,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 <body>
 
     <!-- 스플래시 화면 — body 최상단에서 즉시 렌더링 -->
-    <div id="splash-screen">
+    <div id="splash-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0f;z-index:6000;display:flex;align-items:center;justify-content:center;">
         <div style="position:relative; width:min(480px, 80vw);">
             <video id="splash-video" muted playsinline style="width:100%; height:auto; display:block;">
                 <source src="splash.mp4" type="video/mp4">
