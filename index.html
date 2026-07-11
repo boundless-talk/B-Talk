@@ -1111,7 +1111,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     </div>
 
     <!-- 인트로 화면 -->
-    <div id="intro-screen" style="opacity:0; pointer-events:none;">
+    <div id="intro-screen" style="display:none;">
         <div style="position:relative; display:flex; align-items:center; justify-content:center;">
             <img src="logo-transparent.png" alt="" style="position:absolute; width:220px; height:220px; opacity:0.45; clip-path:inset(0 0 30% 0); pointer-events:none;">
             <div class="intro-title" style="position:relative; z-index:1; white-space:nowrap; font-size:clamp(18px, 6vw, 38px); letter-spacing:clamp(3px, 1.5vw, 8px);">BOUNDLESS TALK</div>
@@ -4402,8 +4402,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             splash.classList.add('hide');
             setTimeout(() => {
                 splash.style.display = 'none';
-                intro.style.opacity = '1';
-                intro.style.pointerEvents = '';
+                intro.style.display = 'flex';
             }, 600);
         }
 
