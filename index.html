@@ -1588,10 +1588,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <!-- 7분 결제 모달 -->
     <div id="payment-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.7); align-items:center; justify-content:center;">
         <div style="background:#1a1a2e; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:28px 24px 20px; width:90%; max-width:340px; margin:auto; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
-            <button id="pay-modal-close" onclick="document.getElementById('payment-modal').style.display='none'" style="position:absolute; top:14px; right:16px; background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:20px; cursor:pointer; line-height:1;">✕</button>
             <div style="font-size:26px; text-align:center; margin-bottom:10px;">💬</div>
             <div style="font-size:17px; font-weight:700; color:rgba(255,255,255,0.92); text-align:center; margin-bottom:6px;" id="pay-modal-title">Too good to stop now? 😊</div>
-            <div style="font-size:12px; color:rgba(255,255,255,0.4); text-align:center; margin-bottom:20px;">Keep the conversation going</div>
+            <div style="font-size:12px; color:rgba(255,255,255,0.4); text-align:center; margin-bottom:20px;" id="pay-modal-sub">Keep the conversation going</div>
 
             <!-- Monthly Plan -->
             <div class="pay-plan-btn" id="pay-monthly" style="border:1.5px solid #00e5ff; background:rgba(0,229,255,0.06); border-radius:14px; padding:14px 16px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;">
@@ -1622,6 +1621,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
 
             <hr id="pay-modal-hr" style="border:none; border-top:1px solid rgba(255,255,255,0.07); margin:6px 0 8px;">
+            <button id="pay-modal-close" onclick="document.getElementById('payment-modal').style.display='none'" style="width:100%; padding:8px; background:transparent; border:none; color:rgba(255,255,255,0.25); font-size:12px; cursor:pointer; border-radius:10px;" id="pay-modal-close-btn">닫기</button>
             <button id="pay-modal-leave" style="width:100%; padding:11px; background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:12px; cursor:pointer; border-radius:10px;">End conversation</button>
             <div id="pay-countdown-row" style="font-size:11px; color:rgba(255,255,255,0.2); text-align:center; margin-top:6px;">
                 Call ends in <span id="pay-countdown">60</span>s
@@ -2020,6 +2020,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         introBtn: "Get Started",
         intro2Btn: "Got it!",
         intro2Title: "HOW IT WORKS",
+        payModalTitle: "Too good to stop now? 😊",
+        payModalSub: "Keep the conversation going",
+        payModalClose: "Close",
         intro2S1: `<strong>Pick a Topic</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">Enter what you want to talk about today, or join a room that's already talking.</span>`,
         intro2S2: `<strong>Enjoy 10 Minutes (or more)</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">Enjoy 10 minutes of free, focused time for every conversation. Want to talk longer without limits? Premium features are always available to keep the chat going.</span>`,
         intro2S3: `<strong>Connect &amp; Collect Badges</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">If you hit it off, add them as a friend. You can also collect unique Talk Badges based on your conversation style.</span>`,
@@ -2129,6 +2132,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         introBtn: "시작하기",
         intro2Btn: "준비완료!",
         intro2Title: "이용 방법",
+        payModalTitle: "대화가 너무 좋았나요? 😊",
+        payModalSub: "대화를 계속 이어가보세요",
+        payModalClose: "닫기",
         intro2S1: `<strong>주제 선택</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">오늘 이야기하고 싶은 주제를 입력하거나, 이미 대화 중인 방에 참여해보세요.</span>`,
         intro2S2: `<strong>10분 무료 대화 (또는 그 이상)</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">모든 대화에서 10분의 무료 집중 시간을 즐겨보세요. 시간 제한 없이 더 오래 대화하고 싶으신가요? 대화를 계속 이어갈 수 있는 프리미엄 기능이 언제나 준비되어 있습니다.</span>`,
         intro2S3: `<strong>친구 맺기 &amp; 배지 수집</strong><br><span style="font-size:13px;color:rgba(255,255,255,0.5);">마음이 맞으면 친구를 추가하세요. 대화 스타일에 따라 다양한 Talk Badge도 수집할 수 있어요.</span>`,
@@ -2513,6 +2519,9 @@ function updateUI() {
         if (intro2TitleEl) intro2TitleEl.textContent = lang.intro2Title;
         const intro2StartBtn = document.getElementById('intro2-start-btn');
         if (intro2StartBtn) intro2StartBtn.textContent = lang.intro2Btn;
+        const pmTitle = document.getElementById('pay-modal-title'); if (pmTitle) pmTitle.textContent = lang.payModalTitle;
+        const pmSub = document.getElementById('pay-modal-sub'); if (pmSub) pmSub.textContent = lang.payModalSub;
+        const pmClose = document.getElementById('pay-modal-close'); if (pmClose) pmClose.textContent = lang.payModalClose;
         const s1 = document.getElementById('intro2-s1'); if (s1) s1.innerHTML = lang.intro2S1;
         const s2 = document.getElementById('intro2-s2'); if (s2) s2.innerHTML = lang.intro2S2;
         const s3 = document.getElementById('intro2-s3'); if (s3) s3.innerHTML = lang.intro2S3;
