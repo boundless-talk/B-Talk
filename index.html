@@ -1101,9 +1101,13 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 스플래시 화면 -->
     <div id="splash-screen">
-        <video autoplay muted playsinline style="width:min(480px, 80vw); height:auto; border-radius:16px;">
-            <source src="splash.mp4" type="video/mp4">
-        </video>
+        <div style="position:relative; width:min(480px, 80vw);">
+            <video id="splash-video" muted playsinline style="width:100%; height:auto; display:block;">
+                <source src="splash.mp4" type="video/mp4">
+            </video>
+            <!-- 가장자리 페이드 -->
+            <div style="position:absolute; inset:0; background: radial-gradient(ellipse at center, transparent 40%, #0a0a0f 80%); pointer-events:none;"></div>
+        </div>
     </div>
 
     <!-- 인트로 화면 -->
@@ -4392,14 +4396,27 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
     (function() {
         const splash = document.getElementById('splash-screen');
         const intro = document.getElementById('intro-screen');
-        setTimeout(() => {
+        const video = document.getElementById('splash-video');
+
+        function hideSplash() {
             splash.classList.add('hide');
             setTimeout(() => {
                 splash.style.display = 'none';
                 intro.style.opacity = '1';
                 intro.style.pointerEvents = '';
             }, 600);
-        }, 3000);
+        }
+
+        // iOS Safari 자동재생 강제
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                // 자동재생 실패 시 스플래시 스킵
+                hideSplash();
+            });
+        }
+
+        setTimeout(hideSplash, 3000);
     })();
 
     // Render 서버 콜드스타트 방지 핑 (10분마다)
