@@ -4901,7 +4901,6 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         signalListenerRef = database.ref(`channels/${safeAgoraChannelId}/badgeSignal`);
         signalListenerRef.on('value', async (snap) => {
             const data = snap.val();
-            showBadgeToast('📥 recv:' + JSON.stringify(data).slice(0,60));
             if (!data) return;
             const myFbUid = auth.currentUser ? auth.currentUser.uid : null;
             if (!myFbUid) return;
@@ -5661,7 +5660,6 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         try {
             // 모바일에서 auth 토큰 만료 방지: 강제 갱신
             const currentUser = auth.currentUser;
-            showBadgeToast('🔑 auth:' + (currentUser ? currentUser.uid.slice(0,10) : 'NULL') + ' ch:' + safeAgoraChannelId.slice(0,10));
             if (currentUser) {
                 try { await currentUser.getIdToken(true); } catch(e) { console.warn('token refresh failed', e); }
             }
@@ -5674,7 +5672,6 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
                 from: _fromUid,
                 ts: Date.now()
             });
-            showBadgeToast('📤 ch:' + safeAgoraChannelId.slice(0,20) + ' from:' + _fromUid.slice(0,8));
 
             badgeSentThisSession = true;
             removeVoteTarget(selectedVoteTarget);
