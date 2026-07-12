@@ -3511,6 +3511,7 @@ function updateUI() {
             uidToAnimal[uid].label = `${color} ${currentLang === 'en' ? animal.en : animal.ko}`;
         });
         updateRoomParticipants();
+        if (isPingpong) updatePPTurnUI();
         // 언어 토글 버튼 텍스트 업데이트
         document.getElementById('lang-toggle-btn').innerText = currentLang === 'ko' ? 'EN' : 'KO';
         ['intro-lang-btn','intro2-lang-btn'].forEach(id => { const el = document.getElementById(id); if(el) el.innerText = currentLang === 'ko' ? 'EN' : 'KO'; });
