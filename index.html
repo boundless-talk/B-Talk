@@ -5095,6 +5095,10 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             subRemainingSeconds--;
             saveAccum++;
             document.getElementById('sub-time-text').textContent = fmt(subRemainingSeconds);
+            const settingsTimeEl = document.getElementById('settings-time-value');
+            if (settingsTimeEl && document.getElementById('settings-modal-overlay').classList.contains('open')) {
+                settingsTimeEl.textContent = fmt(subRemainingSeconds);
+            }
 
             if (saveAccum >= 30) {
                 usageRef.set(MAX - subRemainingSeconds);
