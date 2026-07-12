@@ -3760,7 +3760,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             el.id = `part-${uid}`;
             const avatarSpan = document.createElement('span');
             avatarSpan.className = 'animal-avatar';
-            avatarSpan.textContent = '👤';
+            avatarSpan.textContent = uidToRankEmoji[fbUid] || '👋';
 
             const nameSpan = document.createElement('span');
             nameSpan.className = 'animal-name';
@@ -4123,13 +4123,13 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
 
         if (isSelf) {
             item.innerHTML =
-                '<div class="subtitle-speaker">👤 ' + nickname
+                '<div class="subtitle-speaker">' + myRankEmoji + ' ' + nickname
                 + (currentLang === 'ko' ? ' (나)' : ' (me)') + '</div>'
                 + '<div class="subtitle-self-text">' + original + '</div>';
         } else {
             const showOriginal = translated && original !== translated;
             item.innerHTML =
-                '<div class="subtitle-speaker">👤 ' + nickname + '</div>'
+                '<div class="subtitle-speaker">' + (uidToRankEmoji[uid] || '👋') + ' ' + nickname + '</div>'
                 + (showOriginal ? '<div class="subtitle-original">' + original + '</div>' : '')
                 + '<div class="subtitle-translated">' + (translated || '<span class="subtitle-loading">...</span>') + '</div>';
         }
@@ -4276,7 +4276,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             const btn = document.createElement('button');
             btn.className = "target-btn";
             const nickname = uidToNickname[uid] || `User ${index + 1}`;
-            btn.innerText = `👤 ${nickname}`;
+            btn.innerText = `${uidToRankEmoji[uid] || '👋'} ${nickname}`;
             btn.onclick = () => {
                 document.querySelectorAll('#report-target-container .target-btn').forEach(b => b.classList.remove('selected'));
                 btn.classList.add('selected');
@@ -4838,7 +4838,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             btn.className = "target-btn";
             btn.dataset.uid = uid;
             const nickname = uidToNickname[uid] || `User ${index + 1}`;
-            btn.innerText = `👤 ${nickname}`;
+            btn.innerText = `${uidToRankEmoji[uid] || '👋'} ${nickname}`;
             btn.addEventListener('pointerdown', () => {
                 document.querySelectorAll('#vote-target-container .target-btn').forEach(b => b.classList.remove('selected'));
                 btn.classList.add('selected');
@@ -5163,7 +5163,14 @@ function loadFriendsList() {
             statusDot.textContent = '⚫';
 
             friendNameSpan.appendChild(statusDot);
-            friendNameSpan.appendChild(document.createTextNode(' 👤 '));
+            const rankNode = document.createElement('span');
+            rankNode.textContent = ' 👋 ';
+            friendNameSpan.appendChild(rankNode);
+            database.ref('users/' + friendUid + '/badges').once('value').then(bs => {
+                const b = bs.val() || {};
+                const t = (b.manner||0)+(b.logic||0)+(b.humor||0)+(b.empathy||0)+(b.passion||0);
+                rankNode.textContent = ' ' + getRankEmoji(t) + ' ';
+            }).catch(() => {});
             const nameNode = document.createElement('span');
             nameNode.textContent = displayName;
             friendNameSpan.appendChild(nameNode);
