@@ -1357,21 +1357,18 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <div id="live-topics-tags" style="display:flex; flex-wrap:wrap; gap:7px;"></div>
 </div>
             
-        <div class="input-group">
+        <div class="input-group" style="position:relative;">
             <input type="text" id="topic-input" placeholder="Enter a topic (e.g., tesla, love)">
+            <!-- 핑퐁 모드 토글 (인풋 오른쪽 위) -->
+            <div id="pingpong-toggle-row" onclick="togglePingpongMode()" style="position:absolute;top:-11px;right:8px;display:flex;align-items:center;gap:5px;background:rgba(20,18,32,0.92);border:1px solid rgba(123,97,255,0.35);border-radius:20px;padding:3px 8px 3px 6px;cursor:pointer;user-select:none;z-index:2;">
+                <span style="font-size:12px;">🏓</span>
+                <span id="pp-toggle-sub" style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.6);white-space:nowrap;">Ping-Pong</span>
+                <div class="pp-switch" id="pp-switch" style="width:28px;height:16px;border-radius:8px;"><div class="pp-switch-thumb" style="width:12px;height:12px;top:2px;left:2px;"></div></div>
+            </div>
         </div>
 
         <div id="matching-status"></div>
         <div id="debug-log" style="display:none;font-size:11px;color:#ff6b6b;margin-top:8px;word-break:break-all;max-width:100%;text-align:left;padding:0 10px;"></div>
-
-        <!-- 핑퐁 모드 토글 -->
-        <div class="pingpong-toggle-row" id="pingpong-toggle-row" onclick="togglePingpongMode()">
-            <div>
-                <div class="pingpong-toggle-label">🏓 Ping-Pong Mode</div>
-                <div class="pingpong-toggle-sub" id="pp-toggle-sub">1분 30초씩 번갈아 말하는 턴제 대화</div>
-            </div>
-            <div class="pp-switch" id="pp-switch"><div class="pp-switch-thumb"></div></div>
-        </div>
 
         <div class="select-group" id="max-people-group">
             <label for="max-people-select" id="maxpeople">Max People:</label>
