@@ -3838,6 +3838,8 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
                 isPingpong = true;
                 const ppSection = document.getElementById('pingpong-section');
                 if (ppSection) ppSection.classList.add('active');
+                const partSection = document.querySelector('.room-participants-section');
+                if (partSection) partSection.style.display = 'none';
                 const myFbUid = auth.currentUser ? auth.currentUser.uid : null;
                 if (myFbUid) startPPListener(safeAgoraChannelId, myFbUid, [myFbUid]);
                 startPPReactionListener(safeAgoraChannelId);
@@ -4377,6 +4379,8 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         ppCurrentTurnIdx = 0;
         const section = document.getElementById('pingpong-section');
         if (section) section.classList.remove('active');
+        const partSection = document.querySelector('.room-participants-section');
+        if (partSection) partSection.style.display = '';
         const modal = document.getElementById('pp-slow-match-modal');
         if (modal) modal.style.display = 'none';
         // 마이크 복구
