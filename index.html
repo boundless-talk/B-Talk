@@ -5676,6 +5676,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
 
         } catch (err) {
             console.error("Firebase transaction processing failure:", err);
+            showBadgeToast('❌ ERR: ' + (err && err.message ? err.message.slice(0,50) : String(err).slice(0,50)));
             removeVoteTarget(selectedVoteTarget);
         }
     }
