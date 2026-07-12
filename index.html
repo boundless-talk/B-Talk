@@ -1654,6 +1654,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
 
 
+            <div style="font-size:11px; color:rgba(0,229,255,0.7); text-align:center; margin:4px 0 10px; letter-spacing:0.3px;">✦ + 실시간 번역 &nbsp;·&nbsp; Real-time Translation included</div>
             <hr id="pay-modal-hr" style="border:none; border-top:1px solid rgba(255,255,255,0.07); margin:6px 0 8px;">
             <button id="pay-modal-close" onclick="document.getElementById('payment-modal').style.display='none'" style="width:100%; padding:8px; background:transparent; border:none; color:rgba(255,255,255,0.25); font-size:12px; cursor:pointer; border-radius:10px;" id="pay-modal-close-btn">닫기</button>
             <button id="pay-modal-leave" style="width:100%; padding:11px; background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:12px; cursor:pointer; border-radius:10px;">End conversation</button>
@@ -1939,6 +1940,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     let agoraToFirebaseUid = {}; // Agora UID → Firebase UID 매핑 테이블
     let uidToRankEmoji = {}; // Firebase UID → rank emoji
     let myRankEmoji = '👤';
+    let isSubscribed = false; // 구독 여부 캐시
 
     function getRankEmoji(total) {
         if (total >= 200) return '🔮';
@@ -2482,6 +2484,12 @@ database.ref('activeTopics').on('value', (snap) => {
                 document.getElementById('rank-label').innerText = rank;
                 const rankRow = document.getElementById('stats-rank-row');
                 if (rankRow) rankRow.childNodes[0].textContent = currentLang === 'ko' ? '랭크: ' : 'RANK: ';
+            });
+
+            // 구독 상태 캐시
+            database.ref('users/' + user.uid + '/subscription').on('value', snap => {
+                const sub = snap.val();
+                isSubscribed = !!(sub && sub.plan && sub.expiresAt && new Date(sub.expiresAt) > new Date());
             });
 
             // 친구 요청 실시간 수신 리스너 시작
@@ -3902,6 +3910,11 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
     let subtitleFbRef = null;
 
     function toggleSubtitles() {
+        if (!isSubscribed && !subtitlesEnabled) {
+            const isKo = currentLang === 'ko';
+            alert(isKo ? '실시간 번역 서비스는 Premium 기능입니다.\nGo Premium에서 구독 후 이용하실 수 있어요 ✨' : 'Real-time translation is a Premium feature.\nSubscribe via Go Premium to unlock it ✨');
+            return;
+        }
         subtitlesEnabled = !subtitlesEnabled;
         const btn = document.getElementById('subtitle-toggle-btn');
         const langRow = document.getElementById('subtitle-lang-row');
