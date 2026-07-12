@@ -4904,19 +4904,33 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             const data = snap.val();
             if (!data) return;
 
+            const badgeType = data.badgeType;
             const badgeNames = {
                 manner:  currentLang === 'ko' ? "친절" : "NICE",
                 logic:   currentLang === 'ko' ? "논리" : "LOGIC",
                 empathy: currentLang === 'ko' ? "공감" : "WARM",
                 passion: currentLang === 'ko' ? "열정" : "BOLD",
-                humor:  currentLang === 'ko' ? "유머" : "FUN"
+                humor:   currentLang === 'ko' ? "유머" : "FUN"
             };
-            alert(currentLang === 'ko'
-                ? `✨ 다른 참여자가 나에게 [${badgeNames[data.badgeType]}] 배지를 선물했습니다!`
-                : `✨ A peer has gifted you a [${badgeNames[data.badgeType]}] badge!`
-            );
-            // 수신 후 즉시 삭제
+
+            // 수신 후 즉시 삭제 (중복 처리 방지)
             await database.ref(`signals/${myUid}`).remove();
+
+            // 내 Firebase UID로 직접 badges + dailyBadges 기록 (자기 데이터 쓰기 → 규칙 통과)
+            try {
+                const fbUid = auth.currentUser ? auth.currentUser.uid : null;
+                if (fbUid && badgeType) {
+                    const _n = new Date();
+                    const kstToday = new Date(_n.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
+                    await database.ref(`users/${fbUid}/badges/${badgeType}`).set(firebase.database.ServerValue.increment(1));
+                    await database.ref(`users/${fbUid}/dailyBadges/${kstToday}/${badgeType}`).set(firebase.database.ServerValue.increment(1));
+                }
+            } catch(e) { console.warn('badge self-write failed:', e); }
+
+            showBadgeToast(currentLang === 'ko'
+                ? `✨ [${badgeNames[badgeType]}] 배지를 받았어요!`
+                : `✨ You received a [${badgeNames[badgeType]}] badge!`
+            );
         });
     }
 
@@ -5649,26 +5663,12 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
                 try { await currentUser.getIdToken(true); } catch(e) { console.warn('token refresh failed', e); }
             }
 
-            // 1. Firebase로 배지 수신 알림 전송 (상대방 signals/{uid} 경로에 기록)
-            try {
-                const signalKey = `${auth.currentUser ? auth.currentUser.uid : myUid}_${selectedVoteTarget}`;
-                await database.ref(`signals/${signalKey}`).set({
-                    badgeType,
-                    senderId: String(myUid),
-                    timestamp: Date.now()
-                });
-            } catch(e) { console.warn('Signal write failed:', e); }
-
-            // 2. 서버 사이드 increment
-            const targetBadgeRef = database.ref('users/' + selectedVoteTarget + '/badges/' + badgeType);
-            await targetBadgeRef.set(firebase.database.ServerValue.increment(1));
-            // 오늘 받은 배지 일별 기록
-            const _now = new Date();
-            const today = new Date(_now.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
-            const dailyPath = 'users/' + selectedVoteTarget + '/dailyBadges/' + today + '/' + badgeType;
-            await database.ref(dailyPath).set(firebase.database.ServerValue.increment(1));
-            // 디버그: 화면에 경로 표시
-            showBadgeToast('✅ ' + dailyPath.slice(0, 60));
+            // signals/{receiverFbUid}에 배지 신호 전송 → 수신측에서 자기 데이터에 직접 씀
+            await database.ref(`signals/${selectedVoteTarget}`).set({
+                badgeType,
+                senderId: auth.currentUser ? auth.currentUser.uid : String(myUid),
+                timestamp: Date.now()
+            });
 
             badgeSentThisSession = true;
             showBadgeToast(textData[currentLang].badgeSuccess);
@@ -5676,7 +5676,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
 
         } catch (err) {
             console.error("Firebase transaction processing failure:", err);
-            showBadgeToast('❌ ERR: ' + (err && err.message ? err.message.slice(0,50) : String(err).slice(0,50)));
+            showBadgeToast(currentLang === 'ko' ? '배지 전송에 실패했습니다.' : 'Failed to send badge.');
             removeVoteTarget(selectedVoteTarget);
         }
     }
