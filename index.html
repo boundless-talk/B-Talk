@@ -1561,7 +1561,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <div class="modal-content">
         <h3 id="friends-m-title">나의 친구 목록</h3>
         <div class="target-select-list" id="friends-list-container" style="max-height: 250px; text-align: left;"></div>
-        <button onclick="closeFriendsModal()" style="background: rgba(255,255,255,0.05); color: #fff; margin-top: 10px; width: 100%;">닫기</button>
+        <button id="friends-close-btn" onclick="closeFriendsModal()" style="background: rgba(255,255,255,0.05); color: #fff; margin-top: 10px; width: 100%;">닫기</button>
     </div>
     </div>
 
@@ -2658,6 +2658,8 @@ database.ref('activeTopics').on('value', (snap) => {
                 allBadges.forEach(b => {
                     const el = document.getElementById(b.scoreId).closest('.stats-sub-badge');
                     if (el) el.style.display = b.key === top.key ? 'none' : '';
+                    const labelEl = document.getElementById(b.labelId);
+                    if (labelEl) labelEl.innerText = textData[currentLang][b.textKey];
                 });
 
                 // 랭크 계산
@@ -2797,6 +2799,7 @@ function updateUI() {
         const s7 = document.getElementById('intro2-s7'); if (s7) s7.innerHTML = lang.intro2S7;
         if(document.getElementById('label-add-friend')) document.getElementById('label-add-friend').innerText = lang.addFriendBtn;
         if(document.getElementById('friends-m-title')) document.getElementById('friends-m-title').innerText = lang.friendsModalTitle;
+        const friendsCloseBtn = document.getElementById('friends-close-btn'); if (friendsCloseBtn) friendsCloseBtn.textContent = isKo ? '닫기' : 'Close';
 
         // 인연 레이더 배너 다국어
         const wlTitle = document.getElementById('wl-title'); if (wlTitle) wlTitle.textContent = lang.wlTitle;
