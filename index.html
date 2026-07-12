@@ -5260,7 +5260,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
 
             // 핑퐁 토글 다시 표시
             const ppRow = document.getElementById('pingpong-toggle-row');
-            if (ppRow) ppRow.style.display = '';
+            if (ppRow) ppRow.style.display = 'flex';
             if (ppSlowMatchTimer) { clearTimeout(ppSlowMatchTimer); ppSlowMatchTimer = null; }
 
             // 피어 배지 전송 타겟 리스트박스 렌더링 구성 (uidToAnimal 초기화 전에 호출!)
