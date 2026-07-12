@@ -4339,11 +4339,22 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
 
     function ppSwitchToNormal() {
         document.getElementById('pp-slow-match-modal').style.display = 'none';
+        const savedTopic = finalTopic || document.getElementById('topic-input').value;
         document.getElementById('leave-btn').click();
         setTimeout(() => {
             pingpongMode = false;
-            document.getElementById('pp-switch').classList.remove('on');
-        }, 300);
+            const sw = document.getElementById('pp-switch');
+            if (sw) sw.classList.remove('on');
+            const sub = document.getElementById('pp-toggle-sub');
+            if (sub) sub.textContent = 'PING PONG';
+            if (savedTopic) {
+                const topicInput = document.getElementById('topic-input');
+                if (topicInput) topicInput.value = savedTopic;
+                setTimeout(() => {
+                    document.getElementById('join-btn').click();
+                }, 300);
+            }
+        }, 600);
     }
 
     function ppKeepWaiting() {
