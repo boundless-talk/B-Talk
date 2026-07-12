@@ -4153,7 +4153,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         const sub = document.getElementById('pp-toggle-sub');
         if (pingpongMode) {
             sw.classList.add('on');
-            sub.textContent = currentLang === 'ko' ? '1:30/턴' : '1:30/turn';
+            sub.textContent = '1m30s';
         } else {
             sw.classList.remove('on');
             sub.textContent = 'PING PONG';
