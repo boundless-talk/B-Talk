@@ -1029,6 +1029,48 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .pp-waiting-solo.active { display: block; }
         .pp-waiting-solo-title { font-size: 13px; font-weight: 700; color: rgba(255,200,50,0.85); margin-bottom: 4px; }
         .pp-waiting-solo-sub { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.6; }
+
+        /* ── 이모지 리액션 ── */
+        .pp-reaction-bar {
+            display: none;
+            justify-content: center;
+            gap: 12px;
+            padding: 10px 0 4px;
+        }
+        .pp-reaction-bar.active { display: flex; }
+        .pp-reaction-btn {
+            font-size: 26px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            width: 52px; height: 52px;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: transform 0.1s, background 0.2s;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .pp-reaction-btn:active { transform: scale(0.85); background: rgba(255,255,255,0.14); }
+
+        #pp-emoji-stage {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 8000;
+            overflow: hidden;
+        }
+        .pp-flying-emoji {
+            position: absolute;
+            bottom: 80px;
+            font-size: 32px;
+            animation: ppEmojiFloat 2.2s ease-out forwards;
+            pointer-events: none;
+        }
+        @keyframes ppEmojiFloat {
+            0%   { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+            60%  { opacity: 0.9; transform: translateY(-220px) scale(1.3) rotate(12deg); }
+            100% { opacity: 0; transform: translateY(-380px) scale(0.7) rotate(-8deg); }
+        }
         .room-footer {
             width: 100%;
             max-width: 420px;
@@ -1632,6 +1674,12 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 </div>
                 <div class="pp-progress-track"><div class="pp-progress-fill" id="pp-progress-fill"></div></div>
                 <button class="pp-pass-btn" id="pp-pass-btn" onclick="pingpongPass()">⏭ 턴 넘기기 (Pass)</button>
+                <div class="pp-reaction-bar" id="pp-reaction-bar">
+                    <button class="pp-reaction-btn" onclick="sendPPReaction('❤️')">❤️</button>
+                    <button class="pp-reaction-btn" onclick="sendPPReaction('👏')">👏</button>
+                    <button class="pp-reaction-btn" onclick="sendPPReaction('😂')">😂</button>
+                    <button class="pp-reaction-btn" onclick="sendPPReaction('😢')">😢</button>
+                </div>
                 <div class="pp-waiting-solo" id="pp-waiting-solo">
                     <div class="pp-waiting-solo-title">⏸ 다른 참여자를 기다리는 중...</div>
                     <div class="pp-waiting-solo-sub">핑퐁 타이머가 일시정지됐어요.<br>새 유저가 입장하면 바로 재개돼요!</div>
@@ -1651,6 +1699,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <button class="room-report-btn" id="room-report-btn">🚨 신고하기</button>
         </div>
     </div>
+
+    <!-- 이모지 리액션 스테이지 -->
+    <div id="pp-emoji-stage"></div>
 
     <!-- 핑퐁 매칭 지연 팝업 -->
     <div id="pp-slow-match-modal" style="display:none; position:fixed; inset:0; z-index:9998; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
@@ -3781,6 +3832,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
                 if (ppSection) ppSection.classList.add('active');
                 const myFbUid = auth.currentUser ? auth.currentUser.uid : null;
                 if (myFbUid) startPPListener(safeAgoraChannelId, myFbUid, [myFbUid]);
+                startPPReactionListener(safeAgoraChannelId);
                 startPPSlowMatchTimer();
             }
 
@@ -4144,6 +4196,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         const subEl = document.getElementById('pp-turn-sub');
         const passBtn = document.getElementById('pp-pass-btn');
         const soloEl = document.getElementById('pp-waiting-solo');
+        const reactionBar = document.getElementById('pp-reaction-bar');
         const isKo = currentLang === 'ko';
 
         if (isPaused) {
@@ -4152,6 +4205,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             subEl.textContent = isKo ? '마이크를 자유롭게 사용할 수 있어요' : 'Your mic is open while waiting';
             passBtn.disabled = true;
             soloEl.classList.add('active');
+            if (reactionBar) reactionBar.classList.remove('active');
         } else if (isMySpeaking) {
             labelEl.className = 'pp-turn-label';
             labelEl.textContent = isKo ? '🎙 내 차례예요!' : '🎙 Your turn!';
@@ -4160,6 +4214,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             subEl.textContent = isKo ? `다음: ${nextName} ›` : `Next: ${nextName} ›`;
             passBtn.disabled = false;
             soloEl.classList.remove('active');
+            if (reactionBar) reactionBar.classList.remove('active');
         } else {
             labelEl.className = 'pp-turn-label other';
             const spName = uidToNickname[currentSpeakerUid] || 'User';
@@ -4167,6 +4222,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             subEl.textContent = isKo ? '잠시 들어보세요 👂' : 'Listen for now 👂';
             passBtn.disabled = true;
             soloEl.classList.remove('active');
+            if (reactionBar) reactionBar.classList.add('active');
         }
 
         renderPPRelayBar();
@@ -4297,6 +4353,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         if (ppTimerInterval) { clearInterval(ppTimerInterval); ppTimerInterval = null; }
         if (ppTurnRef) { ppTurnRef.off(); ppTurnRef = null; }
         if (ppSlowMatchTimer) { clearTimeout(ppSlowMatchTimer); ppSlowMatchTimer = null; }
+        if (ppReactionRef) { ppReactionRef.off(); ppReactionRef = null; }
         ppTurnQueue = [];
         ppCurrentTurnIdx = 0;
         const section = document.getElementById('pingpong-section');
@@ -4305,6 +4362,47 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         if (modal) modal.style.display = 'none';
         // 마이크 복구
         if (localAudioTrack) localAudioTrack.setEnabled(true);
+    }
+
+    // ── 이모지 리액션 ──
+    let ppReactionRef = null;
+
+    function sendPPReaction(emoji) {
+        if (!ppReactionRef) return;
+        const myFbUid = auth.currentUser ? auth.currentUser.uid : null;
+        ppReactionRef.push({ emoji, senderUid: myFbUid, ts: Date.now() });
+        spawnEmoji(emoji);
+    }
+
+    function spawnEmoji(emoji) {
+        const stage = document.getElementById('pp-emoji-stage');
+        if (!stage) return;
+        const el = document.createElement('div');
+        el.className = 'pp-flying-emoji';
+        el.textContent = emoji;
+        el.style.left = (15 + Math.random() * 70) + '%';
+        el.style.animationDuration = (1.8 + Math.random() * 0.8) + 's';
+        stage.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+    }
+
+    function startPPReactionListener(channelId) {
+        if (ppReactionRef) { ppReactionRef.off(); ppReactionRef = null; }
+        ppReactionRef = database.ref(`channels/${channelId}/reactions`);
+        const myFbUid = auth.currentUser ? auth.currentUser.uid : null;
+        const startTs = Date.now();
+        ppReactionRef.on('child_added', snap => {
+            const d = snap.val();
+            if (!d || d.ts < startTs) return;
+            if (d.senderUid === myFbUid) return; // 내가 보낸 건 이미 표시함
+            spawnEmoji(d.emoji);
+        });
+        // 오래된 리액션 주기적 정리 (1분 이상 된 것)
+        setInterval(() => {
+            ppReactionRef.orderByChild('ts').endAt(Date.now() - 60000).once('value', snap => {
+                snap.forEach(child => child.ref.remove());
+            });
+        }, 60000);
     }
 
     function toggleSubtitles() {
