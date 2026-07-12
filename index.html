@@ -4620,7 +4620,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         if (!subtitlesEnabled || !subtitleMicStream) return;
 
         const VAD_THRESHOLD = 18;    // 이 볼륨 이상이면 "말하는 중"
-        const SILENCE_DELAY = 900;   // 말 멈춘 후 이 시간(ms) 지나면 전송
+        const SILENCE_DELAY = 550;   // 말 멈춘 후 이 시간(ms) 지나면 전송
         const MAX_DURATION = 8000;   // 최대 녹음 길이 (너무 길어지면 강제 전송)
         const MIN_DURATION = 400;    // 이것보다 짧은 발화는 무시
 
