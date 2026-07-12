@@ -5660,12 +5660,15 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             } catch(e) { console.warn('Signal write failed:', e); }
 
             // 2. 서버 사이드 increment
+            console.log('[Badge] target UID:', selectedVoteTarget, '| badge:', badgeType, '| sessionParticipants:', JSON.stringify(sessionParticipants));
             const targetBadgeRef = database.ref('users/' + selectedVoteTarget + '/badges/' + badgeType);
             await targetBadgeRef.set(firebase.database.ServerValue.increment(1));
             // 오늘 받은 배지 일별 기록
             const _now = new Date();
             const today = new Date(_now.getTime() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10);
-            database.ref('users/' + selectedVoteTarget + '/dailyBadges/' + today + '/' + badgeType).set(firebase.database.ServerValue.increment(1));
+            const dailyPath = 'users/' + selectedVoteTarget + '/dailyBadges/' + today + '/' + badgeType;
+            console.log('[Badge] writing dailyBadges path:', dailyPath);
+            await database.ref(dailyPath).set(firebase.database.ServerValue.increment(1));
 
             badgeSentThisSession = true;
             showBadgeToast(textData[currentLang].badgeSuccess);
