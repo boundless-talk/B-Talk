@@ -69,6 +69,7 @@
             position: relative;
             padding: 20px;
         }
+        body.room-open { overflow: hidden; }
 
 
         /* ── 스플래시 화면 ── */
@@ -4119,10 +4120,12 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
 
         updateRoomParticipants();
         document.getElementById('room-screen').classList.add('active');
+        document.body.classList.add('room-open');
     }
 
     async function hideRoomScreen() {
         document.getElementById('room-screen').classList.remove('active');
+        document.body.classList.remove('room-open');
         document.getElementById('topic-input').style.visibility = 'visible';
         stopConvoTip();
         stopSubtitleRecognition();
