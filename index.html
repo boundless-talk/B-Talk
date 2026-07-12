@@ -243,17 +243,19 @@
         .settings-gear-btn:hover { background: rgba(0,229,255,0.08); border-color: rgba(0,229,255,0.3); color: #00e5ff; }
         /* 설정 모달 */
         #settings-modal-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 9800;
-            align-items: flex-end; justify-content: center;
+            display: none; position: fixed; inset: 0; z-index: 9800;
         }
-        #settings-modal-overlay.open { display: flex; }
+        #settings-modal-overlay.open { display: block; }
         #settings-modal {
-            width: 100%; max-width: 480px; background: #16161f;
-            border-radius: 22px 22px 0 0; padding: 16px 20px 40px;
-            animation: slideUp 0.28s ease;
+            position: absolute; top: 64px; right: 16px;
+            width: 280px; background: #16161f;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px; padding: 16px 16px 20px;
+            animation: fadeDown 0.2s ease;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
         }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        .settings-handle { width: 36px; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; margin: 0 auto 18px; }
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        .settings-handle { display: none; }
         .settings-section-label { font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; margin-top: 16px; }
         .settings-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 14px; }
         .settings-row-left { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(255,255,255,0.7); }
