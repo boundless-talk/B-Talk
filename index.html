@@ -4904,7 +4904,9 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             const data = snap.val();
             if (!data) return;
             const myFbUid = auth.currentUser ? auth.currentUser.uid : null;
-            if (!myFbUid || data.to !== myFbUid) return;
+            if (!myFbUid) return;
+            // 내가 보낸 신호면 무시 (수신자 체크 대신 발신자 체크 — UID 매핑 오류 우회)
+            if (data.from === myFbUid || data.from === String(myUid)) return;
 
             const badgeType = data.badgeType;
             const badgeNames = {
