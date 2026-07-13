@@ -71,6 +71,7 @@
 
         }
         body.room-open { overflow: hidden; }
+        body.intro-open { overflow: hidden; }
 
 
         /* ── 스플래시 화면 ── */
@@ -1215,7 +1216,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         }
     </style>
 </head>
-<body>
+<body class="intro-open">
 
     <!-- 스플래시 화면 — body 최상단에서 즉시 렌더링 -->
     <div id="splash-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0f;z-index:6000;display:flex;align-items:center;justify-content:center;">
@@ -5324,6 +5325,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
 
         function hideSplash() {
             intro.style.display = 'flex';
+            document.body.classList.add('intro-open');
             splash.classList.add('hide');
             setTimeout(() => {
                 splash.style.display = 'none';
@@ -6844,6 +6846,7 @@ B-TALK은 이용자 간 연결을 위한 플랫폼만을 제공합니다. 대화
         document.getElementById('intro-screen-2').classList.remove('active');
         const intro = document.getElementById('intro-screen');
         intro.classList.add('hide');
+        document.body.classList.remove('intro-open');
         setTimeout(() => { intro.style.display = 'none'; }, 500);
     }
 
