@@ -1866,6 +1866,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         <div class="modal-content" style="max-width:320px;">
             <h3 style="margin-bottom:18px; font-size:18px; letter-spacing:2px;">BOUNDLESS TALK</h3>
             <div style="display:flex; flex-direction:column; gap:4px;">
+                <button onclick="openAboutPage('product')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(0,229,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-product">🎙️ <span id="about-label-product">서비스 소개</span></button>
+                <button onclick="openAboutPage('pricing')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(0,229,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-pricing">💳 <span id="about-label-pricing">요금제</span></button>
                 <button onclick="openAboutPage('privacy')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(0,229,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-privacy">🔒 <span id="about-label-privacy">개인정보처리방침</span></button>
                 <button onclick="openAboutPage('terms')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(0,229,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-terms">📄 <span id="about-label-terms">이용약관</span></button>
                 <button onclick="openAboutPage('guidelines')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(0,229,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-guidelines">📋 <span id="about-label-guidelines">커뮤니티 가이드라인</span></button>
@@ -3065,6 +3067,8 @@ function updateUI() {
             const el = document.getElementById(id); if(el) el.textContent = suffixAgree;
         });
         const css = document.getElementById('consent-safety-suffix'); if(css) css.textContent = suffixConfirm;
+        const alProduct = document.getElementById('about-label-product'); if(alProduct) alProduct.textContent = isKo ? '서비스 소개' : 'About';
+        const alPricing = document.getElementById('about-label-pricing'); if(alPricing) alPricing.textContent = isKo ? '요금제' : 'Pricing';
         const alPrivacy = document.getElementById('about-label-privacy'); if(alPrivacy) alPrivacy.textContent = isKo ? '개인정보처리방침' : 'Privacy Policy';
         const alTerms = document.getElementById('about-label-terms'); if(alTerms) alTerms.textContent = isKo ? '이용약관' : 'Terms of Service';
         const alGuide = document.getElementById('about-label-guidelines'); if(alGuide) alGuide.textContent = isKo ? '커뮤니티 가이드라인' : 'Community Guidelines';
@@ -6727,6 +6731,78 @@ B-TALK only provides a platform for connecting users. Users are solely responsib
 
 ─── 면책 조항 ───
 B-TALK은 이용자 간 연결을 위한 플랫폼만을 제공합니다. 대화 내용에 대한 책임은 전적으로 이용자에게 있으며, 대화 내용은 B-TALK의 의견을 대변하지 않습니다.` }
+        },
+        product: {
+            en: { title: '🎙️ About B-Talk', content:
+`B-TALK is a live, topic-driven group voice chat platform where you talk with strangers in real time about a topic you actually care about.
+
+─── What You Can Do ───
+• Type a topic you want to talk about right now, or jump straight into an already-active room
+• Join a live group voice conversation (real-time voice, not text) with multiple participants
+• Use real-time auto-translation to talk across languages (Premium feature)
+• Save people you enjoyed talking to and collect unique Talk Badges
+
+─── Who It's For ───
+• People who enjoy meeting new perspectives and talking with strangers
+• Language exchange learners looking for real conversation partners
+• Anyone who wants to talk freely and anonymously, without a profile-based identity
+
+─── Safety ───
+Only users aged 18+ can sign up. Reported behavior triggers an automatic short recording (up to 30 seconds) for review, and enforcement follows a Warning → 24h Ban → Permanent Ban path. See our Safety page for details.
+
+─── How It's Priced ───
+Every session starts with 10 free minutes. To keep talking longer, you can subscribe for up to 2 hours of calls per day. See the Pricing page for exact plans.` },
+            ko: { title: '🎙️ 서비스 소개', content:
+`B-TALK은 지금 관심 있는 주제로 낯선 사람과 실시간 그룹 음성 대화를 나누는 플랫폼입니다.
+
+─── 무엇을 할 수 있나요 ───
+• 지금 이야기하고 싶은 주제를 직접 입력하거나, 이미 열려 있는 대화방에 바로 참여
+• 여러 명이 함께 참여하는 실시간 그룹 음성 채팅 (텍스트가 아닌 실제 음성 대화)
+• 실시간 자동 번역으로 언어가 달라도 대화 가능 (Premium 기능)
+• 마음에 맞았던 대화 상대를 저장하고 나만의 배지 수집
+
+─── 이런 분들에게 ───
+• 새로운 관점과 낯선 사람과의 대화를 즐기고 싶은 분
+• 언어교환·외국어 회화 연습 상대를 찾는 분
+• 프로필 없이 익명으로 부담 없이 대화하고 싶은 분
+
+─── 안전 장치 ───
+만 18세 이상만 가입할 수 있으며, 신고 접수 시 자동으로 짧은 녹음(최대 30초)이 검토용으로 저장되고 경고 → 24시간 정지 → 영구 정지 순으로 제재됩니다. 자세한 내용은 안전 정책 페이지를 참고하세요.
+
+─── 이용 방식 ───
+모든 세션은 10분 무료로 시작하며, 더 길게 대화하고 싶다면 구독을 통해 하루 최대 2시간까지 이용할 수 있습니다. 정확한 요금은 요금제 페이지를 확인해 주세요.` }
+        },
+        pricing: {
+            en: { title: '💳 Pricing', content:
+`─── Free ───
+Every conversation session includes 10 free minutes — no account required beyond guest access.
+
+─── Weekly Plan — $1.99 / week ───
+Up to 2 hours of calls per day, plus real-time translation. Renews automatically every 7 days; cancel anytime.
+
+─── Monthly Plan — $4.99 / month ───
+Up to 2 hours of calls per day, plus real-time translation. Renews automatically every month; cancel anytime.
+
+─── 🎉 Promotion (through August 31, 2026) ───
+Start a Monthly Plan subscription during the promotion period and get unlimited call time for your first month. This promotion applies to the Monthly Plan only, not the Weekly Plan.
+
+─── Refunds ───
+Request a refund within 14 days of subscribing for a full refund and immediate cancellation. After 14 days, refunds aren't available, but you can cancel anytime — you'll keep access until the end of the current billing period and won't be charged again.` },
+            ko: { title: '💳 요금제', content:
+`─── 무료 ───
+모든 대화 세션은 10분 무료로 이용할 수 있습니다. 게스트로도 바로 체험 가능합니다.
+
+─── 주간 구독 — $1.99 / 주 ───
+매일 최대 2시간 통화 + 실시간 번역 포함. 7일마다 자동 갱신되며 언제든 해지할 수 있습니다.
+
+─── 월간 구독 — $4.99 / 월 ───
+매일 최대 2시간 통화 + 실시간 번역 포함. 매월 자동 갱신되며 언제든 해지할 수 있습니다.
+
+─── 🎉 프로모션 (2026년 8월 31일까지) ───
+프로모션 기간 내에 월간 구독을 시작하면 첫 달은 통화 시간 제한 없이 무제한으로 이용할 수 있습니다. 이 혜택은 월간 구독에만 적용되며 주간 구독에는 적용되지 않습니다.
+
+─── 환불 정책 ───
+구독 후 14일 이내 요청 시 전액 환불과 함께 즉시 해지됩니다. 14일이 지난 후에는 환불은 어려우나, 해지하더라도 남은 결제 기간 동안은 계속 이용할 수 있고 다음 결제부터는 청구되지 않습니다.` }
         }
     };
 
