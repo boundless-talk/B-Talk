@@ -1295,6 +1295,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <span class="intro-pulse"></span>
         </div>
         <button class="intro-start-btn" id="intro-start-btn" onclick="showIntro2()">Get Started</button>
+        <div style="margin-top:18px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
+            <button id="inquiry-btn-hero" onclick="openInquiryModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">문의하기</button>
+            <button id="about-nav-btn-hero" onclick="openAboutModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#00e5ff'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">About</button>
+        </div>
     </div>
 
     <!-- How It Works 팝업 -->
@@ -3041,6 +3045,8 @@ function updateUI() {
         document.getElementById('lang-toggle-btn').innerText = lang.toggleBtn;
         const inquiryBtn = document.getElementById('inquiry-btn');
         if (inquiryBtn) inquiryBtn.textContent = currentLang === 'ko' ? '문의하기' : 'Contact Us';
+        const inquiryBtnHero = document.getElementById('inquiry-btn-hero');
+        if (inquiryBtnHero) inquiryBtnHero.textContent = currentLang === 'ko' ? '문의하기' : 'Contact Us';
         const inqTitle = document.getElementById('inquiry-modal-title');
         const inqDesc = document.getElementById('inquiry-modal-desc');
         const inqText = document.getElementById('inquiry-text');
@@ -3113,6 +3119,8 @@ document.getElementById('part-title-label').innerText = lang.partLabel;
         if (subBtn) subBtn.textContent = currentLang === 'ko' ? '프리미엄 시작 ✨' : 'Go Premium ✨';
         const aboutNavBtn = document.getElementById('about-nav-btn');
         if (aboutNavBtn) aboutNavBtn.textContent = currentLang === 'ko' ? '서비스소개' : 'About';
+        const aboutNavBtnHero = document.getElementById('about-nav-btn-hero');
+        if (aboutNavBtnHero) aboutNavBtnHero.textContent = currentLang === 'ko' ? '서비스소개' : 'About';
         const refundBtn = document.getElementById('sub-btn-refund');
         if (refundBtn) refundBtn.innerHTML = currentLang === 'ko' ? '구독 취소하기' : 'Cancel Subscription';
         const rm = document.getElementById('refund-modal-title');
