@@ -933,7 +933,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         #room-screen {
             position: fixed;
             inset: 0;
-            background: var(--bg-gradient);
+            background:
+                linear-gradient(180deg, rgba(10,10,15,0.55) 0%, rgba(10,10,15,0.6) 45%, rgba(10,10,15,0.82) 100%),
+                url('intro-bg.png') center center / cover no-repeat;
             z-index: 8000;
             display: flex;
             flex-direction: column;
@@ -951,8 +953,11 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         }
         .room-header {
             width: 100%;
-            background: rgba(255,255,255,0.02);
-            border-bottom: 1px solid rgba(255,255,255,0.07);
+            background: rgba(15,15,20,0.55);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid transparent;
+            border-image: linear-gradient(90deg, rgba(255,176,110,0.35), rgba(0,240,255,0.3) 50%, rgba(255,176,110,0.35)) 1;
             padding: 28px 24px 22px;
             display: flex;
             flex-direction: column;
@@ -963,13 +968,13 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 2.5px;
-            color: rgba(255,255,255,0.35);
+            color: rgba(255,255,255,0.4);
         }
         .room-topic-display {
             font-size: 24px;
             font-weight: 700;
-            color: var(--accent-color);
-            text-shadow: 0 0 24px rgba(0,229,255,0.4);
+            color: #00f0ff;
+            text-shadow: 0 0 24px rgba(0,240,255,0.5), 0 1px 8px rgba(0,0,0,0.5);
             text-align: center;
             letter-spacing: 0.5px;
             max-width: 340px;
@@ -985,7 +990,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             flex: 1;
         }
         .icebreaker-box {
-            background: rgba(0,229,255,0.05);
+            background: rgba(0,240,255,0.05);
+            border: 1px solid rgba(0,240,255,0.18);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border-radius: 10px;
             padding: 14px 16px;
             display: flex;
@@ -994,7 +1002,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         }
         .icebreaker-icon {
             font-size: 18px;
-            color: rgba(0,229,255,0.6);
+            color: #00f0ff;
             flex-shrink: 0;
             margin-top: 1px;
         }
@@ -1021,8 +1029,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             display: none;
         }
         .convo-tip-box {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(15,15,20,0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.08);
             border-radius: 10px;
             padding: 11px 14px;
             cursor: pointer;
@@ -1032,7 +1042,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             gap: 10px;
             transition: background 0.15s ease;
         }
-        .convo-tip-box:active { background: rgba(255,255,255,0.05); }
+        .convo-tip-box:active { background: rgba(15,15,20,0.55); }
         .convo-tip-icon { font-size: 15px; color: rgba(255,255,255,0.25); flex-shrink: 0; margin-top: 1px; }
         .convo-tip-inner { flex: 1; }
         .convo-tip-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.22); margin-bottom: 4px; }
