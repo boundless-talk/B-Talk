@@ -1286,6 +1286,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .subtitle-speaker { font-size: 11px; color: var(--accent-color); margin-bottom: 3px; font-weight: 600; }
         .subtitle-original { font-size: 11px; color: rgba(255,255,255,0.3); margin-bottom: 2px; }
         .subtitle-translated { font-size: 14px; color: rgba(255,255,255,0.88); font-weight: 500; line-height: 1.4; }
+        .subtitle-locked { color: #00f0ff; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
         .subtitle-self-text { font-size: 12px; color: rgba(255,255,255,0.35); font-style: italic; }
         .subtitle-loading { font-size: 12px; color: rgba(255,255,255,0.3); font-style: italic; }
 
@@ -4835,11 +4836,6 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
     }
 
     function toggleSubtitles() {
-        if (!isSubscribed && !subtitlesEnabled) {
-            const isKo = currentLang === 'ko';
-            alert(isKo ? '실시간 번역 서비스는 Premium 기능입니다.\nGo Premium에서 구독 후 이용하실 수 있어요 ✨' : 'Real-time translation is a Premium feature.\nSubscribe via Go Premium to unlock it ✨');
-            return;
-        }
         subtitlesEnabled = !subtitlesEnabled;
         const btn = document.getElementById('subtitle-toggle-btn');
         const langRow = document.getElementById('subtitle-lang-row');
@@ -5064,6 +5060,12 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
                 '<div class="subtitle-speaker">' + myRankEmoji + ' ' + nickname
                 + (currentLang === 'ko' ? ' (나)' : ' (me)') + '</div>'
                 + '<div class="subtitle-self-text">' + original + '</div>';
+        } else if (!isSubscribed) {
+            const lockedLabel = currentLang === 'ko' ? '🔒 번역 보기 (Premium)' : '🔒 View translation (Premium)';
+            item.innerHTML =
+                '<div class="subtitle-speaker">' + (uidToRankEmoji[uid] || '👋') + ' ' + nickname + '</div>'
+                + '<div class="subtitle-original">' + original + '</div>'
+                + '<div class="subtitle-translated subtitle-locked" onclick="openMainPayModal()">' + lockedLabel + '</div>';
         } else {
             const showOriginal = translated && original !== translated;
             item.innerHTML =
@@ -5078,6 +5080,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
     }
 
     function updateSubtitleTranslation(uid, original, translated) {
+        if (!isSubscribed) return; // 번역 "보기"는 프리미엄 전용 — 잠금 표시를 덮어쓰지 않음
         const list = document.getElementById('subtitle-list');
         if (!list) return;
         const items = list.querySelectorAll('.subtitle-item');
@@ -5948,6 +5951,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             });
 
             badgeSentThisSession = true;
+            showBadgeToast(textData[currentLang].badgeSuccess);
             removeVoteTarget(selectedVoteTarget);
 
         } catch (err) {
