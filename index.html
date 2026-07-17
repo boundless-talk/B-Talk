@@ -5911,7 +5911,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             formData.append('audioData', fullBlob);
             formData.append('lang', currentLang);
 
-            const res = await fetch('https://b-talk.netlify.app/.netlify/functions/summarize', {
+            const res = await fetch(TOKEN_SERVER_URL + '/summarize', {
                 method: 'POST',
                 body: formData
             });
