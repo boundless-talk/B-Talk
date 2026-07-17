@@ -4753,7 +4753,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
 
     function ppSwitchToNormal() {
         document.getElementById('pp-slow-match-modal').style.display = 'none';
-        const savedTopic = finalTopic || document.getElementById('topic-input').value;
+        const savedTopic = currentChannelName || document.getElementById('topic-input').value;
         ppAutoSwitchInProgress = true;
         document.getElementById('leave-btn').click();
 
