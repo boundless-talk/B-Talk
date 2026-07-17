@@ -677,6 +677,12 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             padding: 20px;
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
+        .tip-card {
+            background: rgba(15,15,20,0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
         .glass-card {
             background:
                 linear-gradient(rgba(15,15,20,0.78), rgba(15,15,20,0.78)) padding-box,
@@ -1553,7 +1559,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         <div class="input-group" style="position:relative;">
             <input type="text" id="topic-input" placeholder="Enter a topic (e.g., tesla, love)">
             <!-- 핑퐁 모드 토글 (인풋 오른쪽 위) -->
-            <div id="pingpong-toggle-row" onclick="togglePingpongMode()" style="position:absolute;top:-11px;right:8px;display:flex;align-items:center;gap:5px;background:rgba(20,18,32,0.92);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:3px 8px 3px 7px;cursor:pointer;user-select:none;z-index:2;white-space:nowrap;">
+            <div id="pingpong-toggle-row" class="tip-card" onclick="togglePingpongMode()" style="position:absolute;top:-11px;right:8px;display:flex;align-items:center;gap:5px;border-radius:20px;padding:3px 8px 3px 7px;cursor:pointer;user-select:none;z-index:2;white-space:nowrap;">
                 <span style="font-size:12px;">🏓</span>
                 <span id="pp-toggle-sub" style="font-size:10px;font-weight:600;color:rgba(255,255,255,0.3);white-space:nowrap;">PING PONG</span>
                 <span id="pp-onoff-tag" style="font-size:9px;font-weight:800;color:rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);border-radius:10px;padding:1px 6px;">OFF</span>
@@ -1565,7 +1571,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
         <div class="select-group" id="max-people-group">
             <label for="max-people-select" id="maxpeople">Max People:</label>
-            <select id="max-people-select">
+            <select id="max-people-select" class="tip-card">
                 <option value="3" id="opt-3">3 Members</option>
                 <option value="4" id="opt-4" selected>4 Members (Recommended)</option>
                 <option value="6" id="opt-6">6 Members</option>
@@ -1606,7 +1612,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         </div>
         <div id="rep-content-inner">
         <div class="stats-rank-row" id="stats-rank-row">RANK: <span id="rank-label">—</span> <button onclick="const p=document.getElementById('rank-info-popup');p.style.display=p.style.display==='none'?'block':'none';" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);border-radius:50%;width:16px;height:16px;font-size:9px;cursor:pointer;padding:0;margin-left:4px;vertical-align:middle;line-height:1;">?</button></div>
-        <div id="rank-info-popup" class="glass-card" style="display:none;border-radius:14px;padding:14px 10px 10px;margin:6px 0 4px;">
+        <div id="rank-info-popup" class="tip-card" style="display:none;border-radius:14px;padding:14px 10px 10px;margin:6px 0 4px;">
             <div id="rank-info-title" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);text-align:center;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">Total badges earned</div>
             <div style="display:flex;justify-content:space-around;gap:4px;">
                 <div class="rank-badge-item" onclick="toggleRankDesc('rd-newcomer')">
