@@ -3,8 +3,16 @@ const cors = require('cors');
 const { RtcTokenBuilder, RtcRole } = require('agora-token');
 const Busboy = require('busboy');
 const OpenAI = require('openai');
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 const admin = require('firebase-admin');
+
+// Gmail SMTP (Resend 샌드박스는 계정 소유자 본인 메일로만 발송 가능해서, 임의 수신자에게 보내려면 이쪽을 씀)
+const gmailTransporter = (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD)
+    ? nodemailer.createTransport({
+        service: 'gmail',
+        auth: { user: process.env.GMAIL_USER, pass: process.env.GMAIL_APP_PASSWORD }
+    })
+    : null;
 
 // Firebase Admin 초기화
 let storageBucket;
@@ -353,7 +361,7 @@ function emailToKey(email) {
 app.post('/sendVerifyEmail', async (req, res) => {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: 'email required' });
-    if (!process.env.RESEND_API_KEY) {
+    if (!gmailTransporter) {
         return res.status(500).json({ error: 'Email not configured' });
     }
     if (!admin.apps.length) {
@@ -370,8 +378,6 @@ app.post('/sendVerifyEmail', async (req, res) => {
         console.error('sendVerifyEmail DB write failed:', e.message);
         return res.status(500).json({ error: 'Failed to store verification code' });
     }
-
-    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const html = `
 <!DOCTYPE html>
@@ -411,22 +417,17 @@ app.post('/sendVerifyEmail', async (req, res) => {
 </html>`;
 
     try {
-        const result = await resend.emails.send({
-            from: 'BOUNDLESS TALK <onboarding@resend.dev>',
+        const info = await gmailTransporter.sendMail({
+            from: `BOUNDLESS TALK <${process.env.GMAIL_USER}>`,
             to: email,
             subject: `[BOUNDLESS TALK] 이메일 인증 코드: ${code}`,
             html
         });
-        // resend SDK는 API 레벨 실패 시 throw하지 않고 { error } 필드로 돌려줌 — 반드시 확인 필요
-        if (result.error) {
-            console.error('sendVerifyEmail Resend API error:', JSON.stringify(result.error));
-            return res.status(502).json({ error: result.error.message || 'Resend API error', resendError: result.error });
-        }
-        console.log('sendVerifyEmail sent, id:', result.data?.id);
+        console.log('sendVerifyEmail sent via Gmail, messageId:', info.messageId);
         res.json({ ok: true });
     } catch (err) {
-        console.error('sendVerifyEmail error:', err.message);
-        res.status(500).json({ error: err.message });
+        console.error('sendVerifyEmail Gmail error:', err.message);
+        res.status(502).json({ error: err.message });
     }
 });
 
