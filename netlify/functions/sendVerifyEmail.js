@@ -1,6 +1,20 @@
 const nodemailer = require('nodemailer');
+const admin = require('firebase-admin');
 
-// 💡 추가된 부분: 브라우저 무사 통과를 위한 출입증(헤더)
+if (!admin.apps.length) {
+    const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: "https://b-talk-login-default-rtdb.firebaseio.com/"
+    });
+}
+const db = admin.database();
+
+// 이메일을 Firebase RTDB 키로 쓸 수 있도록 안전하게 치환 (.#$[] 금지 문자)
+function emailToKey(email) {
+    return email.trim().toLowerCase().replace(/[.#$[\]]/g, '_');
+}
+
 const headers = {
     'Access-Control-Allow-Origin': 'https://boundless-talk.github.io',
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -8,23 +22,31 @@ const headers = {
 };
 
 exports.handler = async (event) => {
-    // 💡 추가된 부분: 브라우저가 POST 전송 전 '미리 찔러보기(OPTIONS)'를 할 때 통과시켜 줌
     if (event.httpMethod === 'OPTIONS') {
         return { statusCode: 200, headers: headers, body: '' };
     }
-
-    // (여기서부터는 기존 작성하신 로직과 100% 동일하며, return에 headers만 추가됨)
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, headers: headers, body: 'Method Not Allowed' };
     }
 
-    const { email, code } = JSON.parse(event.body || '{}');
-    if (!email || !code) {
-        return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'email and code required' }) };
+    const { email } = JSON.parse(event.body || '{}');
+    if (!email) {
+        return { statusCode: 400, headers: headers, body: JSON.stringify({ error: 'email required' }) };
     }
 
     if (!process.env.GMAIL_USER || !process.env.GMAIL_PASS) {
         return { statusCode: 500, headers: headers, body: JSON.stringify({ error: 'Email not configured' }) };
+    }
+
+    // 서버에서 인증 코드 생성 및 10분 유효기간으로 저장 (클라이언트는 코드를 알 수 없음)
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    try {
+        await db.ref('emailVerifications/' + emailToKey(email)).set({
+            code, expiresAt: Date.now() + 10 * 60 * 1000
+        });
+    } catch (e) {
+        console.error('sendVerifyEmail DB write failed:', e.message);
+        return { statusCode: 500, headers: headers, body: JSON.stringify({ error: 'Failed to store verification code' }) };
     }
 
     const transporter = nodemailer.createTransport({

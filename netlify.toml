@@ -1,3 +1,7 @@
+[build]
+  # netlify/functions나 package.json이 안 바뀐 커밋이면 빌드 자체를 건너뜀 (크레딧 낭비 방지)
+  ignore = "git diff --quiet HEAD^ HEAD -- netlify/ package.json"
+
 [[headers]]
   for = "/*"
   [headers.values]
