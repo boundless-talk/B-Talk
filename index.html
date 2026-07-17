@@ -1606,7 +1606,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         </div>
         <div id="rep-content-inner">
         <div class="stats-rank-row" id="stats-rank-row">RANK: <span id="rank-label">—</span> <button onclick="const p=document.getElementById('rank-info-popup');p.style.display=p.style.display==='none'?'block':'none';" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.5);border-radius:50%;width:16px;height:16px;font-size:9px;cursor:pointer;padding:0;margin-left:4px;vertical-align:middle;line-height:1;">?</button></div>
-        <div id="rank-info-popup" style="display:none;background:rgba(15,15,22,0.98);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px 10px 10px;margin:6px 0 4px;">
+        <div id="rank-info-popup" class="glass-card" style="display:none;border-radius:14px;padding:14px 10px 10px;margin:6px 0 4px;">
             <div id="rank-info-title" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);text-align:center;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">Total badges earned</div>
             <div style="display:flex;justify-content:space-around;gap:4px;">
                 <div class="rank-badge-item" onclick="toggleRankDesc('rd-newcomer')">
@@ -1904,7 +1904,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 핑퐁 매칭 지연 팝업 -->
     <div id="pp-slow-match-modal" style="display:none; position:fixed; inset:0; z-index:9998; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
-        <div style="background:#1a1a2e; border:1px solid rgba(123,97,255,0.3); border-radius:20px; padding:28px 24px; width:90%; max-width:320px; text-align:center;">
+        <div class="glass-card" style="border-radius:20px; padding:28px 24px; width:90%; max-width:320px; text-align:center;">
             <div style="font-size:28px; margin-bottom:10px;">🏓</div>
             <div style="font-size:15px; font-weight:700; color:rgba(255,255,255,0.9); margin-bottom:8px;" id="pp-slow-title">핑퐁 모드 매칭 지연 중</div>
             <div style="font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6; margin-bottom:20px;" id="pp-slow-desc">현재 핑퐁 모드 대기열에 사람이 적어요.<br>일반 모드로 변경하시겠어요?</div>
