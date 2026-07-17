@@ -411,12 +411,18 @@ app.post('/sendVerifyEmail', async (req, res) => {
 </html>`;
 
     try {
-        await resend.emails.send({
+        const result = await resend.emails.send({
             from: 'BOUNDLESS TALK <onboarding@resend.dev>',
             to: email,
             subject: `[BOUNDLESS TALK] 이메일 인증 코드: ${code}`,
             html
         });
+        // resend SDK는 API 레벨 실패 시 throw하지 않고 { error } 필드로 돌려줌 — 반드시 확인 필요
+        if (result.error) {
+            console.error('sendVerifyEmail Resend API error:', JSON.stringify(result.error));
+            return res.status(502).json({ error: result.error.message || 'Resend API error', resendError: result.error });
+        }
+        console.log('sendVerifyEmail sent, id:', result.data?.id);
         res.json({ ok: true });
     } catch (err) {
         console.error('sendVerifyEmail error:', err.message);
