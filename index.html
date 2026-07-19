@@ -2118,7 +2118,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <div style="font-size:15px; font-weight:700; color:#fff; margin-bottom:16px;">🔄 <span id="cp-title">플랜 변경</span></div>
             <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
                 <button onclick="switchPlan('weekly')" id="cp-weekly-btn" style="width:100%; padding:14px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:12px; color:#fff; font-size:14px; cursor:pointer; text-align:left;">
-                    <span id="cp-weekly-label">Weekly Plan으로 변경</span> <span style="float:right; color:rgba(255,255,255,0.4);" id="cp-weekly-price">$1.49/week</span>
+                    <span id="cp-weekly-label">Weekly Plan으로 변경</span> <span style="float:right; color:rgba(255,255,255,0.4);" id="cp-weekly-price">$1.99/week</span>
                 </button>
                 <button onclick="switchPlan('monthly')" id="cp-monthly-btn" style="width:100%; padding:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:12px; color:rgba(255,255,255,0.4); font-size:14px; cursor:default; text-align:left;" disabled>
                     <span id="cp-monthly-label">Monthly Plan 유지</span>
@@ -5696,7 +5696,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
                 weeklyBtn.style.opacity = '1';
                 weeklyBtn.style.cursor = 'pointer';
                 document.getElementById('cp-weekly-label').textContent = isKo ? 'Weekly Plan으로 변경' : 'Switch to Weekly Plan';
-                document.getElementById('cp-weekly-price').textContent = '$1.49/week';
+                document.getElementById('cp-weekly-price').textContent = '$1.99/week';
                 monthlyBtn.disabled = true;
                 monthlyBtn.style.opacity = '0.4';
                 document.getElementById('cp-monthly-label').textContent = isKo ? 'Monthly Plan 유지' : 'Keep Monthly Plan';
