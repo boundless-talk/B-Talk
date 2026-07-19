@@ -1600,23 +1600,23 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                     linear-gradient(135deg, rgba(255,176,110,0.5), rgba(0,240,255,0.3) 45%, rgba(255,176,110,0.2) 100%) border-box;
                 border:1px solid transparent; border-radius:16px; padding:20px 22px 22px; box-shadow:0 8px 32px rgba(0,0,0,0.5);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <div style="font-size:15px; font-weight:700; color:#fff;">💡 대화 주제가 고민되신다면</div>
+                    <div id="topic-info-title" style="font-size:15px; font-weight:700; color:#fff;">💡 대화 주제가 고민되신다면</div>
                     <span onclick="closeTopicInfoModal()" style="color:rgba(255,255,255,0.35); font-size:16px; cursor:pointer;">✕</span>
                 </div>
-                <div style="font-size:12.5px; color:rgba(255,255,255,0.5); line-height:1.6; margin-bottom:6px;">
+                <div id="topic-info-intro" style="font-size:12.5px; color:rgba(255,255,255,0.5); line-height:1.6; margin-bottom:6px;">
                     어떤 이야기를 해야 할지 고민되시나요? 🤔 아래 추천 키워드를 참고해 보세요.
                 </div>
 
-                <div class="settings-section-label" style="margin-top:14px;">가벼운 스몰토크가 필요할 때</div>
-                <div class="settings-card" style="white-space:nowrap; overflow-x:auto; font-size:13px; color:rgba(255,255,255,0.75);">#오늘있었던일 · #요즘최애 · #주말일정 · #아무말대잔치</div>
+                <div id="topic-info-label-1" class="settings-section-label" style="margin-top:14px;">가벼운 스몰토크가 필요할 때</div>
+                <div id="topic-info-tags-1" class="settings-card" style="white-space:nowrap; overflow-x:auto; font-size:13px; color:rgba(255,255,255,0.75);">#오늘있었던일 · #요즘최애 · #주말일정 · #아무말대잔치</div>
 
-                <div class="settings-section-label">서로의 취향을 공유하고 싶을 때</div>
-                <div class="settings-card" style="white-space:nowrap; overflow-x:auto; font-size:13px; color:rgba(255,255,255,0.75);">#MBTI · #영화후기 · #나만아는맛집 · #소비일기</div>
+                <div id="topic-info-label-2" class="settings-section-label">서로의 취향을 공유하고 싶을 때</div>
+                <div id="topic-info-tags-2" class="settings-card" style="white-space:nowrap; overflow-x:auto; font-size:13px; color:rgba(255,255,255,0.75);">#MBTI · #영화후기 · #나만아는맛집 · #소비일기</div>
 
-                <div class="settings-section-label">진솔하고 깊은 대화를 원할 때</div>
-                <div class="settings-card" style="white-space:nowrap; overflow-x:auto; font-size:13px; color:rgba(255,255,255,0.75);">#꿈 · #이직커리어 · #고민상담 · #자기계발</div>
+                <div id="topic-info-label-3" class="settings-section-label">진솔하고 깊은 대화를 원할 때</div>
+                <div id="topic-info-tags-3" class="settings-card" style="white-space:nowrap; overflow-x:auto; font-size:13px; color:rgba(255,255,255,0.75);">#꿈 · #이직커리어 · #고민상담 · #자기계발</div>
 
-                <div style="font-size:11.5px; color:rgba(255,255,255,0.35); border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-top:16px;">
+                <div id="topic-info-tip" style="font-size:11.5px; color:rgba(255,255,255,0.35); border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-top:16px;">
                     👉 Tip: 마음에 드는 키워드가 있다면 직접 입력창에 적고 대화를 시작해 보세요!
                 </div>
             </div>
@@ -2951,6 +2951,7 @@ function closeMoreTopicsModal() {
 }
 
 function openTopicInfoModal() {
+    if (typeof updateTopicInfoModalLang === 'function') updateTopicInfoModalLang();
     document.getElementById('topic-info-modal').classList.add('active');
 }
 function closeTopicInfoModal() {
@@ -3477,6 +3478,7 @@ document.getElementById('part-title-label').innerText = lang.partLabel;
         }
         document.getElementById('join-btn').innerText = isJoined ? lang.joinBtn : lang.startBtn;
         if (typeof updateSettingsModalLang === 'function') updateSettingsModalLang();
+        if (typeof updateTopicInfoModalLang === 'function') updateTopicInfoModalLang();
     }
 
     // 구글 로그인: 기본은 Popup 방식 (authDomain과 사이트 도메인이 달라도 안정적으로 동작).
@@ -6639,6 +6641,29 @@ function updateSettingsModalLang() {
     document.getElementById('settings-rank-sub').textContent = isKo ? '누적 배지' : 'Total badges';
     renderSettingsRank();
     renderSettingsDailyBadges();
+}
+
+function updateTopicInfoModalLang() {
+    const isKo = currentLang === 'ko';
+    document.getElementById('topic-info-title').textContent = isKo ? '💡 대화 주제가 고민되신다면' : '💡 Not sure what to talk about?';
+    document.getElementById('topic-info-intro').textContent = isKo
+        ? '어떤 이야기를 해야 할지 고민되시나요? 🤔 아래 추천 키워드를 참고해 보세요.'
+        : "Not sure where to start? 🤔 Here are some keyword ideas to get the conversation going.";
+    document.getElementById('topic-info-label-1').textContent = isKo ? '가벼운 스몰토크가 필요할 때' : 'For easy small talk';
+    document.getElementById('topic-info-tags-1').textContent = isKo
+        ? '#오늘있었던일 · #요즘최애 · #주말일정 · #아무말대잔치'
+        : '#WhatsNew · #CurrentObsession · #WeekendPlans · #RandomThoughts';
+    document.getElementById('topic-info-label-2').textContent = isKo ? '서로의 취향을 공유하고 싶을 때' : 'To share tastes and interests';
+    document.getElementById('topic-info-tags-2').textContent = isKo
+        ? '#MBTI · #영화후기 · #나만아는맛집 · #소비일기'
+        : '#MBTI · #MovieReview · #HiddenGem · #WhatIBought';
+    document.getElementById('topic-info-label-3').textContent = isKo ? '진솔하고 깊은 대화를 원할 때' : 'For deeper, honest conversation';
+    document.getElementById('topic-info-tags-3').textContent = isKo
+        ? '#꿈 · #이직커리어 · #고민상담 · #자기계발'
+        : '#Dreams · #CareerChange · #LifeAdvice · #SelfGrowth';
+    document.getElementById('topic-info-tip').textContent = isKo
+        ? '👉 Tip: 마음에 드는 키워드가 있다면 직접 입력창에 적고 대화를 시작해 보세요!'
+        : "👉 Tip: Found one you like? Type it into the topic box and start talking!";
 }
 
 // currentLang을 매번 새로 읽어서 렌더링 — 언어 토글 시에도 정확히 반영됨
