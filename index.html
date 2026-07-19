@@ -2789,6 +2789,22 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                             await database.ref('users/' + user.uid + '/dob').set(val);
                             document.getElementById('dob-modal').classList.remove('active');
                             pendingDobAction = null;
+
+                            // 초기 회원 50명 프로모션 신청 (선착순 마감되면 조용히 무시됨)
+                            try {
+                                const idToken = await user.getIdToken();
+                                const res = await fetch(TOKEN_SERVER_URL + '/claim-early-access', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ idToken })
+                                });
+                                const data = await res.json();
+                                if (data.granted) {
+                                    alert(currentLang === 'ko'
+                                        ? `🎉 축하합니다! 초기 회원 50명 안에 드셔서\n30일간 하루 2시간 무료 대화 혜택이 적용됐어요!`
+                                        : `🎉 Congrats! You're one of our first 50 members —\nenjoy 2 hours of free daily calls for the next 30 days!`);
+                                }
+                            } catch (e) { console.error('claim-early-access error:', e); }
                         };
                         updateDobLang();
                         document.getElementById('dob-modal').classList.add('active');
@@ -5718,7 +5734,16 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
         startDodoCheckout(plan);
     }
 
+    // 실결제(라이브 모드) 준비되면 true로 변경
+    const PREMIUM_LIVE = false;
+    function showPremiumComingSoon() {
+        alert(currentLang === 'ko'
+            ? '프리미엄이 곧 찾아옵니다! 🎉\n\n지금은 준비 중이라 조금만 더 기다려 주세요.\n그동안은 무료로 계속 대화를 즐겨보세요 😊'
+            : 'Premium is almost here! 🎉\n\nWe\'re putting on the finishing touches — hang tight.\nIn the meantime, keep enjoying free conversations 😊');
+    }
+
     async function openMainPayModal() {
+        if (!PREMIUM_LIVE) { showPremiumComingSoon(); return; }
         const user = auth.currentUser;
         if (!user || user.isAnonymous) {
             // 게스트: 구독 플랜 모달은 보여주되, 실제 구독 버튼 클릭 시 alert
@@ -5773,6 +5798,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
     }
 
     function showPaymentModal() {
+        if (!PREMIUM_LIVE) { showPremiumComingSoon(); return; }
         const user = auth.currentUser;
         if (!user || user.isAnonymous) {
             alert(currentLang === 'ko'

@@ -1363,8 +1363,10 @@
             }
             list.innerHTML = subs.map(([uid, u]) => {
                 const s = u.subscription;
-                const planLabel = s.plan === 'monthly' ? 'Monthly · $4.99' : 'Weekly · $1.99';
-                const planColor = s.plan === 'monthly' ? 'var(--accent)' : 'var(--warn)';
+                const planLabel = s.plan === 'monthly' ? 'Monthly · $4.99'
+                    : s.plan === 'weekly' ? 'Weekly · $1.99'
+                    : '🎁 초기회원 50 (무료)';
+                const planColor = s.plan === 'monthly' ? 'var(--accent)' : s.plan === 'weekly' ? 'var(--warn)' : 'var(--green)';
                 return `
                 <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
                     <div>

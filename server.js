@@ -143,6 +143,56 @@ app.post('/dodo/webhook', express.raw({ type: 'application/json' }), async (req,
 
 app.use(express.json());
 
+// ── 초기 회원 50명 프로모션 (가입 순서로 선착순, 30일간 하루 2시간 무료) ──
+// subscription 필드는 Firebase 규칙상 관리자(서버)만 쓸 수 있으므로,
+// 클라이언트가 uid를 그냥 보내는 게 아니라 ID 토큰을 검증해서 본인 확인 후 서버가 직접 부여함
+const EARLY_ACCESS_LIMIT = 50;
+app.post('/claim-early-access', async (req, res) => {
+    if (!admin.apps.length) return res.status(503).json({ error: 'Firebase Admin not initialized' });
+    const { idToken } = req.body;
+    if (!idToken) return res.status(400).json({ error: 'idToken required' });
+
+    let uid;
+    try {
+        const decoded = await admin.auth().verifyIdToken(idToken);
+        uid = decoded.uid;
+    } catch (e) {
+        return res.status(401).json({ error: 'Invalid token' });
+    }
+
+    try {
+        const db = admin.database();
+
+        // 이미 유효한 구독(프로모션 포함)이 있으면 중복 부여 방지
+        const subSnap = await db.ref('users/' + uid + '/subscription').once('value');
+        const existing = subSnap.val();
+        if (existing && existing.expiresAt && new Date(existing.expiresAt) > new Date()) {
+            return res.json({ granted: false, reason: 'already_has_subscription' });
+        }
+
+        // 원자적 카운터 증가 (동시 가입에도 안전)
+        const counterRef = db.ref('meta/early50Count');
+        const txResult = await counterRef.transaction(v => (v || 0) + 1);
+        const count = txResult.committed ? txResult.snapshot.val() : null;
+
+        if (!count || count > EARLY_ACCESS_LIMIT) {
+            return res.json({ granted: false, reason: 'limit_reached', count });
+        }
+
+        const expiresAt = new Date(Date.now() + 30 * 86400000).toISOString();
+        await db.ref('users/' + uid + '/subscription').set({
+            plan: 'early50',
+            expiresAt,
+            grantedAt: Date.now()
+        });
+        console.log(`[claim-early-access] granted: uid=${uid} count=${count}/${EARLY_ACCESS_LIMIT} expiresAt=${expiresAt}`);
+        res.json({ granted: true, count, expiresAt });
+    } catch (e) {
+        console.error('[claim-early-access] error:', e.message);
+        res.status(500).json({ error: e.message });
+    }
+});
+
 const APP_ID = process.env.AGORA_APP_ID;
 const APP_CERTIFICATE = process.env.AGORA_APP_CERTIFICATE;
 const TOKEN_EXPIRY_SEC = 3600;
