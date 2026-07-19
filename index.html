@@ -2770,41 +2770,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             if (!isGuest) {
                 database.ref('users/' + user.uid + '/dob').once('value').then(snap => {
                     if (!snap.exists()) {
-                        // DOB 없음 → 모달 표시
-                        pendingDobAction = async (dobVal) => {
+                        // DOB 없음 → 확인 모달 표시 (드롭다운 채우기/나이 검증은 requireDob·confirmDob가 처리)
+                        pendingDobCancelAction = () => auth.signOut(); // 취소 또는 미성년이면 로그아웃
+                        requireDob(async (dobVal) => {
                             await database.ref('users/' + user.uid + '/dob').set(dobVal);
-                        };
-                        const today = new Date().toISOString().split('T')[0];
-                        document.getElementById('dob-input').max = today;
-                        document.getElementById('dob-input').value = '';
-                        // Cancel 시 로그아웃
-                        document.getElementById('dob-cancel-btn').onclick = () => {
-                            document.getElementById('dob-modal').classList.remove('active');
-                            pendingDobAction = null;
-                            auth.signOut();
-                        };
-                        // Confirm 오버라이드: DOB 저장 후 진행, 미성년 시 로그아웃
-                        document.getElementById('dob-confirm-btn').onclick = async () => {
-                            const y = document.getElementById('dob-year').value;
-                            const m = document.getElementById('dob-month').value;
-                            const d = document.getElementById('dob-day').value;
-                            if (!y || !m || !d) { alert(currentLang === 'ko' ? '생년월일을 모두 선택해주세요.' : 'Please select your full date of birth.'); return; }
-                            const val = `${y}-${m}-${d}`;
-                            const birth = new Date(val);
-                            const now = new Date();
-                            let age = now.getFullYear() - birth.getFullYear();
-                            const monthDiff = now.getMonth() - birth.getMonth();
-                            if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birth.getDate())) age--;
-                            if (age < 18) {
-                                alert(currentLang === 'ko' ? '죄송합니다. B-TALK은 만 18세 이상만 이용할 수 있습니다.' : 'Sorry, B-TALK is only available for users 18 and older.');
-                                document.getElementById('dob-modal').classList.remove('active');
-                                pendingDobAction = null;
-                                auth.signOut();
-                                return;
-                            }
-                            await database.ref('users/' + user.uid + '/dob').set(val);
-                            document.getElementById('dob-modal').classList.remove('active');
-                            pendingDobAction = null;
 
                             // 초기 회원 50명 프로모션 신청 (선착순 마감되면 조용히 무시됨)
                             try {
@@ -2821,9 +2790,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                                         : `🎉 Congrats! You're one of our first 50 members —\nenjoy 2 hours of free daily calls for the next 30 days!`);
                                 }
                             } catch (e) { console.error('claim-early-access error:', e); }
-                        };
-                        updateDobLang();
-                        document.getElementById('dob-modal').classList.add('active');
+                        });
                     }
                 });
             }
@@ -3505,6 +3472,7 @@ document.getElementById('part-title-label').innerText = lang.partLabel;
 
     // ── 생년월일 확인 ──
     let pendingDobAction = null;
+    let pendingDobCancelAction = null; // 취소 시 추가로 할 일 (예: 로그인 세션 로그아웃)
 
     function requireDob(action) {
         // 연도 드롭다운 채우기
@@ -3561,15 +3529,18 @@ document.getElementById('part-title-label').innerText = lang.partLabel;
                 : 'Sorry, B-TALK is only available for users 18 and older.');
             document.getElementById('dob-modal').classList.remove('active');
             pendingDobAction = null;
+            if (pendingDobCancelAction) { pendingDobCancelAction(); pendingDobCancelAction = null; }
             return;
         }
         document.getElementById('dob-modal').classList.remove('active');
+        pendingDobCancelAction = null;
         if (pendingDobAction) { pendingDobAction(val); pendingDobAction = null; }
     }
 
     function cancelDob() {
         document.getElementById('dob-modal').classList.remove('active');
         pendingDobAction = null;
+        if (pendingDobCancelAction) { pendingDobCancelAction(); pendingDobCancelAction = null; }
     }
 
     document.getElementById('guest-login-btn').addEventListener('click', () => {
@@ -5754,6 +5725,9 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             if (!data.success) throw new Error(data.error || 'unknown');
 
             document.getElementById('withdrawal-modal').classList.remove('active');
+            // 서버에서 Auth 계정 자체를 이미 삭제했으므로, 클라이언트에 남은 세션도 정리해야
+            // 다음 로드 때 존재하지 않는 계정을 갱신 시도하다 에러가 나는 걸 막을 수 있음
+            try { await auth.signOut(); } catch (e) {}
             alert(isKo ? '그동안 이용해 주셔서 감사합니다. 계정이 삭제되었습니다.' : 'Thank you for using B-TALK. Your account has been deleted.');
             location.reload();
         } catch (e) {
