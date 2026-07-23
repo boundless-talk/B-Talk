@@ -336,6 +336,7 @@
         .settings-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
         .settings-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 12px; }
         .settings-card-icon { font-size: 18px; margin-bottom: 6px; }
+        #settings-rank-emoji, #main-badge-emoji { display: none; }
         .settings-card-label { font-size: 10px; color: rgba(255,255,255,0.35); margin-bottom: 4px; }
         .settings-card-value { font-size: 17px; font-weight: 700; word-break: keep-all; }
         .settings-card-sub { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 2px; }
@@ -1508,7 +1509,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <div id="settings-modal-overlay" onclick="if(event.target===this)closeSettingsModal()">
         <div id="settings-modal">
             <div class="settings-handle"></div>
-            <div style="font-size:15px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;" id="settings-title">⚙ Settings</div>
+            <div style="font-size:15px;font-weight:700;color:rgba(255,255,255,0.9);margin-bottom:4px;" id="settings-title">Settings</div>
 
             <div class="settings-section-label" id="settings-lang-label">Language</div>
             <div class="settings-row">
@@ -1522,7 +1523,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <div class="settings-section-label" id="settings-mypage-label">My page</div>
             <div class="settings-cards">
                 <div class="settings-card">
-                    <div class="settings-card-icon">⏱</div>
                     <div class="settings-card-label" id="settings-time-label">오늘 남은 시간</div>
                     <div class="settings-card-value" id="settings-time-value" style="color:#e4362a;">--:--:--</div>
                     <div class="settings-card-sub" id="settings-time-sub">구독 혜택</div>
@@ -1535,7 +1535,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 </div>
             </div>
             <div class="settings-card" style="margin-top:10px;">
-                <div class="settings-card-icon">🏅</div>
                 <div class="settings-card-label" id="settings-badge-label">오늘 받은 배지</div>
                 <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px;">
                     <div class="settings-card-value" id="settings-badge-count" style="color:#ffd166;font-size:17px;font-weight:700;">0</div>
@@ -1674,17 +1673,17 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         <!-- ── 방 만들기 모달 ── -->
         <div class="modal-overlay" id="disco-create-modal" onclick="if(event.target===this) closeDiscoCreateModal()">
             <div class="disco-modal-box">
-                <div class="disco-modal-title">새 방 만들기</div>
+                <div class="disco-modal-title" id="disco-create-title">새 방 만들기</div>
 
-                <div class="disco-modal-label">주제</div>
+                <div class="disco-modal-label" id="disco-create-topic-label">주제</div>
                 <input type="text" id="disco-create-topic-input" placeholder="예: 오늘 있었던 일, F1, 자취 꿀팁">
 
-                <div class="disco-modal-label">카테고리</div>
+                <div class="disco-modal-label" id="disco-create-cat-label">카테고리</div>
                 <div class="disco-cat-grid" id="disco-create-cat-grid"></div>
 
-                <div class="disco-modal-label">모드</div>
+                <div class="disco-modal-label" id="disco-create-mode-label">모드</div>
                 <div class="disco-pp-row">
-                    <span class="disco-pp-row-label">🏓 핑퐁 모드 (순서대로 1분 30초씩 발언)</span>
+                    <span class="disco-pp-row-label" id="disco-pp-row-label">핑퐁 모드 (순서대로 1분 30초씩 발언)</span>
                     <div id="disco-create-pp-toggle" onclick="toggleDiscoCreatePP()" style="display:flex;align-items:center;gap:2px;background:rgba(255,255,255,0.06);border-radius:16px;padding:3px;cursor:pointer;flex:none;">
                         <div id="disco-create-pp-off" style="padding:5px 10px;border-radius:13px;font-size:10.5px;font-weight:700;background:rgba(255,255,255,0.1);color:#fff;">OFF</div>
                         <div id="disco-create-pp-on" style="padding:5px 10px;border-radius:13px;font-size:10.5px;font-weight:700;color:rgba(255,255,255,0.35);">ON</div>
@@ -1692,16 +1691,16 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 </div>
 
                 <button class="disco-modal-submit" id="disco-create-submit-btn" onclick="submitDiscoCreate()">방 만들고 시작하기</button>
-                <button class="disco-modal-cancel" onclick="closeDiscoCreateModal()">취소</button>
+                <button class="disco-modal-cancel" id="disco-create-cancel-btn" onclick="closeDiscoCreateModal()">취소</button>
             </div>
         </div>
 
         <!-- ── My Circles 모달 (대화스탯 / 톡어게인) ── -->
         <div class="modal-overlay" id="my-circles-modal" onclick="if(event.target===this) closeMyCirclesModal()">
             <div class="disco-modal-box" style="max-width:380px; max-height:80vh; overflow-y:auto;">
-                <div class="disco-modal-title">My Circles</div>
+                <div class="disco-modal-title" id="my-circles-title">My Circles</div>
                 <div id="my-circles-modal-body"></div>
-                <button class="disco-modal-cancel" onclick="closeMyCirclesModal()">닫기</button>
+                <button class="disco-modal-cancel" id="my-circles-close-btn" onclick="closeMyCirclesModal()">닫기</button>
             </div>
         </div>
 
@@ -1742,11 +1741,11 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 background:#0e0e0f;
                 border:1px solid rgba(255,255,255,0.09); border-radius:10px; padding:20px 22px 22px; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <div id="topic-info-title" style="font-size:15px; font-weight:700; color:#fff;">💡 대화 주제가 고민되신다면</div>
+                    <div id="topic-info-title" style="font-size:15px; font-weight:700; color:#fff;">대화 주제가 고민되신다면</div>
                     <span onclick="closeTopicInfoModal()" style="color:rgba(255,255,255,0.35); font-size:16px; cursor:pointer;">✕</span>
                 </div>
                 <div id="topic-info-intro" style="font-size:12.5px; color:rgba(255,255,255,0.5); line-height:1.6; margin-bottom:6px;">
-                    어떤 이야기를 해야 할지 고민되시나요? 🤔 아래 추천 키워드를 참고해 보세요.
+                    어떤 이야기를 해야 할지 고민되시나요? 아래 추천 키워드를 참고해 보세요.
                 </div>
 
                 <div id="topic-info-label-1" class="settings-section-label" style="margin-top:14px;">가벼운 스몰토크가 필요할 때</div>
@@ -1759,7 +1758,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <div id="topic-info-tags-3" class="settings-card" style="white-space:nowrap; overflow-x:auto; font-size:13px; color:rgba(255,255,255,0.75);">#꿈 · #이직커리어 · #고민상담 · #자기계발</div>
 
                 <div id="topic-info-tip" style="font-size:11.5px; color:rgba(255,255,255,0.35); border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-top:16px;">
-                    👉 Tip: 마음에 드는 키워드가 있다면 직접 입력창에 적고 대화를 시작해 보세요!
+                    Tip: 마음에 드는 키워드가 있다면 직접 입력창에 적고 대화를 시작해 보세요!
                 </div>
             </div>
         </div>
@@ -1799,13 +1798,12 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     </div>
 
     <div id="user-action-buttons">
-    <button id="btn-talk-again" style="margin: 0; display: none;">🗣️ 또 대화하기</button>
-    <button id="toggle-rep-btn" style="display: none;">📊 대화스탯</button>
+    <button id="btn-talk-again" style="margin: 0; display: none;">또 대화하기</button>
+    <button id="toggle-rep-btn" style="display: none;">대화스탯</button>
     <button id="logout-btn" style="display: none;">LOGOUT</button>
     </div>
    <div class="reputation-board" id="reputation-section" style="display: none;">
-        <div id="guest-stats-overlay" style="display:none; position:absolute; inset:0; z-index:5; border-radius:20px; background:rgba(13,14,18,0.55); backdrop-filter:blur(2px); align-items:center; justify-content:center; flex-direction:column; gap:6px; text-align:center; padding:20px;">
-            <div style="font-size:28px;">🔒</div>
+        <div id="guest-stats-overlay" style="display:none; position:absolute; inset:0; z-index:5; border-radius:10px; background:rgba(13,14,18,0.55); backdrop-filter:blur(2px); align-items:center; justify-content:center; flex-direction:column; gap:6px; text-align:center; padding:20px;">
             <div id="gso-title" style="font-size:14px; font-weight:700; color:#fff;">회원에게만 공개됩니다</div>
             <div id="gso-desc" style="font-size:12px; color:rgba(255,255,255,0.45); line-height:1.6;">대화를 거듭할수록 쌓이는 나만의 토크 스탯,<br>가입하면 바로 확인할 수 있어요.</div>
         </div>
@@ -1815,27 +1813,22 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <div id="rank-info-title" style="font-size:10px;font-weight:700;color:rgba(255,255,255,0.4);text-align:center;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase;">Total badges earned</div>
             <div style="display:flex;justify-content:space-around;gap:4px;">
                 <div class="rank-badge-item" onclick="toggleRankDesc('rd-newcomer')">
-                    <div class="rank-badge-icon" style="background:rgba(255,255,255,0.08);">👋</div>
                     <div class="rank-badge-name" id="ri-newcomer">Newcomer</div>
                     <div class="rank-badge-range">0–9</div>
                 </div>
                 <div class="rank-badge-item" onclick="toggleRankDesc('rd-rising')">
-                    <div class="rank-badge-icon" style="background:rgba(120,200,80,0.15);">🌱</div>
                     <div class="rank-badge-name" id="ri-name">Rising Talker</div>
                     <div class="rank-badge-range">10–49</div>
                 </div>
                 <div class="rank-badge-item" onclick="toggleRankDesc('rd-silver')">
-                    <div class="rank-badge-icon" style="background:rgba(100,180,255,0.15);">💬</div>
                     <div class="rank-badge-name" id="ri-silver">Storyteller</div>
                     <div class="rank-badge-range">50–99</div>
                 </div>
                 <div class="rank-badge-item" onclick="toggleRankDesc('rd-gold')">
-                    <div class="rank-badge-icon" style="background:rgba(255,200,50,0.15);">☕</div>
                     <div class="rank-badge-name" id="ri-gold">Lingering Voice</div>
                     <div class="rank-badge-range">100–199</div>
                 </div>
                 <div class="rank-badge-item" onclick="toggleRankDesc('rd-legend')">
-                    <div class="rank-badge-icon" style="background:rgba(180,100,255,0.2);">🔮</div>
                     <div class="rank-badge-name" id="ri-legend">Soulmate</div>
                     <div class="rank-badge-range">200+</div>
                 </div>
@@ -1855,36 +1848,36 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             </div>
             <div class="stats-sub-grid" id="stats-sub-grid">
                 <div class="stats-sub-badge">
-                    <div class="stats-sub-top">👍 <span id="label-manner">NICE</span>: <strong id="score-manner">0</strong></div>
+                    <div class="stats-sub-top"><span id="label-manner">NICE</span>: <strong id="score-manner">0</strong></div>
                     <div class="stats-bar"><div class="stats-bar-fill" id="bar-manner" style="width:0%"></div></div>
                 </div>
                 <div class="stats-sub-badge">
-                    <div class="stats-sub-top">🧠 <span id="label-logic">LOGIC</span>: <strong id="score-logic">0</strong></div>
+                    <div class="stats-sub-top"><span id="label-logic">LOGIC</span>: <strong id="score-logic">0</strong></div>
                     <div class="stats-bar"><div class="stats-bar-fill" id="bar-logic" style="width:0%"></div></div>
                 </div>
                 <div class="stats-sub-badge">
-                    <div class="stats-sub-top">🤣 <span id="label-humor">FUN</span>: <strong id="score-humor">0</strong></div>
+                    <div class="stats-sub-top"><span id="label-humor">FUN</span>: <strong id="score-humor">0</strong></div>
                     <div class="stats-bar"><div class="stats-bar-fill" id="bar-humor" style="width:0%"></div></div>
                 </div>
                 <div class="stats-sub-badge">
-                    <div class="stats-sub-top">🤗 <span id="label-empathy">WARM</span>: <strong id="score-empathy">0</strong></div>
+                    <div class="stats-sub-top"><span id="label-empathy">WARM</span>: <strong id="score-empathy">0</strong></div>
                     <div class="stats-bar"><div class="stats-bar-fill" id="bar-empathy" style="width:0%"></div></div>
                 </div>
                 <div class="stats-sub-badge">
-                    <div class="stats-sub-top">🔥 <span id="label-passion">BOLD</span>: <strong id="score-passion">0</strong></div>
+                    <div class="stats-sub-top"><span id="label-passion">BOLD</span>: <strong id="score-passion">0</strong></div>
                     <div class="stats-bar"><div class="stats-bar-fill" id="bar-passion" style="width:0%"></div></div>
                 </div>
             </div>
         </div>
         <div class="stats-heatmap" style="margin-top:14px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08);">
             <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                <span>🌍</span><span id="heatmap-title">지금 대화 흐름 (시간대별)</span>
+                <span id="heatmap-title">지금 대화 흐름 (시간대별)</span>
             </div>
             <div id="heatmap-bars" style="display:none; align-items:flex-end; gap:2px; height:44px;"></div>
             <div id="heatmap-ticks" style="display:none; justify-content:space-between; font-size:9px; color:rgba(255,255,255,0.25); margin-top:3px;">
                 <span>0</span><span>6</span><span>12</span><span>18</span><span>23</span>
             </div>
-            <div id="heatmap-empty" style="font-size:11px; color:rgba(255,255,255,0.35); text-align:center; padding:14px 0;">📊</div>
+            <div id="heatmap-empty" style="font-size:11px; color:rgba(255,255,255,0.35); text-align:center; padding:14px 0;">—</div>
             <div id="heatmap-peak-text" style="font-size:11px; color:rgba(228,54,42,0.7); text-align:center; margin-top:6px;"></div>
         </div>
         </div><!-- /rep-content-inner -->
@@ -1902,7 +1895,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <!-- 문의하기 모달 -->
     <div class="modal-overlay" id="inquiry-modal">
         <div class="modal-content" style="max-width:380px;">
-            <h3 id="inquiry-modal-title" style="font-size:17px; margin-bottom:6px;">✉️ 문의하기</h3>
+            <h3 id="inquiry-modal-title" style="font-size:17px; margin-bottom:6px;">문의하기</h3>
             <p id="inquiry-modal-desc" style="font-size:12px; color:rgba(255,255,255,0.35); margin-bottom:20px;">불편한 점이나 건의 사항을 보내주세요.<br>이메일로 답변해드립니다. 24시간 이내에 답변드립니다.</p>
             <input type="email" id="inquiry-email" placeholder="회신받을 이메일 (선택사항)" style="display:none; width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; color:#fff; padding:12px; font-size:13px; font-family:inherit; outline:none; box-sizing:border-box; margin-bottom:10px;">
             <textarea id="inquiry-text" placeholder="문의 내용을 입력해주세요..." style="width:100%; min-height:120px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:10px; color:#fff; padding:12px; font-size:13px; font-family:inherit; resize:vertical; outline:none; box-sizing:border-box;"></textarea>
@@ -1929,8 +1922,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <h3 id="speech-style-modal-title" style="font-size:17px; margin-bottom:6px;">어떤 스타일로 대화할래요?</h3>
             <p id="speech-style-modal-desc" style="font-size:12px; margin-bottom:22px; color:rgba(255,255,255,0.35);">선택하지 않아도 입장할 수 있어요</p>
             <div style="display:flex; gap:10px; margin-bottom:14px;">
-                <button class="speech-style-btn" id="modal-btn-casual" onclick="selectStyleAndJoin('casual')" style="flex:1; padding:14px 8px; font-size:14px;">👋 친구처럼</button>
-                <button class="speech-style-btn" id="modal-btn-polite" onclick="selectStyleAndJoin('polite')" style="flex:1; padding:14px 8px; font-size:14px;">🤝 정중하게</button>
+                <button class="speech-style-btn" id="modal-btn-casual" onclick="selectStyleAndJoin('casual')" style="flex:1; padding:14px 8px; font-size:14px;">친구처럼</button>
+                <button class="speech-style-btn" id="modal-btn-polite" onclick="selectStyleAndJoin('polite')" style="flex:1; padding:14px 8px; font-size:14px;">정중하게</button>
             </div>
             <button id="speech-style-skip-btn" onclick="selectStyleAndJoin(null)" style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:12px; cursor:pointer; width:auto; padding:4px; margin:0;">건너뛰기</button>
         </div>
@@ -1942,20 +1935,20 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <p id="modal-desc">Here is your AI conversation summary. Choose a peer to gift a badge!</p>
 
             <div class="ai-summary-box">
-                💡 <strong id="summary-headline">AI Chat Summary Loading...</strong><br>
+                <strong id="summary-headline">AI Chat Summary Loading...</strong><br>
                 <span id="summary-content" style="color: rgba(255,255,255,0.7);">Analyzing the dialogue pattern...</span>
             </div>
 
             <div class="target-select-list" id="vote-target-container"></div>
 
             <div class="badge-select-grid">
-                <button class="badge-vote-btn btn-disabled" id="btn-vote-manner" onclick="executeVote('manner')">👍 <span id="vote-manner">NICE</span></button>
-                <button class="badge-vote-btn btn-disabled" id="btn-vote-logic" onclick="executeVote('logic')">🧠 <span id="vote-logic">LOGIC</span></button>
-                <button class="badge-vote-btn btn-disabled" id="btn-vote-humor" onclick="executeVote('humor')">🤣 <span id="vote-humor">FUN</span></button>
-                <button class="badge-vote-btn btn-disabled" id="btn-vote-empathy" onclick="executeVote('empathy')">🤗 <span id="vote-empathy">WARM</span></button>
-                <button class="badge-vote-btn btn-disabled" id="btn-vote-passion" onclick="executeVote('passion')">🔥 <span id="vote-passion">BOLD</span></button>
-                <button class="badge-vote-btn btn-disabled" id="btn-add-friend" onclick="executeAddFriend()" style="background: rgba(228,54,42, 0.05); border-color: rgba(228,54,42, 0.4);"
-        <span id="label-add-friend">➕ Add Friend</span>
+                <button class="badge-vote-btn btn-disabled" id="btn-vote-manner" onclick="executeVote('manner')"><span id="vote-manner">NICE</span></button>
+                <button class="badge-vote-btn btn-disabled" id="btn-vote-logic" onclick="executeVote('logic')"><span id="vote-logic">LOGIC</span></button>
+                <button class="badge-vote-btn btn-disabled" id="btn-vote-humor" onclick="executeVote('humor')"><span id="vote-humor">FUN</span></button>
+                <button class="badge-vote-btn btn-disabled" id="btn-vote-empathy" onclick="executeVote('empathy')"><span id="vote-empathy">WARM</span></button>
+                <button class="badge-vote-btn btn-disabled" id="btn-vote-passion" onclick="executeVote('passion')"><span id="vote-passion">BOLD</span></button>
+                <button class="badge-vote-btn btn-disabled" id="btn-add-friend" onclick="executeAddFriend()" style="background: rgba(228,54,42, 0.05); border-color: rgba(228,54,42, 0.4);">
+        <span id="label-add-friend">Add Friend</span>
     </button>
                 <button class="badge-vote-btn" onclick="closeModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-weight:400; margin-top: 10px;" id="vote-skip">Skip Feedback</button>
             </div>
@@ -1973,7 +1966,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <!-- 친구 추가 닉네임 입력 모달 -->
     <div class="nickname-modal-overlay" id="nickname-modal">
         <div class="nickname-modal-box">
-            <h3>👤 친구 닉네임 설정</h3>
+            <h3>친구 닉네임 설정</h3>
             <p>이 친구를 어떤 이름으로 저장할까요?<br>나만 볼 수 있는 이름입니다.</p>
             <input type="text" id="nickname-input" placeholder="닉네임 입력 (최대 12자)" maxlength="12">
             <div class="nickname-modal-actions">
@@ -2099,7 +2092,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <div id="room-part-list"></div>
             </div>
         </div>
-        <button class="room-pp-switch-btn" id="room-pp-switch-btn" style="display:none;" onclick="switchToPingpong()">🏓 이 방을 핑퐁 모드로 전환하기</button>
+        <button class="room-pp-switch-btn" id="room-pp-switch-btn" style="display:none;" onclick="switchToPingpong()">이 방을 핑퐁 모드로 전환하기</button>
         <div class="room-footer">
             <button class="room-leave-btn" id="room-leave-btn">🚪 대화방 나가기</button>
             <button class="room-report-btn" id="room-report-btn">🚨 신고하기</button>
@@ -2111,8 +2104,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 핑퐁 매칭 지연 팝업 -->
     <div id="pp-slow-match-modal" style="display:none; position:fixed; inset:0; z-index:9998; background:rgba(0,0,0,0.6); align-items:center; justify-content:center;">
-        <div class="glass-card" style="border-radius:20px; padding:28px 24px; width:90%; max-width:320px; text-align:center;">
-            <div style="font-size:28px; margin-bottom:10px;">🏓</div>
+        <div class="glass-card" style="border-radius:10px; padding:28px 24px; width:90%; max-width:320px; text-align:center;">
             <div style="font-size:15px; font-weight:700; color:rgba(255,255,255,0.9); margin-bottom:8px;" id="pp-slow-title">핑퐁 모드 매칭 지연 중</div>
             <div style="font-size:12px; color:rgba(255,255,255,0.4); line-height:1.6; margin-bottom:20px;" id="pp-slow-desc">현재 핑퐁 모드 대기열에 사람이 적어요.<br>일반 모드로 변경하시겠어요?</div>
             <button onclick="ppSwitchToNormal()" class="intro2-start-btn" style="margin-bottom:10px;" id="pp-slow-confirm">일반 모드로 변경</button>
@@ -2124,7 +2116,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <!-- 생년월일 확인 모달 -->
     <div class="modal-overlay" id="dob-modal">
         <div class="modal-content" style="max-width:340px; text-align:center;">
-            <div style="font-size:28px; margin-bottom:10px;">🎂</div>
             <h3 id="dob-title" style="font-size:17px; margin-bottom:6px; letter-spacing:0.5px;">Enter your date of birth</h3>
             <p id="dob-subtitle" style="font-size:12px; color:rgba(255,255,255,0.4); margin-bottom:22px;">B-TALK is for users 18 and older.</p>
             <div style="display:flex; gap:8px; margin-bottom:16px;">
@@ -2173,12 +2164,12 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         <div class="modal-content" style="max-width:320px;">
             <h3 style="margin-bottom:18px; font-size:18px; letter-spacing:2px;">BOUNDLESS TALK</h3>
             <div style="display:flex; flex-direction:column; gap:4px;">
-                <button onclick="openAboutPage('product')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-product">🎙️ <span id="about-label-product">서비스 소개</span></button>
-                <button onclick="openAboutPage('pricing')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-pricing">💳 <span id="about-label-pricing">요금제</span></button>
-                <button onclick="openAboutPage('privacy')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-privacy">🔒 <span id="about-label-privacy">개인정보처리방침</span></button>
-                <button onclick="openAboutPage('terms')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-terms">📄 <span id="about-label-terms">이용약관</span></button>
-                <button onclick="openAboutPage('guidelines')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-guidelines">📋 <span id="about-label-guidelines">커뮤니티 가이드라인</span></button>
-                <button onclick="openAboutPage('safety')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-safety">🛡️ <span id="about-label-safety">안전 정책</span></button>
+                <button onclick="openAboutPage('product')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-product"><span id="about-label-product">서비스 소개</span></button>
+                <button onclick="openAboutPage('pricing')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-pricing"><span id="about-label-pricing">요금제</span></button>
+                <button onclick="openAboutPage('privacy')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-privacy"><span id="about-label-privacy">개인정보처리방침</span></button>
+                <button onclick="openAboutPage('terms')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-terms"><span id="about-label-terms">이용약관</span></button>
+                <button onclick="openAboutPage('guidelines')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-guidelines"><span id="about-label-guidelines">커뮤니티 가이드라인</span></button>
+                <button onclick="openAboutPage('safety')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-safety"><span id="about-label-safety">안전 정책</span></button>
             </div>
             <button id="about-close-btn" onclick="document.getElementById('about-modal').classList.remove('active')" style="margin-top:16px; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.4); border:none; border-radius:10px; padding:10px; width:100%; cursor:pointer; font-size:13px;">닫기</button>
         </div>
@@ -2204,9 +2195,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <!-- 7분 결제 모달 -->
     <div id="payment-modal" style="display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px); align-items:center; justify-content:center;">
-        <div class="glass-card" style="border-radius:20px; padding:28px 24px 20px; width:90%; max-width:340px; margin:auto; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
-            <div style="font-size:26px; text-align:center; margin-bottom:10px;">💬</div>
-            <div style="font-size:17px; font-weight:700; color:rgba(255,255,255,0.92); text-align:center; margin-bottom:6px;" id="pay-modal-title">Too good to stop now? 😊</div>
+        <div class="glass-card" style="border-radius:10px; padding:28px 24px 20px; width:90%; max-width:340px; margin:auto; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);">
+            <div style="font-size:17px; font-weight:700; color:rgba(255,255,255,0.92); text-align:center; margin-bottom:6px;" id="pay-modal-title">Too good to stop now?</div>
             <div style="font-size:12px; color:rgba(255,255,255,0.4); text-align:center; margin-bottom:20px;" id="pay-modal-sub">Keep the conversation going</div>
 
             <!-- Monthly Plan -->
@@ -2251,8 +2241,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         <div class="modal-content" style="max-width:340px;">
             <!-- 헤더 -->
             <div style="margin-bottom:4px;">
-                <div style="font-size:13px; color:rgba(255,255,255,0.4); margin-bottom:6px;">👑 <span id="sub-modal-badge">추천</span></div>
-                <div id="sub-modal-title" style="font-size:18px; font-weight:700; color:#fff; margin-bottom:4px;">You're already subscribed ✨</div>
+                <div style="font-size:13px; color:rgba(255,255,255,0.4); margin-bottom:6px;"><span id="sub-modal-badge">추천</span></div>
+                <div id="sub-modal-title" style="font-size:18px; font-weight:700; color:#fff; margin-bottom:4px;">You're already subscribed</div>
                 <p id="sub-modal-desc" style="font-size:13px; color:rgba(255,255,255,0.45); margin-bottom:16px;"></p>
             </div>
             <!-- 플랜 정보 -->
@@ -2267,7 +2257,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 </div>
             </div>
             <!-- 플랜 변경 -->
-            <button onclick="openChangePlanModal()" style="width:100%; padding:12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:12px; color:rgba(255,255,255,0.6); font-size:14px; cursor:pointer; margin-bottom:8px;">🔄 <span id="sub-btn-change">플랜 변경하기</span></button>
+            <button onclick="openChangePlanModal()" style="width:100%; padding:12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:12px; color:rgba(255,255,255,0.6); font-size:14px; cursor:pointer; margin-bottom:8px;"><span id="sub-btn-change">플랜 변경하기</span></button>
             <button onclick="requestRefund()" style="width:100%; padding:8px; background:transparent; border:none; color:rgba(255,255,255,0.2); font-size:11px; cursor:pointer; margin-top:2px; text-decoration:underline;" id="sub-btn-refund">구독 취소하기</button>
             <button onclick="document.getElementById('subscription-modal').classList.remove('active')" style="width:100%; padding:8px; background:transparent; border:none; color:rgba(255,255,255,0.15); font-size:12px; cursor:pointer; margin-top:2px;" id="sub-btn-close">닫기</button>
         </div>
@@ -2276,7 +2266,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <!-- 환불 피드백 모달 -->
     <div class="modal-overlay" id="refund-modal">
         <div class="modal-content" style="max-width:340px;">
-            <div style="font-size:22px; text-align:center; margin-bottom:10px;">😢</div>
             <div id="refund-modal-title" style="font-size:16px; font-weight:700; color:#fff; text-align:center; margin-bottom:4px;">어떤 점이 불편하셨나요?</div>
             <div id="refund-modal-subtitle" style="font-size:12px; color:rgba(255,255,255,0.35); text-align:center; margin-bottom:20px;">여러 개 선택 가능해요</div>
             <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;" id="refund-reasons">
@@ -2308,7 +2297,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <!-- 플랜 변경 모달 -->
     <div class="modal-overlay" id="change-plan-modal">
         <div class="modal-content" style="max-width:340px;">
-            <div style="font-size:15px; font-weight:700; color:#fff; margin-bottom:16px;">🔄 <span id="cp-title">플랜 변경</span></div>
+            <div style="font-size:15px; font-weight:700; color:#fff; margin-bottom:16px;"><span id="cp-title">플랜 변경</span></div>
             <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
                 <button onclick="switchPlan('weekly')" id="cp-weekly-btn" style="width:100%; padding:14px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:12px; color:#fff; font-size:14px; cursor:pointer; text-align:left;">
                     <span id="cp-weekly-label">Weekly Plan으로 변경</span> <span style="float:right; color:rgba(255,255,255,0.4);" id="cp-weekly-price">$1.99/week</span>
@@ -2323,7 +2312,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <div class="modal-overlay" id="report-modal">
         <div class="modal-content">
-            <h3 style="color: var(--danger-color);" id="rep-m-title">🚨 Report Toxic User</h3>
+            <h3 style="color: var(--danger-color);" id="rep-m-title">Report Toxic User</h3>
             <p id="rep-m-desc">Select the user you wish to report. The past 60 seconds of audio data will be audited by the Safeguard AI.</p>
 
             <div class="target-select-list" id="report-target-container"></div>
@@ -2598,8 +2587,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         const n = Math.max(1, Math.min(maxPeople || 4, 8));
         for (let i = 0; i < n; i++) {
             const angle = (-90 + (360 / n) * i) * Math.PI / 180;
-            const x = 22 + 19 * Math.cos(angle) - 3;
-            const y = 22 + 19 * Math.sin(angle) - 3;
+            const x = 28 + 24.5 * Math.cos(angle) - 3.5;
+            const y = 28 + 24.5 * Math.sin(angle) - 3.5;
             const node = document.createElement('div');
             node.className = 'ring-n ' + (i < occupancy ? 'filled' : 'empty');
             node.style.left = x + 'px';
@@ -2808,15 +2797,29 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         renderDiscoGrid();
     });
     renderDiscoChipRow();
+
+    function updateDiscoLangTexts() {
+        const isKo = currentLang === 'ko';
+        renderDiscoChipRow();
+        renderDiscoGrid();
+        const searchInput = document.getElementById('disco-search-input');
+        if (searchInput) searchInput.placeholder = isKo ? '주제 검색...' : 'Search topics...';
+        const setText = (id, ko, en) => { const el = document.getElementById(id); if (el) el.textContent = isKo ? ko : en; };
+        const setPh = (id, ko, en) => { const el = document.getElementById(id); if (el) el.placeholder = isKo ? ko : en; };
+        setText('disco-create-title', '새 방 만들기', 'New circle');
+        setText('disco-create-topic-label', '주제', 'Topic');
+        setPh('disco-create-topic-input', '예: 오늘 있었던 일, F1, 자취 꿀팁', 'e.g. today\'s highlight, F1, dorm life tips');
+        setText('disco-create-cat-label', '카테고리', 'Category');
+        setText('disco-create-mode-label', '모드', 'Mode');
+        setText('disco-pp-row-label', '핑퐁 모드 (순서대로 1분 30초씩 발언)', 'Ping Pong mode (take 90s turns speaking in order)');
+        setText('disco-create-submit-btn', '방 만들고 시작하기', 'Create and start');
+        setText('disco-create-cancel-btn', '취소', 'Cancel');
+        setText('my-circles-close-btn', '닫기', 'Close');
+        renderDiscoCreateCatGrid();
+    }
+    updateDiscoLangTexts();
     document.getElementById('lang-toggle-btn').addEventListener('click', () => {
-        setTimeout(() => {
-            renderDiscoChipRow();
-            renderDiscoGrid();
-            const disTitle = document.getElementById('disco-title');
-            if (disTitle) disTitle.textContent = 'Discover';
-            const searchInput = document.getElementById('disco-search-input');
-            if (searchInput) searchInput.placeholder = currentLang === 'ko' ? '주제 검색...' : 'Search topics...';
-        }, 0);
+        setTimeout(updateDiscoLangTexts, 0);
     });
     // ── My Circles 모달 (기존 '또 대화하기' / '대화스탯' 버튼 + 스탯 보드를 그대로 옮겨서 재사용) ──
     function openMyCirclesModal() {
@@ -3051,7 +3054,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         intro2S5: ``,
         intro2S6: ``,
         intro2S7: ``,
-        talkAgainBtn: "🗣️ TALK AGAIN",
+        talkAgainBtn: "TALK AGAIN",
         guestLoginBtn: "👀 Try as Guest",
         addFriendBtn: "➕ ADD FRIEND",
         friendsModalTitle: "MY FRIEND LIST",
@@ -3175,7 +3178,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         intro2S5: ``,
         intro2S6: ``,
         intro2S7: ``,
-        talkAgainBtn: "🗣️ 또 대화하기",
+        talkAgainBtn: "또 대화하기",
         guestLoginBtn: "👀 게스트로 체험하기",
         addFriendBtn: "➕ 친구 추가",
         friendsModalTitle: "나의 친구 목록",
@@ -3662,7 +3665,7 @@ function updateUI() {
         const frbRejectBtn = document.getElementById('frb-reject-btn'); if (frbRejectBtn) frbRejectBtn.textContent = lang.frbReject;
 
         // 토글 버튼 텍스트 고정
-        document.getElementById('toggle-rep-btn').innerText = currentLang === 'ko' ? "📊 대화스탯" : "📊 TALK STATS";
+        document.getElementById('toggle-rep-btn').innerText = currentLang === 'ko' ? "대화스탯" : "TALK STATS";
 
         // 시간대별 히트맵 다국어
         const heatmapTitleEl = document.getElementById('heatmap-title');
@@ -4794,7 +4797,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
                 if (ppSwitchBtn) ppSwitchBtn.style.display = 'none';
             } else if (!finalTopic.startsWith('🔒_')) {
                 const ppSwitchBtn = document.getElementById('room-pp-switch-btn');
-                if (ppSwitchBtn) { ppSwitchBtn.style.display = 'block'; ppSwitchBtn.disabled = false; }
+                if (ppSwitchBtn) { ppSwitchBtn.style.display = 'block'; ppSwitchBtn.disabled = false; ppSwitchBtn.textContent = currentLang === 'ko' ? '이 방을 핑퐁 모드로 전환하기' : 'Switch this room to Ping Pong'; }
             }
 
             // 핑퐁 토글 숨기기
@@ -5412,7 +5415,7 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
                 speechStyleConfirmed = true;
                 document.getElementById('join-btn').click();
                 ppAutoSwitchInProgress = false;
-                if (btn) { btn.disabled = false; btn.textContent = currentLang === 'ko' ? '🏓 이 방을 핑퐁 모드로 전환하기' : '🏓 Switch this room to Ping Pong'; }
+                if (btn) { btn.disabled = false; btn.textContent = currentLang === 'ko' ? '이 방을 핑퐁 모드로 전환하기' : 'Switch this room to Ping Pong'; }
             }
         }, 150);
     }
@@ -7141,7 +7144,7 @@ function updateSettingsModalLang() {
 
 function updateTopicInfoModalLang() {
     const isKo = currentLang === 'ko';
-    document.getElementById('topic-info-title').textContent = isKo ? '💡 대화 주제가 고민되신다면' : '💡 Not sure what to talk about?';
+    document.getElementById('topic-info-title').textContent = isKo ? '대화 주제가 고민되신다면' : 'Not sure what to talk about?';
     document.getElementById('topic-info-intro').textContent = isKo
         ? '어떤 이야기를 해야 할지 고민되시나요? 🤔 아래 추천 키워드를 참고해 보세요.'
         : "Not sure where to start? 🤔 Here are some keyword ideas to get the conversation going.";
