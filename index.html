@@ -10,11 +10,11 @@
     <meta property="og:description" content="관심 있는 주제로 전 세계 사람들과 실시간 음성 대화를 나누세요. 실시간 번역 자막 지원. A topic-driven voice discussion platform with real-time translated subtitles.">
     <meta property="og:url" content="https://boundless-talk.github.io/B-Talk/">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://boundless-talk.github.io/B-Talk/logo-transparent.png">
+    <meta property="og:image" content="https://boundless-talk.github.io/B-Talk/logo-boundless-talk.png">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Boundless Talk — 주제 기반 그룹 음성 대화">
     <meta name="twitter:description" content="관심 있는 주제로 전 세계 사람들과 실시간 음성 대화를 나누세요. 실시간 번역 자막 지원. A topic-driven voice discussion platform with real-time translated subtitles.">
-    <meta name="twitter:image" content="https://boundless-talk.github.io/B-Talk/logo-transparent.png">
+    <meta name="twitter:image" content="https://boundless-talk.github.io/B-Talk/logo-boundless-talk.png">
     <link rel="canonical" href="https://boundless-talk.github.io/B-Talk/">
     <meta name="google-site-verification" content="5Q7376bEwALtvcMyr7Qm3iQAMWxuQelfDSjgcPAVO3k" />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MC48J29K7L"></script>
@@ -31,7 +31,7 @@
     <script src="https://download.agora.io/sdk/release/AgoraRTC_N-4.18.0.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0b0b0c">
+    <meta name="theme-color" content="#062C6D">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -44,9 +44,12 @@
 
     <style>
         :root {
-            --bg-gradient: #0b0b0c;
-            --accent-color: #e4362a;
-            --accent-glow: rgba(228,54,42, 0.2);
+            --bg-gradient: #062C6D;
+            --accent-color: #99E1D9;
+            --accent-rgb: 153,225,217;
+            --accent-hover: #7DD4C9;
+            --accent-light: #C2F0E8;
+            --accent-glow: rgba(153,225,217, 0.2);
             --danger-color: #ff3b30;
             --danger-glow: rgba(255, 59, 48, 0.2);
             --card-bg: rgba(255, 255, 255, 0.03);
@@ -59,7 +62,7 @@
 
         body {
             font-family: 'Inter', 'Segoe UI', Roboto, -apple-system, sans-serif;
-            background: #0b0b0c;
+            background: #062C6D;
             color: #f5f4f2;
             display: flex;
             flex-direction: column;
@@ -80,7 +83,7 @@
         #splash-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: #0a0a0f;
+            background: #04193F;
             z-index: 6000;
             display: flex;
             flex-direction: column;
@@ -137,7 +140,7 @@
             letter-spacing: 8px;
             text-transform: uppercase;
             color: #fff;
-            text-shadow: 0 0 30px rgba(228,54,42,0.55), 0 0 60px rgba(228,54,42,0.25), 0 2px 10px rgba(0,0,0,0.5);
+            text-shadow: 0 0 30px rgba(var(--accent-rgb),0.55), 0 0 60px rgba(var(--accent-rgb),0.25), 0 2px 10px rgba(0,0,0,0.5);
             margin-bottom: 56px;
         }
         .intro-desc {
@@ -153,7 +156,7 @@
         .intro-desc strong {
             color: var(--accent-color);
             font-weight: 600;
-            text-shadow: 0 0 16px rgba(228,54,42,0.5), 0 1px 6px rgba(0,0,0,0.5);
+            text-shadow: 0 0 16px rgba(var(--accent-rgb),0.5), 0 1px 6px rgba(0,0,0,0.5);
         }
         .intro-start-btn {
             width: auto !important;
@@ -165,14 +168,14 @@
             border-radius: 50px !important;
             border: none !important;
             cursor: pointer !important;
-            box-shadow: 0 4px 20px rgba(228,54,42,0.35) !important;
+            box-shadow: 0 4px 20px rgba(var(--accent-rgb),0.35) !important;
             transition: all 0.2s ease !important;
             letter-spacing: 1px;
         }
         .intro-start-btn:hover {
-            background: #c62e21 !important;
+            background: var(--accent-hover) !important;
             transform: translateY(-2px) !important;
-            box-shadow: 0 8px 28px rgba(228,54,42,0.45) !important;
+            box-shadow: 0 8px 28px rgba(var(--accent-rgb),0.45) !important;
         }
         .intro-pulse {
             width: 6px; height: 6px;
@@ -198,9 +201,9 @@
         .intro2-num {
             font-size: 11px;
             font-weight: 700;
-            color: #e4362a;
-            background: rgba(228,54,42,0.08);
-            border: 1px solid rgba(228,54,42,0.35);
+            color: var(--accent-color);
+            background: rgba(var(--accent-rgb),0.08);
+            border: 1px solid rgba(var(--accent-rgb),0.35);
             border-radius: 50%;
             width: 28px;
             height: 28px;
@@ -209,7 +212,7 @@
             justify-content: center;
             flex-shrink: 0;
             margin-top: 2px;
-            box-shadow: 0 0 10px rgba(228,54,42,0.25);
+            box-shadow: 0 0 10px rgba(var(--accent-rgb),0.25);
         }
         .intro2-step p {
             font-size: 13.5px;
@@ -234,7 +237,7 @@
             font-size: 10px;
             font-weight: 600;
             letter-spacing: 1.4px;
-            color: rgba(228,54,42,0.6);
+            color: rgba(var(--accent-rgb),0.6);
             text-align: center;
             text-transform: uppercase;
             margin: 0 0 18px;
@@ -263,15 +266,15 @@
         .intro2-start-btn {
             width: 100%;
             padding: 14px;
-            background: rgba(228,54,42,0.06);
-            border: 1px solid rgba(228,54,42,0.4);
-            color: #e4362a;
+            background: rgba(var(--accent-rgb),0.06);
+            border: 1px solid rgba(var(--accent-rgb),0.4);
+            color: var(--accent-color);
             font-size: 15px;
             font-weight: 700;
             border-radius: 12px;
             cursor: pointer;
             letter-spacing: 0.5px;
-            box-shadow: 0 0 16px rgba(228,54,42,0.2);
+            box-shadow: 0 0 16px rgba(var(--accent-rgb),0.2);
             transition: all 0.25s ease;
         }
         .intro2-start-btn:hover {
@@ -306,7 +309,7 @@
             color: rgba(255,255,255,0.45); font-size: 20px; cursor: pointer;
             display: flex; align-items: center; justify-content: center; transition: all 0.2s;
         }
-        .settings-gear-btn:hover { color: #e4362a; }
+        .settings-gear-btn:hover { color: var(--accent-color); }
         /* 설정 모달 */
         #settings-modal-overlay {
             display: none; position: fixed; inset: 0; z-index: 9800;
@@ -318,7 +321,7 @@
         #settings-modal {
             position: absolute; top: 64px; right: 20px;
             width: 280px;
-            background: #0e0e0f;
+            background: #0A3A82;
             border: 1px solid rgba(255,255,255,0.09);
             border-radius: 10px; padding: 16px 16px 20px;
             animation: fadeDown 0.2s ease;
@@ -331,8 +334,11 @@
         .settings-row-left { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(255,255,255,0.7); }
         .lang-pills { display: flex; gap: 6px; }
         .lang-pill { padding: 5px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
-        .lang-pill.active { background: #e4362a; color: #000; }
+        .lang-pill.active { background: var(--accent-color); color: #000; }
         .lang-pill.inactive { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.1); }
+        .theme-swatches { display: flex; gap: 8px; }
+        .theme-swatch { width: 24px; height: 24px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; padding: 0; transition: all 0.2s; }
+        .theme-swatch.active { border-color: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,0.15); transform: scale(1.08); }
         .settings-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
         .settings-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 12px; }
         .settings-card-icon { font-size: 18px; margin-bottom: 6px; }
@@ -347,13 +353,13 @@
             color: rgba(255,255,255,0.6); padding: 6px 14px; font-size: 12px; font-weight: 600;
             border-radius: 20px; cursor: pointer; transition: all 0.2s;
         }
-        .lang-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(228,54,42,0.05); }
+        .lang-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(var(--accent-rgb),0.05); }
 
         .reputation-board {
             background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(228,54,42,0.25);
+            border: 1px solid rgba(var(--accent-rgb),0.25);
             padding: 16px; border-radius: 20px; margin-bottom: 25px;
-            box-shadow: 0 0 24px rgba(228,54,42,0.08), 0 4px 20px rgba(0,0,0,0.3);
+            box-shadow: 0 0 24px rgba(var(--accent-rgb),0.08), 0 4px 20px rgba(0,0,0,0.3);
             width: 100%; max-width: 400px;
             position: relative; overflow: hidden;
         }
@@ -379,7 +385,7 @@
         .stats-sub-top { font-size: 12px; color: rgba(255,255,255,0.7); font-weight: 600; }
         .stats-sub-top strong { color: #fff; }
         .stats-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; margin-top: 2px; }
-        .stats-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #e4362a, #ff7a5c); transition: width 0.5s ease; }
+        .stats-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent-color), var(--accent-light)); transition: width 0.5s ease; }
         #rank-info-popup { display: none; }
         #rank-info-popup.active { display: block; }
         .rank-badge-item { display:flex; flex-direction:column; align-items:center; gap:4px; flex:1; }
@@ -405,7 +411,7 @@
             margin-bottom: 32px;
         }
 
-        h2 { font-size: 30px; font-weight: 700; letter-spacing: 6px; margin-bottom: 10px; text-transform: uppercase; text-align: center; color: #fff; text-shadow: 0 0 30px rgba(228,54,42,0.5), 0 0 60px rgba(228,54,42,0.2); }
+        h2 { font-size: 30px; font-weight: 700; letter-spacing: 6px; margin-bottom: 10px; text-transform: uppercase; text-align: center; color: #fff; text-shadow: 0 0 30px rgba(var(--accent-rgb),0.5), 0 0 60px rgba(var(--accent-rgb),0.2); }
 
         /* 추가된 서브타이틀 스타일 */
         .sub-title { font-size: 14px; color: rgba(255,255,255,0.6); text-align: center; margin-top: -4px; margin-bottom: 0; letter-spacing: 1px; }
@@ -433,16 +439,16 @@
 .speech-style-label { font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:6px; letter-spacing:0.3px; }
 .consent-item { display:flex; align-items:center; gap:10px; font-size:13px; color:rgba(255,255,255,0.75); cursor:pointer; }
         .consent-item input[type="checkbox"] { appearance:none; width:18px; height:18px; min-width:18px; border:1.5px solid rgba(255,255,255,0.25); border-radius:5px; background:transparent; cursor:pointer; transition:all 0.2s; position:relative; }
-        .consent-item input[type="checkbox"]:checked { background:#e4362a; border-color:#e4362a; }
+        .consent-item input[type="checkbox"]:checked { background:var(--accent-color); border-color:var(--accent-color); }
         .consent-item input[type="checkbox"]:checked::after { content:'✓'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:#0d0e12; font-size:12px; font-weight:700; }
-        .consent-view-btn { background:transparent; border:none; color:rgba(228,54,42,0.6); font-size:11px; cursor:pointer; padding:0 4px; text-decoration:underline; width:auto; margin:0; }
-        .consent-view-btn:hover { color:#e4362a; }
-        #consent-confirm-btn:not(:disabled) { background:rgba(228,54,42,0.15); color:#e4362a; border-color:rgba(228,54,42,0.5); cursor:pointer; }
-        #consent-confirm-btn:not(:disabled):hover { background:rgba(228,54,42,0.25); }
+        .consent-view-btn { background:transparent; border:none; color:rgba(var(--accent-rgb),0.6); font-size:11px; cursor:pointer; padding:0 4px; text-decoration:underline; width:auto; margin:0; }
+        .consent-view-btn:hover { color:var(--accent-color); }
+        #consent-confirm-btn:not(:disabled) { background:rgba(var(--accent-rgb),0.15); color:var(--accent-color); border-color:rgba(var(--accent-rgb),0.5); cursor:pointer; }
+        #consent-confirm-btn:not(:disabled):hover { background:rgba(var(--accent-rgb),0.25); }
         .speech-style-btns { display:flex; gap:6px; justify-content:center; }
 .speech-style-btn { padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.04); color:rgba(255,255,255,0.5); transition:all 0.2s; width:auto; margin:0; }
-.speech-style-btn.active { background:rgba(228,54,42,0.12); border-color:rgba(228,54,42,0.5); color:#e4362a; }
-.speech-style-badge { font-size:10px; padding:2px 7px; border-radius:10px; margin-left:5px; background:rgba(228,54,42,0.1); color:rgba(228,54,42,0.7); border:1px solid rgba(228,54,42,0.2); vertical-align:middle; }
+.speech-style-btn.active { background:rgba(var(--accent-rgb),0.12); border-color:rgba(var(--accent-rgb),0.5); color:var(--accent-color); }
+.speech-style-badge { font-size:10px; padding:2px 7px; border-radius:10px; margin-left:5px; background:rgba(var(--accent-rgb),0.1); color:rgba(var(--accent-rgb),0.7); border:1px solid rgba(var(--accent-rgb),0.2); vertical-align:middle; }
 select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.08); padding: 3px 8px; border-radius: 6px; cursor: pointer; outline: none; font-size: 11px; }
         button { width: 100%; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; margin-bottom: 12px; border: none; transition: all 0.2s ease; }
 
@@ -494,15 +500,15 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
         #email-signup-btn-main {
             background-color: transparent;
-            color: rgba(228,54,42,0.6);
-            border: 1px solid rgba(228,54,42,0.2);
+            color: rgba(var(--accent-rgb),0.6);
+            border: 1px solid rgba(var(--accent-rgb),0.2);
             margin: 0 0 12px 0;
             font-size: 12.5px;
             padding: 11px 14px;
             font-weight: 500;
             opacity: 0.75;
         }
-        #email-signup-btn-main:hover { background-color: rgba(228,54,42,0.06); color: var(--accent-color); border-color: rgba(228,54,42,0.4); transform: translateY(-1px); opacity: 1; }
+        #email-signup-btn-main:hover { background-color: rgba(var(--accent-rgb),0.06); color: var(--accent-color); border-color: rgba(var(--accent-rgb),0.4); transform: translateY(-1px); opacity: 1; }
 
         /* 인라인 폼 패널 */
         .auth-form-panel {
@@ -566,9 +572,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             color: #000;
             box-shadow: 0 4px 15px var(--accent-glow);
         }
-        .auth-submit-btn.primary:hover { background-color: #c62e21; transform: translateY(-1px); }
+        .auth-submit-btn.primary:hover { background-color: var(--accent-hover); transform: translateY(-1px); }
         .auth-submit-btn.primary:disabled {
-            background-color: rgba(228,54,42,0.2);
+            background-color: rgba(var(--accent-rgb),0.2);
             color: rgba(255,255,255,0.3);
             cursor: not-allowed;
             box-shadow: none;
@@ -627,18 +633,18 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         #logout-btn:hover {
             border-color: var(--accent-color);
             color: var(--accent-color);
-            background: rgba(228,54,42,0.05);
+            background: rgba(var(--accent-rgb),0.05);
         }
 
         #join-btn { background-color: var(--accent-color); color: #000000; font-size: 16px; box-shadow: 0 4px 15px var(--accent-glow); }
-        #join-btn:hover:not(:disabled) { background-color: #c62e21; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(228,54,42,0.3); }
+        #join-btn:hover:not(:disabled) { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(var(--accent-rgb),0.3); }
         #join-btn:disabled { background-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.3); box-shadow: none; cursor: not-allowed; }
 
         #leave-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); display: none; font-size: 12.5px; border-radius: 20px; padding: 8px 16px; }
-        #leave-btn:hover:not(:disabled) { border-color: var(--accent-color); color: var(--accent-color); background: rgba(228,54,42,0.05); }
+        #leave-btn:hover:not(:disabled) { border-color: var(--accent-color); color: var(--accent-color); background: rgba(var(--accent-rgb),0.05); }
 
         #report-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); display: none; font-size: 12.5px; border-radius: 20px; padding: 8px 16px; }
-        #report-btn:hover:not(:disabled) { border-color: var(--accent-color); color: var(--accent-color); background: rgba(228,54,42,0.05); }
+        #report-btn:hover:not(:disabled) { border-color: var(--accent-color); color: var(--accent-color); background: rgba(var(--accent-rgb),0.05); }
 
         /* 대화방 활성화 시 매칭 상태 및 참여자 그리드 */
         #matching-status {
@@ -674,16 +680,16 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .tip-card {
-            background: #141416;
+            background: #0D3D8A;
             border: 1px solid rgba(255,255,255,0.09);
         }
         .glass-card {
-            background: #0e0e0f;
+            background: #0A3A82;
             border: 1px solid rgba(255,255,255,0.09);
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
         }
         .modal-content {
-            background: #0e0e0f;
+            background: #0A3A82;
             border: 1px solid rgba(255,255,255,0.09);
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             padding: 30px;
@@ -696,7 +702,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .modal-content p { color: rgba(255,255,255,0.5); font-size: 13.5px; margin-bottom: 20px; line-height: 1.5; }
 
         .ai-summary-box {
-            background: rgba(228,54,42,0.03); border: 1px dashed rgba(228,54,42,0.2);
+            background: rgba(var(--accent-rgb),0.03); border: 1px dashed rgba(var(--accent-rgb),0.2);
             border-radius: 12px; padding: 15px; margin-bottom: 20px;
             text-align: left; font-size: 13px; line-height: 1.6; color: #e0e6ed;
         }
@@ -708,8 +714,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             color: #fff; padding: 12px; border-radius: 8px; text-align: left; font-size: 13.5px; cursor: pointer; transition: all 0.2s;
             touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
-        .target-btn:hover { background: rgba(228,54,42,0.08); border-color: var(--accent-color); color: var(--accent-color); }
-        .target-btn.selected { background: rgba(228,54,42,0.15); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; }
+        .target-btn:hover { background: rgba(var(--accent-rgb),0.08); border-color: var(--accent-color); color: var(--accent-color); }
+        .target-btn.selected { background: rgba(var(--accent-rgb),0.15); border-color: var(--accent-color); color: var(--accent-color); font-weight: 600; }
 
         .badge-select-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
         .badge-vote-btn {
@@ -718,7 +724,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             text-align: center; cursor: pointer; transition: all 0.2s; width: 100%; margin: 0;
             touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         }
-        .badge-vote-btn:hover:not(:disabled) { background: rgba(228,54,42,0.08); border-color: var(--accent-color); color: var(--accent-color); }
+        .badge-vote-btn:hover:not(:disabled) { background: rgba(var(--accent-rgb),0.08); border-color: var(--accent-color); color: var(--accent-color); }
         .badge-vote-btn:disabled { opacity: 0.4; cursor: not-allowed; }
         .badge-vote-btn.btn-disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
 
@@ -743,7 +749,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         #toggle-rep-btn:hover {
             border-color: var(--accent-color);
             color: var(--accent-color);
-            background: rgba(228,54,42, 0.05);
+            background: rgba(var(--accent-rgb), 0.05);
         }
         /* 조그만 '또 대화하기' 버튼 스타일 */
 #btn-talk-again {
@@ -760,7 +766,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 #btn-talk-again:hover {
     border-color: var(--accent-color);
     color: var(--accent-color);
-    background: rgba(228,54,42,0.05);
+    background: rgba(var(--accent-rgb),0.05);
 
     #user-action-buttons {
     display: flex;
@@ -814,7 +820,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     margin: 0;
     width: auto;
 }
-.friend-call-btn:hover { background: #c62e21; }
+.friend-call-btn:hover { background: var(--accent-hover); }
 
 #user-action-buttons {
     display: flex;
@@ -836,7 +842,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 }
 .nickname-modal-overlay.active { opacity: 1; visibility: visible; }
 .nickname-modal-box {
-    background: #0e0e0f;
+    background: #0A3A82;
     border: 1px solid rgba(255,255,255,0.09);
     border-radius: 10px; padding: 28px 24px; width: 100%; max-width: 380px;
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
@@ -863,7 +869,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 }
 #friend-request-banner.show { display: flex; }
 .frb-top { display: flex; flex-direction: column; gap: 4px; }
-.frb-title { font-size: 14px; font-weight: 600; color: #e4362a; }
+.frb-title { font-size: 14px; font-weight: 600; color: var(--accent-color); }
 .frb-desc { font-size: 12.5px; color: rgba(255,255,255,0.55); line-height: 1.4; }
 .frb-nickname-row { display: flex; align-items: center; gap: 8px; }
 .frb-nickname-row input {
@@ -910,8 +916,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 .part-item .animal-name { font-weight: 500; letter-spacing: 0.3px; }
 .part-item.speaking {
     border-color: var(--accent-color);
-    background: rgba(228,54,42, 0.07);
-    box-shadow: 0 0 14px rgba(228,54,42, 0.18);
+    background: rgba(var(--accent-rgb), 0.07);
+    box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.18);
     color: #fff;
 }
 .part-item.speaking .animal-avatar { animation: pulse-avatar 0.6s ease infinite alternate; }
@@ -955,7 +961,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         }
         .room-header {
             width: 100%;
-            background: #141416;
+            background: #0D3D8A;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             padding: 28px 24px 22px;
             display: flex;
@@ -972,8 +978,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .room-topic-display {
             font-size: 24px;
             font-weight: 700;
-            color: #e4362a;
-            text-shadow: 0 0 24px rgba(228,54,42,0.5), 0 1px 8px rgba(0,0,0,0.5);
+            color: var(--accent-color);
+            text-shadow: 0 0 24px rgba(var(--accent-rgb),0.5), 0 1px 8px rgba(0,0,0,0.5);
             text-align: center;
             letter-spacing: 0.5px;
             max-width: 340px;
@@ -989,8 +995,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             flex: 1;
         }
         .icebreaker-box {
-            background: rgba(228,54,42,0.05);
-            border: 1px solid rgba(228,54,42,0.18);
+            background: rgba(var(--accent-rgb),0.05);
+            border: 1px solid rgba(var(--accent-rgb),0.18);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border-radius: 10px;
@@ -1001,7 +1007,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         }
         .icebreaker-icon {
             font-size: 18px;
-            color: #e4362a;
+            color: var(--accent-color);
             flex-shrink: 0;
             margin-top: 1px;
         }
@@ -1014,7 +1020,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             font-size: 9px;
             text-transform: uppercase;
             letter-spacing: 2px;
-            color: rgba(228,54,42,0.48);
+            color: rgba(var(--accent-rgb),0.48);
             margin-bottom: 4px;
         }
         .icebreaker-text {
@@ -1065,7 +1071,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         }
         .room-part-count {
             font-size: 11px;
-            color: rgba(228,54,42,0.6);
+            color: rgba(var(--accent-rgb),0.6);
             font-weight: 600;
         }
         .room-waiting {
@@ -1093,8 +1099,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .pp-switch.on { background: linear-gradient(135deg, #7b61ff, #a78bff); }
         .pp-switch-thumb { width: 18px; height: 18px; background: #fff; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: left 0.3s; box-shadow: 0 1px 4px rgba(0,0,0,0.3); }
         .pp-switch.on .pp-switch-thumb { left: 23px; }
-        .pp-switch-badge { width: 28px !important; height: 16px !important; background: rgba(228,54,42,0.2) !important; }
-        .pp-switch-badge.on { background: rgba(228,54,42,0.35) !important; }
+        .pp-switch-badge { width: 28px !important; height: 16px !important; background: rgba(var(--accent-rgb),0.2) !important; }
+        .pp-switch-badge.on { background: rgba(var(--accent-rgb),0.35) !important; }
         .pp-switch-badge .pp-switch-thumb { width: 12px !important; height: 12px !important; top: 2px !important; left: 2px !important; background: #ffd166 !important; }
         .pp-switch-badge.on .pp-switch-thumb { left: 14px !important; }
 
@@ -1119,10 +1125,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .pp-relay-item.removing { opacity: 0; transform: scale(0.6); }
         .pp-relay-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; border: 1.5px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04); transition: all 0.3s; }
         .pp-relay-avatar.guest { border-style: dashed; border-color: rgba(255,255,255,0.25); }
-        .pp-relay-avatar.speaking { border-color: #e4362a; background: rgba(228,54,42,0.12); box-shadow: 0 0 10px rgba(228,54,42,0.25); }
+        .pp-relay-avatar.speaking { border-color: var(--accent-color); background: rgba(var(--accent-rgb),0.12); box-shadow: 0 0 10px rgba(var(--accent-rgb),0.25); }
         .pp-relay-avatar.new-join { border-color: #7b61ff; background: rgba(123,97,255,0.12); box-shadow: 0 0 10px rgba(123,97,255,0.2); }
         .pp-relay-name { font-size: 8px; color: rgba(255,255,255,0.35); font-weight: 600; max-width: 36px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .pp-relay-name.speaking { color: #e4362a; }
+        .pp-relay-name.speaking { color: var(--accent-color); }
         .pp-relay-arrow { font-size: 12px; color: rgba(255,255,255,0.12); flex-shrink: 0; margin-bottom: 14px; }
 
         .pp-turn-block {
@@ -1130,7 +1136,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             padding: 14px 0 10px;
             margin-bottom: 10px;
         }
-        .pp-turn-label { font-size: 15px; font-weight: 800; color: #e4362a; margin-bottom: 2px; }
+        .pp-turn-label { font-size: 15px; font-weight: 800; color: var(--accent-color); margin-bottom: 2px; }
         .pp-turn-label.waiting { color: rgba(255,200,50,0.85); }
         .pp-turn-label.other { color: rgba(255,255,255,0.45); }
         .pp-turn-sub { font-size: 11px; color: rgba(255,255,255,0.3); }
@@ -1139,16 +1145,16 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .pp-timer-num { font-size: 32px; font-weight: 800; color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -1px; }
         .pp-timer-total { font-size: 13px; color: rgba(255,255,255,0.22); }
         .pp-progress-track { height: 5px; background: rgba(255,255,255,0.07); border-radius: 5px; margin-bottom: 14px; overflow: hidden; }
-        .pp-progress-fill { height: 100%; background: linear-gradient(90deg, #7b61ff, #e4362a); border-radius: 5px; transition: width 1s linear; }
+        .pp-progress-fill { height: 100%; background: linear-gradient(90deg, #7b61ff, var(--accent-color)); border-radius: 5px; transition: width 1s linear; }
         .pp-progress-fill.other { background: rgba(255,255,255,0.15); transition: width 1s linear; }
 
         .pp-pass-btn {
             width: 100%; padding: 11px;
-            background: rgba(228,54,42,0.08); border: 1px solid rgba(228,54,42,0.35);
-            border-radius: 12px; color: #e4362a; font-size: 13px; font-weight: 700; cursor: pointer;
+            background: rgba(var(--accent-rgb),0.08); border: 1px solid rgba(var(--accent-rgb),0.35);
+            border-radius: 12px; color: var(--accent-color); font-size: 13px; font-weight: 700; cursor: pointer;
             margin-bottom: 8px; transition: all 0.2s;
         }
-        .pp-pass-btn:hover:not(:disabled) { background: rgba(228,54,42,0.18); }
+        .pp-pass-btn:hover:not(:disabled) { background: rgba(var(--accent-rgb),0.18); }
         .pp-pass-btn:disabled { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.07); color: rgba(255,255,255,0.18); cursor: not-allowed; }
 
         .pp-waiting-solo {
@@ -1221,7 +1227,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             transition: all 0.2s;
             margin: 0;
         }
-        .room-leave-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(228,54,42,0.05); }
+        .room-leave-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(var(--accent-rgb),0.05); }
         .room-report-btn {
             flex: 1;
             padding: 13px;
@@ -1235,21 +1241,21 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             transition: all 0.2s;
             margin: 0;
         }
-        .room-report-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(228,54,42,0.05); }
+        .room-report-btn:hover { border-color: var(--accent-color); color: var(--accent-color); background: rgba(var(--accent-rgb),0.05); }
 
         /* ── 핑퐁 전환 버튼 (통화 중) ── */
         .room-pp-switch-btn {
             width: 100%; max-width: 420px; margin: 0 0 8px; padding: 11px;
-            border-radius: 20px; background: rgba(228,54,42,0.06);
-            border: 1px solid rgba(228,54,42,0.3); color: var(--accent-color);
+            border-radius: 20px; background: rgba(var(--accent-rgb),0.06);
+            border: 1px solid rgba(var(--accent-rgb),0.3); color: var(--accent-color);
             font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.2s;
         }
-        .room-pp-switch-btn:hover { background: rgba(228,54,42,0.12); }
+        .room-pp-switch-btn:hover { background: rgba(var(--accent-rgb),0.12); }
         .room-pp-switch-btn:disabled { opacity: 0.4; cursor: default; }
 
         /* ── Discover 화면 (시안 1a 충실 재현: 레드 액센트 + 다크 카드) ── */
         #discover-screen {
-            --dr: #e4362a; --dr-glow: rgba(228,54,42,.35); --dsurf: #141416; --dbord: rgba(255,255,255,.08);
+            --dr: var(--accent-color); --dr-glow: rgba(var(--accent-rgb),.35); --dsurf: #0D3D8A; --dbord: rgba(255,255,255,.08);
             width: 100%; display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;
         }
         @keyframes discoWave1 { 0%,100%{height:5px} 50%{height:18px} }
@@ -1269,7 +1275,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .disco-navbar-links a { cursor: default; }
         .disco-navbar-links a.active { color: #f5f4f2; font-weight: 700; }
         .disco-navbar-cta {
-            flex: none; background: var(--dr); color: #fff; font-size: 12.5px; font-weight: 700;
+            flex: none; background: var(--dr); color: #062C6D; font-size: 12.5px; font-weight: 700;
             border: none; border-radius: 4px; padding: 9px 16px; cursor: pointer; white-space: nowrap;
         }
         .disco-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--dr); margin-bottom: -6px; }
@@ -1290,18 +1296,18 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             background: rgba(255,255,255,0.06); border: 1px solid var(--dbord); color: rgba(255,255,255,0.7);
             cursor: pointer; transition: all 0.15s; user-select: none;
         }
-        .disco-chip.active { background: var(--dr); border-color: var(--dr); color: #fff; font-weight: 600; }
+        .disco-chip.active { background: var(--dr); border-color: var(--dr); color: #062C6D; font-weight: 600; }
         .disco-trending-row { display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; }
         .disco-trending-row::-webkit-scrollbar { display: none; }
         .disco-trending-label { font-size: 12px; color: rgba(255,255,255,0.35); flex: none; }
-        .disco-trending-tag { flex: none; font-size: 12px; color: var(--dr); padding: 5px 12px; border: 1px solid rgba(228,54,42,0.3); border-radius: 14px; cursor: pointer; background: none; }
+        .disco-trending-tag { flex: none; font-size: 12px; color: var(--dr); padding: 5px 12px; border: 1px solid rgba(var(--accent-rgb),0.3); border-radius: 14px; cursor: pointer; background: none; }
         .disco-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
         .disco-card {
             background: var(--dsurf); border: 1px solid var(--dbord); border-radius: 8px;
             padding: 20px; display: flex; flex-direction: column; gap: 16px; cursor: pointer;
             transition: border-color 0.15s, transform 0.15s; text-align: left;
         }
-        .disco-card:hover { border-color: rgba(228,54,42,0.4); transform: translateY(-1px); }
+        .disco-card:hover { border-color: rgba(var(--accent-rgb),0.4); transform: translateY(-1px); }
         .disco-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
         .disco-card-cat { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
         .disco-card-badges { display: flex; align-items: center; gap: 6px; flex-none; }
@@ -1326,7 +1332,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .disco-divider span { font-size: 11px; color: rgba(255,255,255,0.3); white-space: nowrap; }
 
         /* ── 방 만들기 모달 (같은 레드 액센트) ── */
-        .disco-modal-box { --dr: #e4362a; width: 100%; max-width: 340px; background: #0e0e0f; border: 1px solid rgba(255,255,255,.09); border-radius: 10px; padding: 20px 20px 22px; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
+        .disco-modal-box { --dr: var(--accent-color); width: 100%; max-width: 340px; background: #0A3A82; border: 1px solid rgba(255,255,255,.09); border-radius: 10px; padding: 20px 20px 22px; box-shadow: 0 20px 60px rgba(0,0,0,.5); }
         .disco-modal-title { font-size: 15px; font-weight: 700; color: #f5f4f2; margin-bottom: 14px; }
         .disco-modal-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin: 14px 0 7px; }
         .disco-modal-label:first-of-type { margin-top: 0; }
@@ -1338,7 +1344,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .disco-cat-grid { display: flex; flex-wrap: wrap; gap: 7px; }
         .disco-pp-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,.09); border-radius: 8px; padding: 10px 12px; }
         .disco-pp-row-label { font-size: 12.5px; color: rgba(255,255,255,0.7); }
-        .disco-modal-submit { width: 100%; margin-top: 18px; padding: 12px; border-radius: 8px; background: var(--dr); color: #fff; font-weight: 700; font-size: 14px; border: none; cursor: pointer; }
+        .disco-modal-submit { width: 100%; margin-top: 18px; padding: 12px; border-radius: 8px; background: var(--dr); color: #062C6D; font-weight: 700; font-size: 14px; border: none; cursor: pointer; }
         .disco-modal-cancel { width: 100%; margin-top: 8px; padding: 10px; border-radius: 8px; background: none; color: rgba(255,255,255,0.4); font-weight: 600; font-size: 12.5px; border: none; cursor: pointer; }
 
         /* ── 번역 자막 ── */
@@ -1346,11 +1352,11 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .subtitle-ctrl { display: flex; align-items: center; gap: 8px; padding: 12px 0 6px; flex-wrap: wrap; }
         .subtitle-toggle-btn {
             font-size: 12px; font-weight: 600; padding: 6px 14px; border-radius: 20px;
-            border: 1px solid rgba(228,54,42,0.3); background: transparent;
+            border: 1px solid rgba(var(--accent-rgb),0.3); background: transparent;
             color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s;
         }
         .subtitle-toggle-btn.on {
-            background: rgba(228,54,42,0.12); border-color: var(--accent-color);
+            background: rgba(var(--accent-rgb),0.12); border-color: var(--accent-color);
             color: var(--accent-color);
         }
         .subtitle-lang-row { display: none; align-items: center; gap: 6px; margin-top: 4px; width: 100%; justify-content: center; }
@@ -1372,7 +1378,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .subtitle-speaker { font-size: 11px; color: var(--accent-color); margin-bottom: 3px; font-weight: 600; }
         .subtitle-original { font-size: 11px; color: rgba(255,255,255,0.3); margin-bottom: 2px; }
         .subtitle-translated { font-size: 14px; color: rgba(255,255,255,0.88); font-weight: 500; line-height: 1.4; }
-        .subtitle-locked { color: #e4362a; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+        .subtitle-locked { color: var(--accent-color); cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
         .subtitle-self-text { font-size: 12px; color: rgba(255,255,255,0.35); font-style: italic; }
         .subtitle-loading { font-size: 12px; color: rgba(255,255,255,0.3); font-style: italic; }
 
@@ -1403,19 +1409,19 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 <body class="intro-open">
 
     <!-- 스플래시 화면 — body 최상단에서 즉시 렌더링 -->
-    <div id="splash-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0a0a0f;z-index:6000;display:flex;align-items:center;justify-content:center;">
+    <div id="splash-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#04193F;z-index:6000;display:flex;align-items:center;justify-content:center;">
         <div style="position:relative; width:min(480px, 80vw);">
             <video id="splash-video" muted playsinline style="width:100%; height:auto; display:block;">
                 <source src="splash.mp4" type="video/mp4">
             </video>
-            <div style="position:absolute; inset:0; pointer-events:none; background: linear-gradient(to right, #0a0a0f 0%, transparent 20%, transparent 80%, #0a0a0f 100%), linear-gradient(to bottom, #0a0a0f 0%, transparent 12%, transparent 93%, #0a0a0f 100%);"></div>
+            <div style="position:absolute; inset:0; pointer-events:none; background: linear-gradient(to right, #04193F 0%, transparent 20%, transparent 80%, #04193F 100%), linear-gradient(to bottom, #04193F 0%, transparent 12%, transparent 93%, #04193F 100%);"></div>
         </div>
     </div>
 
-    <div id="invite-banner" style="display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(13,14,18,0.95); border:1px solid rgba(228,54,42,0.4); border-radius:16px; padding:18px 24px; z-index:9999; text-align:center; min-width:280px;">
+    <div id="invite-banner" style="display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:rgba(13,14,18,0.95); border:1px solid rgba(var(--accent-rgb),0.4); border-radius:16px; padding:18px 24px; z-index:9999; text-align:center; min-width:280px;">
     <div id="invite-text" style="font-size:14px; color:#fff; margin-bottom:14px;">친구가 대화를 요청했어요! 🎉</div>
     <div style="display:flex; gap:10px; justify-content:center;">
-        <button onclick="respondInvite('accepted')" style="background:rgba(228,54,42,0.15); border:1px solid rgba(228,54,42,0.5); color:#e4362a; border-radius:20px; padding:8px 22px; cursor:pointer; font-size:13px;">좋아</button>
+        <button onclick="respondInvite('accepted')" style="background:rgba(var(--accent-rgb),0.15); border:1px solid rgba(var(--accent-rgb),0.5); color:var(--accent-color); border-radius:20px; padding:8px 22px; cursor:pointer; font-size:13px;">좋아</button>
         <button onclick="respondInvite('rejected')" style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.15); color:rgba(255,255,255,0.5); border-radius:20px; padding:8px 22px; cursor:pointer; font-size:13px;">나중에</button>
     </div>
 </div>
@@ -1436,7 +1442,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                     이의신청 제출하기
                 </button>
             </div>
-            <div id="appeal-done-msg" style="display:none; padding:16px; background:rgba(228,54,42,0.07); border:1px solid rgba(228,54,42,0.25);
+            <div id="appeal-done-msg" style="display:none; padding:16px; background:rgba(var(--accent-rgb),0.07); border:1px solid rgba(var(--accent-rgb),0.25);
                 border-radius:12px; font-size:13.5px; color:var(--accent-color); line-height:1.6; text-align:center;">
                 ✅ 이의신청이 접수되었습니다.<br>영업일 기준 1~3일 내 검토 후 결과를 안내드립니다.
             </div>
@@ -1480,8 +1486,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         </div>
         <button class="intro-start-btn" id="intro-start-btn" onclick="showIntro2()">Get Started</button>
         <div style="margin-top:12px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
-            <button id="inquiry-btn-hero" onclick="openInquiryModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#e4362a'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">문의하기</button>
-            <button id="about-nav-btn-hero" onclick="openAboutModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#e4362a'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">About</button>
+            <button id="inquiry-btn-hero" onclick="openInquiryModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">문의하기</button>
+            <button id="about-nav-btn-hero" onclick="openAboutModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">About</button>
         </div>
     </div>
 
@@ -1520,11 +1526,20 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 </div>
             </div>
 
+            <div class="settings-section-label" id="settings-theme-label">Color</div>
+            <div class="settings-row">
+                <div class="settings-row-left"><span id="settings-theme-text">테마 색상</span></div>
+                <div class="theme-swatches">
+                    <button class="theme-swatch" id="swatch-mint" style="background:#99E1D9;" onclick="setThemeColor('mint')" aria-label="Mint"></button>
+                    <button class="theme-swatch" id="swatch-pink" style="background:#E5BDDF;" onclick="setThemeColor('pink')" aria-label="Pink"></button>
+                </div>
+            </div>
+
             <div class="settings-section-label" id="settings-mypage-label">My page</div>
             <div class="settings-cards">
                 <div class="settings-card">
                     <div class="settings-card-label" id="settings-time-label">오늘 남은 시간</div>
-                    <div class="settings-card-value" id="settings-time-value" style="color:#e4362a;">--:--:--</div>
+                    <div class="settings-card-value" id="settings-time-value" style="color:var(--accent-color);">--:--:--</div>
                     <div class="settings-card-sub" id="settings-time-sub">구독 혜택</div>
                 </div>
                 <div class="settings-card">
@@ -1563,7 +1578,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     <div id="main-container">
         <div class="title-block">
-            <img src="logo-transparent.png" alt="B-Talk" style="width:72px; height:72px; display:block; margin:0 auto -22px;">
+            <img src="logo-boundless-talk.png" alt="Boundless Talk" style="width:72px; height:72px; display:block; margin:0 auto -22px; border-radius:16px;">
             <h2 id="app-title" style="font-size:22px; letter-spacing:4px;">BOUNDLESS TALK</h2>
             <p id="app-subtitle" class="sub-title">talk about anything with anyone!</p>
         </div>
@@ -1708,14 +1723,14 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         <div id="manual-entry-wrap" style="display:none;">
         <div id="live-topics-bar" style="display:none; margin-bottom:10px;">
     <div style="font-size:11px; color:rgba(255,255,255,0.35); margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-        <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#e4362a; animation:pulse-dot 1.4s infinite;"></span>
+        <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent-color); animation:pulse-dot 1.4s infinite;"></span>
         <span id="live-topics-label">지금 대화 중인 주제</span>
     </div>
     <div id="live-topics-tags" style="display:flex; flex-wrap:wrap; gap:7px;"></div>
 </div>
 
 <div id="more-topics-modal" class="modal-overlay" onclick="if(event.target===this) closeMoreTopicsModal()">
-    <div style="width:100%; max-width:320px; background:#0e0e0f; border:1px solid rgba(255,255,255,0.09); border-radius:10px; padding:16px; box-shadow:0 20px 60px rgba(0,0,0,0.5); position:relative;">
+    <div style="width:100%; max-width:320px; background:#0A3A82; border:1px solid rgba(255,255,255,0.09); border-radius:10px; padding:16px; box-shadow:0 20px 60px rgba(0,0,0,0.5); position:relative;">
         <span onclick="closeMoreTopicsModal()" style="position:absolute; top:14px; right:16px; color:rgba(255,255,255,0.35); font-size:16px; cursor:pointer;">✕</span>
         <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:2px;" id="more-topics-title">지금 대화 중인 주제</div>
         <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-bottom:16px;" id="more-topics-sub">눌러서 바로 참여해보세요</div>
@@ -1723,7 +1738,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     </div>
 </div>
             
-        <div id="fixed-room-banner" style="display:none; margin-bottom:10px; padding:8px 12px; background:rgba(228,54,42,0.08); border:1px solid rgba(228,54,42,0.25); border-radius:8px; font-size:13px; color:#e4362a; font-weight:600;"></div> <div class="input-group" style="position:relative;">
+        <div id="fixed-room-banner" style="display:none; margin-bottom:10px; padding:8px 12px; background:rgba(var(--accent-rgb),0.08); border:1px solid rgba(var(--accent-rgb),0.25); border-radius:8px; font-size:13px; color:var(--accent-color); font-weight:600;"></div> <div class="input-group" style="position:relative;">
             <input type="text" id="topic-input" placeholder="Enter a topic (e.g., tesla, love)" style="padding-right:40px;">
             <!-- 주제 추천 안내 아이콘 -->
             <span id="topic-info-icon" onclick="openTopicInfoModal()" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:16px;color:rgba(255,255,255,0.25);cursor:pointer;z-index:2;line-height:1;">ⓘ</span>
@@ -1738,7 +1753,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         <!-- 주제 추천 안내 팝업 (설정 모달과 동일한 톤: 그라데이션 테두리 + 카드형 섹션) -->
         <div class="modal-overlay" id="topic-info-modal" onclick="if(event.target===this) closeTopicInfoModal()">
             <div style="position:relative; width:400px; max-width:92vw; max-height:80vh; overflow-y:auto; text-align:left;
-                background:#0e0e0f;
+                background:#0A3A82;
                 border:1px solid rgba(255,255,255,0.09); border-radius:10px; padding:20px 22px 22px; box-shadow:0 20px 60px rgba(0,0,0,0.5);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                     <div id="topic-info-title" style="font-size:15px; font-weight:700; color:#fff;">대화 주제가 고민되신다면</div>
@@ -1787,7 +1802,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
         <button id="join-btn" disabled>Start Talk</button>
         <div id="waiting-count-bar" style="display:none; align-items:center; justify-content:center; gap:8px; margin-top:10px; font-size:13px; color:rgba(255,255,255,0.45);">
-            <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#e4362a; animation:pulse-dot 1.4s infinite;"></span>
+            <span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--accent-color); animation:pulse-dot 1.4s infinite;"></span>
             <span id="waiting-count-text">아직 대화를 시작할 사람이 없어요.</span>
         </div>
         <button id="report-btn">🚨 Report Toxic User</button>
@@ -1878,14 +1893,14 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <span>0</span><span>6</span><span>12</span><span>18</span><span>23</span>
             </div>
             <div id="heatmap-empty" style="font-size:11px; color:rgba(255,255,255,0.35); text-align:center; padding:14px 0;">—</div>
-            <div id="heatmap-peak-text" style="font-size:11px; color:rgba(228,54,42,0.7); text-align:center; margin-top:6px;"></div>
+            <div id="heatmap-peak-text" style="font-size:11px; color:rgba(var(--accent-rgb),0.7); text-align:center; margin-top:6px;"></div>
         </div>
         </div><!-- /rep-content-inner -->
     </div>
     <div style="text-align:center; margin-top:10px; display:flex; justify-content:center; gap:16px; flex-wrap:wrap;">
-        <button id="inquiry-btn" onclick="openInquiryModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#e4362a'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">문의하기</button>
-        <button onclick="openAboutModal()" id="about-nav-btn" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='#e4362a'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">About</button>
-        <button onclick="openMainPayModal()" id="subscribe-btn" style="background:transparent; border:none; color:rgba(228,54,42,0.6); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer; font-weight:600;" onmouseover="this.style.color='#e4362a'" onmouseout="this.style.color='rgba(228,54,42,0.6)'">Go Premium ✨</button>
+        <button id="inquiry-btn" onclick="openInquiryModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">문의하기</button>
+        <button onclick="openAboutModal()" id="about-nav-btn" style="background:transparent; border:none; color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">About</button>
+        <button onclick="openMainPayModal()" id="subscribe-btn" style="background:transparent; border:none; color:rgba(var(--accent-rgb),0.6); font-size:12px; padding:4px 8px; margin:0; width:auto; text-decoration:underline; cursor:pointer; font-weight:600;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='rgba(var(--accent-rgb),0.6)'">Go Premium ✨</button>
     </div>
 
 
@@ -1947,7 +1962,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <button class="badge-vote-btn btn-disabled" id="btn-vote-humor" onclick="executeVote('humor')"><span id="vote-humor">FUN</span></button>
                 <button class="badge-vote-btn btn-disabled" id="btn-vote-empathy" onclick="executeVote('empathy')"><span id="vote-empathy">WARM</span></button>
                 <button class="badge-vote-btn btn-disabled" id="btn-vote-passion" onclick="executeVote('passion')"><span id="vote-passion">BOLD</span></button>
-                <button class="badge-vote-btn btn-disabled" id="btn-add-friend" onclick="executeAddFriend()" style="background: rgba(228,54,42, 0.05); border-color: rgba(228,54,42, 0.4);">
+                <button class="badge-vote-btn btn-disabled" id="btn-add-friend" onclick="executeAddFriend()" style="background: rgba(var(--accent-rgb), 0.05); border-color: rgba(var(--accent-rgb), 0.4);">
         <span id="label-add-friend">Add Friend</span>
     </button>
                 <button class="badge-vote-btn" onclick="closeModal()" style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-weight:400; margin-top: 10px;" id="vote-skip">Skip Feedback</button>
@@ -1979,7 +1994,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     <!-- 친구 요청 수신 배너 -->
     <!-- 혼자 대기 중 → 인연 레이더 켜두기 배너 -->
     <div id="waitlist-banner" class="glass-card" style="display:none; position:fixed; bottom:80px; left:50%; transform:translateX(-50%); width:90%; max-width:360px; border-radius:16px; padding:16px; z-index:9500;">
-        <div style="font-size:13px; font-weight:700; color:#e4362a; margin-bottom:6px;">📡 <span id="wl-title">지금은 이 주제를 공유할 사람이 없네요.</span></div>
+        <div style="font-size:13px; font-weight:700; color:var(--accent-color); margin-bottom:6px;">📡 <span id="wl-title">지금은 이 주제를 공유할 사람이 없네요.</span></div>
         <div style="font-size:11.5px; color:rgba(255,255,255,0.55); line-height:1.5; margin-bottom:12px;" id="wl-desc">24시간 동안 레이더를 켜둘게요. 누군가 같은 키워드를 입력하면 바로 신호를 보내드릴게요.</div>
         <div style="display:flex; gap:8px; align-items:center;">
             <button id="wl-enable-btn" class="intro2-start-btn" onclick="subscribeWaitlist()" style="flex:3; padding:12px; font-size:13px; white-space:nowrap; margin:0;"></button>
@@ -2154,7 +2169,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                     <span><span id="consent-safety-label">안전 정책</span><span id="consent-safety-suffix">을 확인했습니다</span> <button class="consent-view-btn" onclick="openAboutPage('safety')" id="consent-safety-view">보기</button></span>
                 </label>
             </div>
-            <button id="consent-confirm-btn" onclick="confirmConsent()" disabled style="width:100%; padding:14px; border-radius:12px; background:rgba(228,54,42,0.15); color:rgba(255,255,255,0.3); border:1px solid rgba(228,54,42,0.2); font-size:15px; font-weight:600; cursor:not-allowed; transition:all 0.2s;" id="consent-confirm-label">동의하고 시작하기</button>
+            <button id="consent-confirm-btn" onclick="confirmConsent()" disabled style="width:100%; padding:14px; border-radius:12px; background:rgba(var(--accent-rgb),0.15); color:rgba(255,255,255,0.3); border:1px solid rgba(var(--accent-rgb),0.2); font-size:15px; font-weight:600; cursor:not-allowed; transition:all 0.2s;" id="consent-confirm-label">동의하고 시작하기</button>
             <button onclick="document.getElementById('consent-modal').classList.remove('active')" style="width:100%; margin-top:10px; background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:13px; cursor:pointer; padding:8px;" id="consent-cancel-label">취소</button>
         </div>
     </div>
@@ -2164,12 +2179,12 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         <div class="modal-content" style="max-width:320px;">
             <h3 style="margin-bottom:18px; font-size:18px; letter-spacing:2px;">BOUNDLESS TALK</h3>
             <div style="display:flex; flex-direction:column; gap:4px;">
-                <button onclick="openAboutPage('product')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-product"><span id="about-label-product">서비스 소개</span></button>
-                <button onclick="openAboutPage('pricing')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-pricing"><span id="about-label-pricing">요금제</span></button>
-                <button onclick="openAboutPage('privacy')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-privacy"><span id="about-label-privacy">개인정보처리방침</span></button>
-                <button onclick="openAboutPage('terms')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-terms"><span id="about-label-terms">이용약관</span></button>
-                <button onclick="openAboutPage('guidelines')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-guidelines"><span id="about-label-guidelines">커뮤니티 가이드라인</span></button>
-                <button onclick="openAboutPage('safety')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(228,54,42,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-safety"><span id="about-label-safety">안전 정책</span></button>
+                <button onclick="openAboutPage('product')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(var(--accent-rgb),0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-product"><span id="about-label-product">서비스 소개</span></button>
+                <button onclick="openAboutPage('pricing')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(var(--accent-rgb),0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-pricing"><span id="about-label-pricing">요금제</span></button>
+                <button onclick="openAboutPage('privacy')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(var(--accent-rgb),0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-privacy"><span id="about-label-privacy">개인정보처리방침</span></button>
+                <button onclick="openAboutPage('terms')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(var(--accent-rgb),0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-terms"><span id="about-label-terms">이용약관</span></button>
+                <button onclick="openAboutPage('guidelines')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(var(--accent-rgb),0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-guidelines"><span id="about-label-guidelines">커뮤니티 가이드라인</span></button>
+                <button onclick="openAboutPage('safety')" style="background:rgba(255,255,255,0.04); border:none; color:rgba(255,255,255,0.8); font-size:14px; padding:14px 16px; border-radius:10px; text-align:left; cursor:pointer; width:100%;" onmouseover="this.style.background='rgba(var(--accent-rgb),0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'" id="about-btn-safety"><span id="about-label-safety">안전 정책</span></button>
             </div>
             <button id="about-close-btn" onclick="document.getElementById('about-modal').classList.remove('active')" style="margin-top:16px; background:rgba(255,255,255,0.06); color:rgba(255,255,255,0.4); border:none; border-radius:10px; padding:10px; width:100%; cursor:pointer; font-size:13px;">닫기</button>
         </div>
@@ -2200,15 +2215,15 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <div style="font-size:12px; color:rgba(255,255,255,0.4); text-align:center; margin-bottom:20px;" id="pay-modal-sub">Keep the conversation going</div>
 
             <!-- Monthly Plan -->
-            <div class="pay-plan-btn" id="pay-monthly" style="border:1.5px solid #e4362a; background:rgba(228,54,42,0.06); border-radius:14px; padding:14px 16px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; box-shadow:0 0 16px rgba(228,54,42,0.15);">
+            <div class="pay-plan-btn" id="pay-monthly" style="border:1.5px solid var(--accent-color); background:rgba(var(--accent-rgb),0.06); border-radius:14px; padding:14px 16px; margin-bottom:10px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; box-shadow:0 0 16px rgba(var(--accent-rgb),0.15);">
                 <div>
-                    <div id="pay-popular-badge" style="font-size:10px; background:rgba(228,54,42,0.15); color:#e4362a; border-radius:6px; padding:2px 7px; display:inline-block; margin-bottom:4px;">Popular</div>
+                    <div id="pay-popular-badge" style="font-size:10px; background:rgba(var(--accent-rgb),0.15); color:var(--accent-color); border-radius:6px; padding:2px 7px; display:inline-block; margin-bottom:4px;">Popular</div>
                     <div id="pay-monthly-title" style="font-size:14px; font-weight:600; color:rgba(255,255,255,0.9);">Monthly Plan</div>
                     <div style="font-size:11px; color:rgba(255,255,255,0.4); margin-top:2px;" id="pay-monthly-desc">2 hrs/day for a month</div>
                     <div id="pay-event-badge" style="font-size:10px; color:#ffcc00; margin-top:5px;"></div>
                 </div>
                 <div style="text-align:right;">
-                    <div style="font-size:16px; font-weight:700; color:#e4362a;">$4.99</div>
+                    <div style="font-size:16px; font-weight:700; color:var(--accent-color);">$4.99</div>
                     <div id="pay-monthly-period" style="font-size:10px; color:rgba(255,255,255,0.35);">/ mo</div>
                 </div>
             </div>
@@ -2270,22 +2285,22 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <div id="refund-modal-subtitle" style="font-size:12px; color:rgba(255,255,255,0.35); text-align:center; margin-bottom:20px;">여러 개 선택 가능해요</div>
             <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;" id="refund-reasons">
                 <label id="refund-r1" style="display:flex; align-items:center; gap:10px; padding:12px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; font-size:13px; color:rgba(255,255,255,0.75);">
-                    <input type="checkbox" value="too_expensive" style="accent-color:#e4362a; width:16px; height:16px; cursor:pointer;"> <span>너무 비싸요</span>
+                    <input type="checkbox" value="too_expensive" style="accent-color:var(--accent-color); width:16px; height:16px; cursor:pointer;"> <span>너무 비싸요</span>
                 </label>
                 <label id="refund-r2" style="display:flex; align-items:center; gap:10px; padding:12px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; font-size:13px; color:rgba(255,255,255,0.75);">
-                    <input type="checkbox" value="few_users" style="accent-color:#e4362a; width:16px; height:16px; cursor:pointer;"> <span>대화 상대가 부족해요</span>
+                    <input type="checkbox" value="few_users" style="accent-color:var(--accent-color); width:16px; height:16px; cursor:pointer;"> <span>대화 상대가 부족해요</span>
                 </label>
                 <label id="refund-r3" style="display:flex; align-items:center; gap:10px; padding:12px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; font-size:13px; color:rgba(255,255,255,0.75);">
-                    <input type="checkbox" value="bad_users" style="accent-color:#e4362a; width:16px; height:16px; cursor:pointer;"> <span>불량 유저가 많아요</span>
+                    <input type="checkbox" value="bad_users" style="accent-color:var(--accent-color); width:16px; height:16px; cursor:pointer;"> <span>불량 유저가 많아요</span>
                 </label>
                 <label id="refund-r4" style="display:flex; align-items:center; gap:10px; padding:12px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; font-size:13px; color:rgba(255,255,255,0.75);">
-                    <input type="checkbox" value="not_fun" style="accent-color:#e4362a; width:16px; height:16px; cursor:pointer;"> <span>대화가 기대만큼 재미없어요</span>
+                    <input type="checkbox" value="not_fun" style="accent-color:var(--accent-color); width:16px; height:16px; cursor:pointer;"> <span>대화가 기대만큼 재미없어요</span>
                 </label>
                 <label id="refund-r5" style="display:flex; align-items:center; gap:10px; padding:12px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; font-size:13px; color:rgba(255,255,255,0.75);">
-                    <input type="checkbox" value="bad_quality" style="accent-color:#e4362a; width:16px; height:16px; cursor:pointer;"> <span>통화 품질이 별로예요</span>
+                    <input type="checkbox" value="bad_quality" style="accent-color:var(--accent-color); width:16px; height:16px; cursor:pointer;"> <span>통화 품질이 별로예요</span>
                 </label>
                 <label id="refund-r6" style="display:flex; align-items:center; gap:10px; padding:12px 14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; cursor:pointer; font-size:13px; color:rgba(255,255,255,0.75);">
-                    <input type="checkbox" value="other" style="accent-color:#e4362a; width:16px; height:16px; cursor:pointer;"> <span id="refund-r6-label">기타</span>
+                    <input type="checkbox" value="other" style="accent-color:var(--accent-color); width:16px; height:16px; cursor:pointer;"> <span id="refund-r6-label">기타</span>
                 </label>
                 <textarea id="refund-other-input" placeholder="기타 사유를 입력해주세요. (선택)" maxlength="200" style="display:none; width:100%; box-sizing:border-box; padding:10px 12px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:10px; color:#fff; font-size:12.5px; resize:none; height:64px; outline:none; font-family:inherit;"></textarea>
             </div>
@@ -2489,6 +2504,35 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         const browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
         return browserLang.startsWith('ko') ? 'ko' : 'en';
     })();
+
+    // ── 테마 색상 (민트 기본 / 핑크 선택) ──
+    const THEME_PALETTES = {
+        mint: { color: '#99E1D9', hover: '#7DD4C9', light: '#C2F0E8', rgb: '153,225,217' },
+        pink: { color: '#E5BDDF', hover: '#D39FCB', light: '#F2DCEE', rgb: '229,189,223' }
+    };
+    function applyThemeColor(name) {
+        const p = THEME_PALETTES[name] || THEME_PALETTES.mint;
+        const root = document.documentElement.style;
+        root.setProperty('--accent-color', p.color);
+        root.setProperty('--accent-hover', p.hover);
+        root.setProperty('--accent-light', p.light);
+        root.setProperty('--accent-rgb', p.rgb);
+        root.setProperty('--accent-glow', `rgba(${p.rgb}, 0.2)`);
+        ['mint', 'pink'].forEach(n => {
+            const sw = document.getElementById('swatch-' + n);
+            if (sw) sw.classList.toggle('active', n === name);
+        });
+    }
+    function setThemeColor(name) {
+        localStorage.setItem('btalk_theme', name);
+        applyThemeColor(name);
+    }
+    const currentThemeColor = (() => {
+        const saved = localStorage.getItem('btalk_theme');
+        return (saved === 'mint' || saved === 'pink') ? saved : 'mint';
+    })();
+    applyThemeColor(currentThemeColor);
+
     const AGORA_APP_ID = "71b6f8c1cb424be1b2b5480d447e69e2";
     const TOKEN_SERVER_URL = "https://b-talk-0gi0.onrender.com";
     const SIGNAL_SERVER_URL = "https://kvdb.io/YAPuhyeXZWiNidFcsstzqK/";
@@ -2753,7 +2797,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         const offEl = document.getElementById('disco-create-pp-off');
         if (!onEl || !offEl) return;
         if (on) {
-            onEl.style.background = '#e4362a'; onEl.style.color = '#000';
+            onEl.style.background = 'var(--accent-color)'; onEl.style.color = '#000';
             offEl.style.background = 'transparent'; offEl.style.color = 'rgba(255,255,255,0.35)';
         } else {
             offEl.style.background = 'rgba(255,255,255,0.1)'; offEl.style.color = '#fff';
@@ -2864,7 +2908,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     let lastHourlyData = null;
 
     function heatmapBarColor(ratio) {
-        if (ratio < 0.34) return 'rgba(228,54,42,0.28)';
+        if (ratio < 0.34) return 'rgba(var(--accent-rgb),0.28)';
         if (ratio < 0.67) return 'rgba(255,180,60,0.6)';
         return 'rgba(255,90,60,0.9)';
     }
@@ -3083,8 +3127,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         roomReportBtn: "🚨 REPORT",
         roomWaiting: "Waiting for others...",
         speechStyleLabel: "How would you like to chat?",
-        speechStyleCasual: "👋 Friendly",
-        speechStylePolite: "🤝 Polite",
+        speechStyleCasual: "Friendly",
+        speechStylePolite: "Polite",
         speechStyleBadgeCasual: "Friendly",
         speechStyleBadgePolite: "Polite",
         liveTopicsLabel: "Topics in conversation",
@@ -3207,8 +3251,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         roomReportBtn: "🚨 신고하기",
         roomWaiting: "다른 참여자를 기다리는 중...",
         speechStyleLabel: "어떤 스타일로 대화할래요?",
-        speechStyleCasual: "👋 친구처럼",
-        speechStylePolite: "🤝 정중하게",
+        speechStyleCasual: "친구처럼",
+        speechStylePolite: "정중하게",
         speechStyleBadgeCasual: "친구처럼",
         speechStyleBadgePolite: "정중하게",
         liveTopicsLabel: "지금 대화 중인 주제",
@@ -3366,7 +3410,7 @@ database.ref('activeTopics').on('value', (snap) => {
         if (topics.length > 6) {
             const moreBtn = document.createElement('button');
             moreBtn.textContent = '+' + (topics.length - 6);
-            moreBtn.style.cssText = 'background:rgba(228,54,42,0.08);border:0.5px solid rgba(228,54,42,0.3);color:#e4362a;border-radius:20px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;width:auto;';
+            moreBtn.style.cssText = 'background:rgba(var(--accent-rgb),0.08);border:0.5px solid rgba(var(--accent-rgb),0.3);color:var(--accent-color);border-radius:20px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;width:auto;';
             moreBtn.addEventListener('click', openMoreTopicsModal);
             tagsEl.appendChild(moreBtn);
         }
@@ -3956,15 +4000,15 @@ document.getElementById('part-title-label').innerText = lang.partLabel;
         const btn = document.getElementById('consent-confirm-btn');
         btn.disabled = !allChecked;
         if (allChecked) {
-            btn.style.background = 'linear-gradient(135deg, rgba(228,54,42,0.35), rgba(0,180,255,0.25))';
-            btn.style.color = '#e4362a';
-            btn.style.borderColor = 'rgba(228,54,42,0.6)';
+            btn.style.background = 'linear-gradient(135deg, rgba(var(--accent-rgb),0.35), rgba(0,180,255,0.25))';
+            btn.style.color = 'var(--accent-color)';
+            btn.style.borderColor = 'rgba(var(--accent-rgb),0.6)';
             btn.style.cursor = 'pointer';
-            btn.style.boxShadow = '0 0 16px rgba(228,54,42,0.2)';
+            btn.style.boxShadow = '0 0 16px rgba(var(--accent-rgb),0.2)';
         } else {
-            btn.style.background = 'rgba(228,54,42,0.08)';
+            btn.style.background = 'rgba(var(--accent-rgb),0.08)';
             btn.style.color = 'rgba(255,255,255,0.3)';
-            btn.style.borderColor = 'rgba(228,54,42,0.15)';
+            btn.style.borderColor = 'rgba(var(--accent-rgb),0.15)';
             btn.style.cursor = 'not-allowed';
             btn.style.boxShadow = 'none';
         }
@@ -5140,8 +5184,8 @@ database.ref('activeTopics/' + safeAgoraChannelId).on('value', snap => {
             sub.style.color = '#ffd166';
             tag.textContent = 'ON';
             tag.style.color = '#000';
-            tag.style.background = '#e4362a';
-            row.style.border = '1px solid rgba(228,54,42,0.45)';
+            tag.style.background = 'var(--accent-color)';
+            row.style.border = '1px solid rgba(var(--accent-rgb),0.45)';
         } else {
             sub.textContent = 'PING PONG';
             sub.style.color = 'rgba(255,255,255,0.3)';
@@ -7085,7 +7129,7 @@ function loadFriendsList() {
                 if (statusDot) {
                     if (isOnline) {
                         statusDot.innerText = '●';
-                        statusDot.style.color = '#e4362a';
+                        statusDot.style.color = 'var(--accent-color)';
                     } else {
                         statusDot.innerText = '●';
                         statusDot.style.color = 'rgba(255,255,255,0.2)';
@@ -7129,9 +7173,11 @@ function updateSettingsModalLang() {
     const isKo = currentLang === 'ko';
     document.getElementById('pill-ko').className = 'lang-pill ' + (isKo ? 'active' : 'inactive');
     document.getElementById('pill-en').className = 'lang-pill ' + (!isKo ? 'active' : 'inactive');
-    document.getElementById('settings-title').textContent = isKo ? '⚙ 설정' : '⚙ Settings';
+    document.getElementById('settings-title').textContent = isKo ? '설정' : 'Settings';
     document.getElementById('settings-lang-label').textContent = isKo ? '언어' : 'Language';
     document.getElementById('settings-lang-text').textContent = isKo ? '표시 언어' : 'Display language';
+    document.getElementById('settings-theme-label').textContent = isKo ? '색상' : 'Color';
+    document.getElementById('settings-theme-text').textContent = isKo ? '테마 색상' : 'Theme color';
     document.getElementById('settings-mypage-label').textContent = isKo ? '마이페이지' : 'My page';
     document.getElementById('settings-time-label').textContent = isKo ? '오늘 남은 시간' : 'Today\'s remaining time';
     document.getElementById('settings-time-sub').textContent = isKo ? '구독 혜택' : 'Subscription benefit';
@@ -7181,14 +7227,14 @@ function renderSettingsRank() {
 function renderSettingsDailyBadges() {
     if (!_settingsDailyBadgeData) return;
     const isKo = currentLang === 'ko';
-    const badgeMap = { manner:'👍', logic:'🧠', humor:'🤣', empathy:'🤗', passion:'🔥' };
+    const badgeKeys = ['manner', 'logic', 'humor', 'empathy', 'passion'];
     const badgeName = { manner:{ko:'친절',en:'NICE'}, logic:{ko:'논리',en:'LOGIC'}, humor:{ko:'유머',en:'FUN'}, empathy:{ko:'공감',en:'WARM'}, passion:{ko:'열정',en:'BOLD'} };
     const daily = _settingsDailyBadgeData;
     let total = 0;
     const chips = [];
-    Object.entries(badgeMap).forEach(([k, emoji]) => {
+    badgeKeys.forEach(k => {
         const cnt = daily[k] || 0;
-        if (cnt > 0) { total += cnt; chips.push(emoji + ' ' + badgeName[k][isKo ? 'ko' : 'en'] + (cnt > 1 ? ' x' + cnt : '')); }
+        if (cnt > 0) { total += cnt; chips.push(badgeName[k][isKo ? 'ko' : 'en'] + (cnt > 1 ? ' x' + cnt : '')); }
     });
     document.getElementById('settings-badge-count').textContent = total;
     const chipsEl = document.getElementById('settings-badge-chips');
@@ -7314,7 +7360,7 @@ async function connectToFriend(friendUid) {
     // A는 응답 대기
     const toast = document.createElement('div');
     toast.id = 'invite-waiting-toast';
-    toast.style.cssText = 'position:fixed;top:30px;left:50%;transform:translateX(-50%);background:rgba(228,54,42,0.1);border:1px solid rgba(228,54,42,0.3);color:#fff;padding:12px 22px;border-radius:16px;font-size:13px;z-index:9999;';
+    toast.style.cssText = 'position:fixed;top:30px;left:50%;transform:translateX(-50%);background:rgba(var(--accent-rgb),0.1);border:1px solid rgba(var(--accent-rgb),0.3);color:#fff;padding:12px 22px;border-radius:16px;font-size:13px;z-index:9999;';
     toast.textContent = currentLang === 'ko' ? '친구에게 대화 요청을 보냈어요... ⏳' : 'Invite sent, waiting...';
     document.body.appendChild(toast);
 
@@ -7796,7 +7842,7 @@ Request a refund within 14 days of subscribing for a full refund and immediate c
             .map(line => {
                 const sectionMatch = line.match(/^─+\s*(.+?)\s*─+$/);
                 if (sectionMatch) {
-                    return `<div style="color:#e4362a; font-size:11px; font-weight:700; letter-spacing:0.08em; margin-top:20px; margin-bottom:6px;">${sectionMatch[1]}</div>`;
+                    return `<div style="color:var(--accent-color); font-size:11px; font-weight:700; letter-spacing:0.08em; margin-top:20px; margin-bottom:6px;">${sectionMatch[1]}</div>`;
                 }
                 if (line.startsWith('•')) {
                     return `<div style="padding-left:12px; color:rgba(255,255,255,0.6); font-size:13px; margin-bottom:3px;">${line}</div>`;
@@ -7987,14 +8033,14 @@ function showSuspendOverlay(until, reason, uid) {
 </script>
 
 <!-- PWA 설치 배너 (안드로이드/크롬) -->
-<div id="chrome-banner" style="display:none; position:fixed; top:0; left:0; width:100%; background:#1a1d26; border-bottom:1px solid rgba(228,54,42,0.2); padding:10px 16px; z-index:9998; display:none; align-items:center; gap:10px;">
+<div id="chrome-banner" style="display:none; position:fixed; top:0; left:0; width:100%; background:#1a1d26; border-bottom:1px solid rgba(var(--accent-rgb),0.2); padding:10px 16px; z-index:9998; display:none; align-items:center; gap:10px;">
   <span style="font-size:18px;">🔵</span>
-  <span style="flex:1; font-size:12px; color:rgba(255,255,255,0.7); line-height:1.5;">홈화면 추가는 <strong style="color:#e4362a;">Chrome</strong>을 권장해요. 삼성 브라우저는 보안 경고가 뜰 수 있어요.</span>
-  <button onclick="openInChrome()" style="background:rgba(228,54,42,0.15); border:1px solid rgba(228,54,42,0.4); color:#e4362a; font-size:11px; font-weight:700; cursor:pointer; padding:6px 10px; border-radius:8px; width:auto; margin:0; flex-shrink:0; white-space:nowrap;">Chrome으로 열기</button>
+  <span style="flex:1; font-size:12px; color:rgba(255,255,255,0.7); line-height:1.5;">홈화면 추가는 <strong style="color:var(--accent-color);">Chrome</strong>을 권장해요. 삼성 브라우저는 보안 경고가 뜰 수 있어요.</span>
+  <button onclick="openInChrome()" style="background:rgba(var(--accent-rgb),0.15); border:1px solid rgba(var(--accent-rgb),0.4); color:var(--accent-color); font-size:11px; font-weight:700; cursor:pointer; padding:6px 10px; border-radius:8px; width:auto; margin:0; flex-shrink:0; white-space:nowrap;">Chrome으로 열기</button>
   <button onclick="document.getElementById('chrome-banner').style.display='none'" style="background:transparent; border:none; color:rgba(255,255,255,0.3); font-size:16px; cursor:pointer; padding:0; margin:0; width:auto; flex-shrink:0;">✕</button>
 </div>
 
-<div id="pwa-banner" style="display:none; position:fixed; bottom:24px; left:50%; transform:translateX(-50%); width:calc(100% - 32px); max-width:400px; background:#161920; border:1px solid rgba(228,54,42,0.25); border-radius:16px; padding:16px 18px; z-index:9999; box-shadow:0 8px 30px rgba(0,0,0,0.5);">
+<div id="pwa-banner" style="display:none; position:fixed; bottom:24px; left:50%; transform:translateX(-50%); width:calc(100% - 32px); max-width:400px; background:#161920; border:1px solid rgba(var(--accent-rgb),0.25); border-radius:16px; padding:16px 18px; z-index:9999; box-shadow:0 8px 30px rgba(0,0,0,0.5);">
   <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
     <div style="flex:1;">
       <div id="pwa-title" style="font-size:14px; font-weight:600; color:#fff; margin-bottom:5px; line-height:1.4;">홈 화면에 추가하고 더 편하게 대화하세요</div>
@@ -8009,7 +8055,7 @@ function showSuspendOverlay(until, reason, uid) {
 </div>
 
 <!-- iOS Safari 안내 배너 -->
-<div id="ios-banner" style="display:none; position:fixed; bottom:24px; left:50%; transform:translateX(-50%); width:calc(100% - 32px); max-width:400px; background:#161920; border:1px solid rgba(228,54,42,0.25); border-radius:16px; padding:16px 18px; z-index:9999; box-shadow:0 8px 30px rgba(0,0,0,0.5);">
+<div id="ios-banner" style="display:none; position:fixed; bottom:24px; left:50%; transform:translateX(-50%); width:calc(100% - 32px); max-width:400px; background:#161920; border:1px solid rgba(var(--accent-rgb),0.25); border-radius:16px; padding:16px 18px; z-index:9999; box-shadow:0 8px 30px rgba(0,0,0,0.5);">
   <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
     <div style="flex:1;">
       <div id="ios-title" style="font-size:14px; font-weight:600; color:#fff; margin-bottom:5px; line-height:1.4;">홈 화면에 추가하고 더 편하게 대화하세요</div>
