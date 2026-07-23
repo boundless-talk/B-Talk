@@ -1668,13 +1668,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 <div class="disco-modal-label">카테고리</div>
                 <div class="disco-cat-grid" id="disco-create-cat-grid"></div>
 
-                <div class="disco-modal-label">인원</div>
-                <select id="disco-create-maxpeople-select" class="tip-card" style="width:100%;">
-                    <option value="3">3명</option>
-                    <option value="4" selected>4명 (추천)</option>
-                    <option value="6">6명</option>
-                </select>
-
                 <div class="disco-modal-label">모드</div>
                 <div class="disco-pp-row">
                     <span class="disco-pp-row-label">🏓 핑퐁 모드 (순서대로 1분 30초씩 발언)</span>
@@ -2721,7 +2714,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         discoCreateSelectedCat = 'general';
         discoCreatePP = false;
         document.getElementById('disco-create-topic-input').value = '';
-        document.getElementById('disco-create-maxpeople-select').value = '4';
         renderDiscoCreateCatGrid();
         setDiscoCreatePPUI(false);
         document.getElementById('disco-create-modal').classList.add('active');
@@ -2742,7 +2734,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         pingpongMode = discoCreatePP;
         setPingpongToggleUI(pingpongMode);
         document.getElementById('topic-input').value = topic;
-        document.getElementById('max-people-select').value = document.getElementById('disco-create-maxpeople-select').value;
         closeDiscoCreateModal();
         document.getElementById('join-btn').click();
     }
