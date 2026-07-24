@@ -157,12 +157,6 @@
             color: #fff;
         }
         html[data-cute-mode="cute"] .intro-wordmark { color: #2b1f24; }
-        .brand-mark-small {
-            display: flex; align-items: center; justify-content: center; gap: 7px;
-            font-size: 13px; font-weight: 700; letter-spacing: -0.01em;
-            color: rgba(255,255,255,0.35);
-        }
-        html[data-cute-mode="cute"] .brand-mark-small { color: rgba(43,31,36,0.35); }
         .app-logo-cute { display: none !important; }
         html[data-cute-mode="cute"] .app-logo-dark { display: none !important; }
         html[data-cute-mode="cute"] .app-logo-cute { display: block !important; }
@@ -365,6 +359,10 @@
         html[data-cute-mode="cute"] .settings-card-value.dim { color: rgba(43,31,36,0.35) !important; }
         html[data-cute-mode="cute"] .settings-card-sub { color: rgba(43,31,36,0.4); }
         html[data-cute-mode="cute"] #mycircles-withdrawal-link { color: rgba(43,31,36,0.3) !important; }
+        html[data-cute-mode="cute"] .friend-item-box { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
+        html[data-cute-mode="cute"] .friend-name { color: #2b1f24; }
+        html[data-cute-mode="cute"] .friend-date { color: rgba(43,31,36,0.4); }
+        html[data-cute-mode="cute"] .friend-edit-icon-btn { color: rgba(43,31,36,0.35); }
 
         #main-container {
             width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center;
@@ -377,11 +375,13 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-top: 32px;
-            margin-bottom: 16px;
+            margin-top: 64px;
+            margin-bottom: 32px;
         }
 
         h2 { font-size: 30px; font-weight: 700; letter-spacing: 6px; margin-bottom: 10px; text-transform: uppercase; text-align: center; color: #fff; text-shadow: 0 0 30px rgba(var(--accent-rgb),0.5), 0 0 60px rgba(var(--accent-rgb),0.2); }
+
+        .sub-title { font-size: 14px; color: rgba(255,255,255,0.6); text-align: center; margin-top: -4px; margin-bottom: 0; letter-spacing: 1px; }
 
         /* 추가된 서브타이틀 스타일 */
 
@@ -1713,6 +1713,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
         /* ── 페이지 배경 + 메인/로그인 타이틀 영역: 큐트 모드 (Discover 카드 밖, body 배경 위에 바로 얹혀 있음) ── */
         html[data-cute-mode="cute"] body { background: #fff8f4; }
+        html[data-cute-mode="cute"] #app-title { color: #2b1f24; text-shadow: none; }
+        html[data-cute-mode="cute"] .sub-title { color: rgba(43,31,36,.55); }
         html[data-cute-mode="cute"] .settings-gear-btn { color: rgba(43,31,36,.45); }
         /* 전역 입력창 텍스트 색상 — 큐트 모드는 배경이 밝은 톤이라 기본 흰 글씨가 다 안 보임. 어디에 있는 input/textarea든 일괄 적용 */
         html[data-cute-mode="cute"] input,
@@ -1965,12 +1967,11 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
 
     <div id="main-container">
-        <div class="title-block">
-            <div class="brand-mark-small">
-                <img class="app-logo-dark" src="logoboundlesstalk.png" alt="" style="width:20px; height:20px; object-fit:contain;">
-                <img class="app-logo-cute" src="logoboundlesstalkcute.png" alt="" style="width:20px; height:20px; object-fit:contain;">
-                <span>boundless talk</span>
-            </div>
+        <div class="title-block" id="title-block">
+            <img class="app-logo-dark" src="logoboundlesstalk.png" alt="Boundless Talk" style="width:72px; height:72px; display:block; margin:0 auto -22px; border-radius:16px; object-fit:contain;">
+            <img class="app-logo-cute" src="logoboundlesstalkcute.png" alt="Boundless Talk" style="width:72px; height:72px; display:block; margin:0 auto -22px; border-radius:16px; object-fit:contain;">
+            <h2 id="app-title" style="font-size:22px; letter-spacing:4px;">BOUNDLESS TALK</h2>
+            <p id="app-subtitle" class="sub-title">talk about anything with anyone!</p>
         </div>
 
         <div id="auth-section" style="display:none;">
@@ -3560,6 +3561,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 document.getElementById("auth-section").style.display = "none";
                 if (logoutBtn) logoutBtn.style.display = "inline-block";
                 if (talkControls) talkControls.style.display = "block";
+                const titleBlock = document.getElementById('title-block');
+                if (titleBlock) titleBlock.style.display = 'none';
                 const mainBattery = document.getElementById("main-battery");
                 if (mainBattery) mainBattery.style.display = "flex";
                 if (startBtn && !isJoined) startBtn.disabled = false;
@@ -3849,6 +3852,8 @@ window.closeTopicInfoModal = closeTopicInfoModal;
             document.getElementById("auth-section").style.display = "flex";
             if (logoutBtn) logoutBtn.style.display = "none";
             if (talkControls) talkControls.style.display = "none";
+            const titleBlock = document.getElementById('title-block');
+            if (titleBlock) titleBlock.style.display = 'flex';
             document.getElementById("btn-talk-again").style.display = "none";
             const mainBattery = document.getElementById("main-battery");
             if (mainBattery) mainBattery.style.display = "none";
@@ -3894,6 +3899,10 @@ window.closeTopicInfoModal = closeTopicInfoModal;
     // 4. UI 갱신 & 다국어 바인딩 매핑 로직
 function updateUI() {
         const lang = textData[currentLang];
+        const appTitle = document.getElementById('app-title');
+        const appSubtitle = document.getElementById('app-subtitle');
+        if (appTitle) appTitle.innerText = lang.title;
+        if (appSubtitle) appSubtitle.innerText = lang.subtitle;
 
         document.getElementById('btn-talk-again').innerText = lang.talkAgainBtn;
         const guestLoginText = document.getElementById('guest-login-text');
@@ -4568,6 +4577,7 @@ document.getElementById('part-title-label').innerText = lang.partLabel;
             await database.ref('users/' + user.uid + '/presence').set({ online: false, last_changed: firebase.database.ServerValue.TIMESTAMP });
             await database.ref('waiting/' + user.uid).remove();
         }
+        closeSettingsModal();
         auth.signOut();
     });
 
