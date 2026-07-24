@@ -493,6 +493,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         html[data-cute-mode="cute"] #email-login-btn-main:hover { background: #ffd6e5; }
 
         .auth-signup-prompt {
+            display: flex; flex-direction: column; align-items: center;
             text-align: center; font-size: 12.5px; color: rgba(255,255,255,0.4);
             margin: 14px 0 0; line-height: 1.5;
         }
@@ -1665,7 +1666,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         @media (max-width: 400px) {
             body { padding: 12px; }
             .lang-container { top: calc(12px + env(safe-area-inset-top, 0px)); right: calc(12px + env(safe-area-inset-right, 0px)); }
-            #guest-badge { top: calc(12px + env(safe-area-inset-top, 0px)) !important; left: calc(12px + env(safe-area-inset-left, 0px)) !important; }
 
             .intro-title { font-size: 24px; letter-spacing: 4px; }
             h2 { font-size: 22px; letter-spacing: 4px; }
@@ -1944,10 +1944,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
             <div class="settings-section-label" id="settings-theme-label">Theme</div>
             <div class="settings-row">
-                <div class="settings-row-left">🎨 <span id="settings-theme-text">Dark / Cute</span></div>
-                <div class="cute-mode-toggle" id="cute-mode-toggle" onclick="toggleCuteMode()" aria-label="Dark / Cute 테마 전환">
+                <div class="settings-row-left">🎨 <span id="settings-theme-text">Dark / Light</span></div>
+                <div class="cute-mode-toggle" id="cute-mode-toggle" onclick="toggleCuteMode()" aria-label="Dark / Light 테마 전환">
                     <span class="cute-mode-seg" data-mode="dark" id="cute-mode-seg-dark">Dark</span>
-                    <span class="cute-mode-seg" data-mode="cute" id="cute-mode-seg-cute">Cute</span>
+                    <span class="cute-mode-seg" data-mode="cute" id="cute-mode-seg-cute">Light</span>
                 </div>
             </div>
 
@@ -1995,7 +1995,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         <div class="title-block" id="title-block">
             <img class="app-logo-dark" src="logoboundlesstalk.png" alt="Boundless Talk" style="width:80px; height:80px; display:block; margin:0 auto 12px; object-fit:contain; filter:drop-shadow(0 0 24px rgba(var(--accent-rgb),0.2));">
             <img class="app-logo-cute" src="logoboundlesstalkcute.png" alt="Boundless Talk" style="width:80px; height:80px; display:block; margin:0 auto 12px; object-fit:contain; filter:drop-shadow(0 0 24px rgba(var(--accent-rgb),0.2));">
-            <h2 id="app-title" style="font-size:22px; font-weight:800; letter-spacing:-0.02em; text-transform:none;">Log in to boundless talk</h2>
+            <h2 id="app-title" style="font-size:18px; font-weight:800; letter-spacing:-0.02em; text-transform:none; white-space:nowrap;">Log in to boundless talk</h2>
             <p id="app-subtitle" class="sub-title">No names, no faces — just voices, 4 at a time.</p>
         </div>
 
@@ -3394,7 +3394,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         intro2S6: ``,
         intro2S7: ``,
         talkAgainBtn: "TALK AGAIN",
-        guestLoginBtn: "👀 Continue as guest — no account needed",
+        guestLoginBtn: "👀 Continue as guest<br>— no account needed",
         addFriendBtn: "➕ ADD FRIEND",
         friendsModalTitle: "MY FRIEND LIST",
         noFriends: "No friends added yet.<br>Make some friends after a talk!",
@@ -3520,7 +3520,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         intro2S6: ``,
         intro2S7: ``,
         talkAgainBtn: "또 대화하기",
-        guestLoginBtn: "👀 계정 없이 게스트로 계속하기",
+        guestLoginBtn: "👀 계정 없이<br>게스트로 계속하기",
         addFriendBtn: "➕ 친구 추가",
         friendsModalTitle: "나의 친구 목록",
         noFriends: "아직 추가된 친구가 없습니다.<br>대화 후 친구를 맺어보세요!",
@@ -3638,9 +3638,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 if (!guestBadge) {
                     guestBadge = document.createElement('div');
                     guestBadge.id = 'guest-badge';
-                    guestBadge.style.cssText = 'position:absolute;top:calc(20px + env(safe-area-inset-top, 0px));left:calc(20px + env(safe-area-inset-left, 0px));z-index:9000;background:rgba(255,255,255,0.06);border:1px dashed rgba(255,255,255,0.2);color:rgba(255,255,255,0.45);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.5px;';
+                    guestBadge.style.cssText = 'background:rgba(255,255,255,0.06);border:1px dashed rgba(255,255,255,0.2);color:rgba(255,255,255,0.45);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.5px;white-space:nowrap;';
                     guestBadge.textContent = 'GUEST';
-                    document.body.appendChild(guestBadge);
+                    const langContainer = document.getElementById('lang-container');
+                    langContainer.insertBefore(guestBadge, langContainer.firstChild);
                 }
             } else {
                 if (guestBadge) guestBadge.remove();
@@ -3935,7 +3936,7 @@ function updateUI() {
 
         document.getElementById('btn-talk-again').innerText = lang.talkAgainBtn;
         const guestLoginText = document.getElementById('guest-login-text');
-        if (guestLoginText) guestLoginText.textContent = lang.guestLoginBtn.replace('👀 ', '');
+        if (guestLoginText) guestLoginText.innerHTML = lang.guestLoginBtn.replace('👀 ', '');
         // 인트로 화면 다국어
         const introDescEl = document.getElementById('intro-desc');
         const introBtnEl = document.getElementById('intro-start-btn');
@@ -7420,7 +7421,7 @@ function updateSettingsModalLang() {
     document.getElementById('settings-lang-label').textContent = isKo ? '언어' : 'Language';
     document.getElementById('settings-lang-text').textContent = isKo ? '표시 언어' : 'Display language';
     document.getElementById('settings-theme-label').textContent = isKo ? '테마' : 'Theme';
-    document.getElementById('settings-theme-text').textContent = isKo ? '다크 / 큐트' : 'Dark / Cute';
+    document.getElementById('settings-theme-text').textContent = isKo ? '다크 / 라이트' : 'Dark / Light';
     document.getElementById('settings-mypage-label').textContent = isKo ? '마이페이지' : 'My page';
     document.getElementById('settings-time-label').textContent = isKo ? '오늘 남은 시간' : 'Today\'s remaining time';
     document.getElementById('settings-time-sub').textContent = isKo ? '구독 혜택' : 'Subscription benefit';
