@@ -293,7 +293,7 @@
         #ban-overlay > p { font-size: 16px; color: #a0aec0; max-width: 500px; line-height: 1.6; }
         #appeal-textarea:focus { border-color: rgba(255,59,48,0.5); box-shadow: 0 0 12px rgba(255,59,48,0.15); }
 
-        .lang-container { position: fixed; top: calc(20px + env(safe-area-inset-top, 0px)); right: calc(20px + env(safe-area-inset-right, 0px)); z-index: 9000; display: flex; align-items: center; gap: 8px; }
+        .lang-container { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: calc(20px + env(safe-area-inset-right, 0px)); z-index: 9000; display: flex; align-items: center; gap: 8px; }
         .settings-gear-btn {
             width: 40px; height: 40px; border-radius: 50%;
             background: transparent; border: none;
@@ -368,7 +368,7 @@
             width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center;
             min-height: 100vh;
             justify-content: center;
-            padding: 24px 0;
+            padding: 64px 0 24px;
         }
 
         .title-block {
@@ -1665,6 +1665,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         @media (max-width: 400px) {
             body { padding: 12px; }
             .lang-container { top: calc(12px + env(safe-area-inset-top, 0px)); right: calc(12px + env(safe-area-inset-right, 0px)); }
+            #guest-badge { top: calc(12px + env(safe-area-inset-top, 0px)) !important; left: calc(12px + env(safe-area-inset-left, 0px)) !important; }
 
             .intro-title { font-size: 24px; letter-spacing: 4px; }
             h2 { font-size: 22px; letter-spacing: 4px; }
@@ -1675,7 +1676,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             .auth-btn-group { width: 100%; }
             .auth-form-panel { width: 100%; }
 
-            #main-container { padding: 16px 0; }
+            #main-container { padding: 56px 0 16px; }
             .title-block { margin-bottom: 30px; }
 
             .room-body { padding: 16px 14px; }
@@ -3637,7 +3638,7 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 if (!guestBadge) {
                     guestBadge = document.createElement('div');
                     guestBadge.id = 'guest-badge';
-                    guestBadge.style.cssText = 'position:fixed;top:20px;left:20px;z-index:9000;background:rgba(255,255,255,0.06);border:1px dashed rgba(255,255,255,0.2);color:rgba(255,255,255,0.45);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.5px;';
+                    guestBadge.style.cssText = 'position:absolute;top:calc(20px + env(safe-area-inset-top, 0px));left:calc(20px + env(safe-area-inset-left, 0px));z-index:9000;background:rgba(255,255,255,0.06);border:1px dashed rgba(255,255,255,0.2);color:rgba(255,255,255,0.45);padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.5px;';
                     guestBadge.textContent = 'GUEST';
                     document.body.appendChild(guestBadge);
                 }
