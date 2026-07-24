@@ -295,7 +295,7 @@
 
         .lang-container { position: fixed; top: calc(20px + env(safe-area-inset-top, 0px)); right: calc(20px + env(safe-area-inset-right, 0px)); z-index: 9000; display: flex; align-items: center; gap: 8px; }
         .settings-gear-btn {
-            width: 40px; height: 40px; border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%; margin: 0; padding: 0;
             background: transparent; border: none;
             color: rgba(255,255,255,0.45); font-size: 20px; cursor: pointer;
             display: flex; align-items: center; justify-content: center; transition: all 0.2s;
@@ -900,33 +900,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             100% { box-shadow: 0 0 0 0 rgba(52, 199, 89, 0); }
         }
 
-        /* 조그만 '또 대화하기' 버튼 스타일 */
-#btn-talk-again {
-    width: auto;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    color: rgba(255, 255, 255, 0.8);
-    padding: 8px 14px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: all 0.2s;
-}
-#btn-talk-again:hover {
-    border-color: var(--accent-color);
-    color: var(--accent-color);
-    background: rgba(var(--accent-rgb),0.05);
-
-    #user-action-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center; /* 핵심 */
-    gap: 12px;
-    margin: 20px 0;
-}
-}
-
-#btn-talk-again,
 #logout-btn {
     width: auto;
     height: 38px;
@@ -969,15 +942,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 }
 .friend-call-btn:hover { background: var(--accent-hover); }
 
-#user-action-buttons {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 20px;
-    margin-bottom: 12px;
-    flex-wrap: wrap;
-}
 
 /* 친구 닉네임 입력 모달 */
 .nickname-modal-overlay {
@@ -1499,6 +1463,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             --dr: var(--accent-color); --dr-glow: rgba(var(--accent-rgb),.35); --dsurf: #141416; --dbord: rgba(255,255,255,.08);
             width: 100%; display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; padding-bottom: 64px;
         }
+        #discover-tab-discover, #discover-tab-trending, #discover-tab-mycircles {
+            display: flex; flex-direction: column; gap: 16px;
+        }
         #post-login-footer {
             position: fixed; left: 0; right: 0; bottom: 0;
             display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap;
@@ -1543,13 +1510,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .disco-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--dr); margin-bottom: -6px; }
         .disco-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; position: relative; }
         .disco-title { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; color: #f5f4f2; margin: 0; }
-        .disco-title-glow {
-            position: absolute; top: 50%; left: -30px; transform: translateY(-50%);
-            width: 280px; height: 220px;
-            background: radial-gradient(circle, rgba(var(--accent-rgb),0.3), transparent 70%);
-            filter: blur(16px);
-            pointer-events: none; z-index: -1;
-        }
         .disco-live-count { font-size: 12px; color: rgba(255,255,255,0.4); white-space: nowrap; }
         .disco-search-row { display: flex; gap: 8px; }
         .disco-search-input {
@@ -1661,6 +1621,16 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         }
         .mycircles-rejoin-btn:hover { border-color: var(--dr); color: var(--dr); }
         .mycircles-empty { padding: 28px 4px; text-align: center; color: rgba(255,255,255,0.35); font-size: 13px; }
+        .mycircles-plan-row {
+            display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+            padding: 12px 14px; border: 1px solid rgba(255,255,255,0.09); border-radius: 10px; margin-bottom: 8px;
+            background: rgba(255,255,255,0.03); transition: border-color 0.15s;
+        }
+        .mycircles-plan-row:hover { border-color: rgba(var(--accent-rgb),0.4); }
+        .mycircles-plan-name { font-size: 13.5px; font-weight: 700; color: #f5f4f2; }
+        .mycircles-plan-desc { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+        .mycircles-plan-price { font-size: 14px; font-weight: 700; color: var(--accent-color); }
+        .mycircles-plan-price span { font-size: 10px; font-weight: 500; color: rgba(255,255,255,0.35); }
 
         /* ── 방 만들기 모달 (같은 레드 액센트) ── */
         .disco-modal-box {
@@ -1870,10 +1840,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             background: rgba(0,0,0,.03); border-color: rgba(0,0,0,.1); color: #2b1f24;
         }
         html[data-cute-mode="cute"] .disco-pp-row { background: rgba(0,0,0,.03); border-color: rgba(0,0,0,.08); }
-        html[data-cute-mode="cute"] #btn-talk-again {
-            background: #ffe6ee; border-color: rgba(255,111,156,.3); color: #ff6f9c;
-        }
-        html[data-cute-mode="cute"] #btn-talk-again:hover { background: #ffd6e5; border-color: #ff6f9c; }
         html[data-cute-mode="cute"] #disco-create-pp-toggle { background: rgba(0,0,0,.05) !important; }
         html[data-cute-mode="cute"] #disco-create-pp-off { background: rgba(0,0,0,.08) !important; color: #2b1f24 !important; }
 
@@ -1894,6 +1860,12 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         html[data-cute-mode="cute"] .mycircles-empty { color: rgba(43,31,36,.5); }
         html[data-cute-mode="cute"] .mycircles-rejoin-btn { color: rgba(43,31,36,.5); border-color: rgba(0,0,0,.1); }
         html[data-cute-mode="cute"] .mycircles-rejoin-btn:hover { border-color: #ff6f9c; color: #ff6f9c; }
+        html[data-cute-mode="cute"] .mycircles-plan-row { background: rgba(0,0,0,.03); border-color: rgba(0,0,0,.08); }
+        html[data-cute-mode="cute"] .mycircles-plan-row:hover { border-color: #ff6f9c; }
+        html[data-cute-mode="cute"] .mycircles-plan-name { color: #2b1f24; }
+        html[data-cute-mode="cute"] .mycircles-plan-desc { color: rgba(43,31,36,.45); }
+        html[data-cute-mode="cute"] .mycircles-plan-price { color: #ff6f9c; }
+        html[data-cute-mode="cute"] .mycircles-plan-price span { color: rgba(43,31,36,.35); }
     </style>
 </head>
 <body class="intro-open">
@@ -2129,7 +2101,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             <div id="discover-tab-discover">
                 <div class="disco-eyebrow" id="disco-eyebrow">Live now</div>
                 <div class="disco-head">
-                    <div class="disco-title-glow" aria-hidden="true"></div>
                     <h2 class="disco-title" id="disco-title">Discover</h2>
                     <span class="disco-live-count" id="disco-live-count-text">0개 방 진행 중</span>
                 </div>
@@ -2166,19 +2137,34 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
                 <div class="mycircles-subtabs">
                     <button class="mycircles-subtab active" id="subtab-recent" onclick="switchMyCirclesSubtab('recent')">Recently joined</button>
-                    <button class="mycircles-subtab" id="subtab-saved" onclick="switchMyCirclesSubtab('saved')">Saved topics</button>
+                    <button class="mycircles-subtab" id="subtab-subscription" onclick="switchMyCirclesSubtab('subscription')">Subscription</button>
                     <button class="mycircles-subtab" id="subtab-friends" onclick="switchMyCirclesSubtab('friends')">Friends</button>
                 </div>
 
                 <div id="mycircles-recent-list"></div>
-                <div id="mycircles-saved-list" style="display:none;"></div>
-
-                <div class="settings-card" id="mycircles-sub-card" onclick="openMainPayModal()" style="margin-top:20px; cursor:pointer;">
-                    <div class="settings-card-label" id="mycircles-sub-label">구독 현황</div>
-                    <div class="settings-card-value" id="mycircles-sub-value" style="color:var(--accent-color);">--</div>
-                </div>
-                <div style="text-align:center; margin-top:10px;">
-                    <span id="mycircles-withdrawal-link" onclick="openWithdrawalModal()" style="font-size:10px; color:rgba(255,255,255,0.18); text-decoration:underline; cursor:pointer;">회원탈퇴</span>
+                <div id="mycircles-subscription-panel" style="display:none;">
+                    <div class="settings-card" id="mycircles-sub-card" style="cursor:default;">
+                        <div class="settings-card-label" id="mycircles-sub-label">구독 현황</div>
+                        <div class="settings-card-value" id="mycircles-sub-value" style="color:var(--accent-color);">--</div>
+                    </div>
+                    <div class="settings-section-label" id="mycircles-plans-label" style="margin-top:18px;">전환 가능한 플랜</div>
+                    <div class="mycircles-plan-row" id="mycircles-plan-monthly" onclick="openMainPayModal()">
+                        <div>
+                            <div class="mycircles-plan-name">Monthly</div>
+                            <div class="mycircles-plan-desc" id="mycircles-plan-monthly-desc">하루 2시간, 한 달간</div>
+                        </div>
+                        <div class="mycircles-plan-price">$4.99<span>/mo</span></div>
+                    </div>
+                    <div class="mycircles-plan-row" id="mycircles-plan-weekly" onclick="openMainPayModal()">
+                        <div>
+                            <div class="mycircles-plan-name">Weekly</div>
+                            <div class="mycircles-plan-desc" id="mycircles-plan-weekly-desc">하루 2시간, 일주일간</div>
+                        </div>
+                        <div class="mycircles-plan-price">$1.99<span>/wk</span></div>
+                    </div>
+                    <div style="text-align:center; margin-top:16px;">
+                        <span id="mycircles-withdrawal-link" onclick="openWithdrawalModal()" style="font-size:10px; color:rgba(255,255,255,0.18); text-decoration:underline; cursor:pointer;">회원탈퇴</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2300,9 +2286,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
     </div>
 
-    <div id="user-action-buttons">
-    <button id="btn-talk-again" style="margin: 0; display: none;">또 대화하기</button>
-    </div>
     <div id="post-login-footer">
         <button class="footer-link-btn" id="inquiry-btn" onclick="openInquiryModal()" style="color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto;">문의하기</button>
         <button class="footer-link-btn" onclick="openAboutModal()" id="about-nav-btn" style="color:rgba(255,255,255,0.35); font-size:12px; padding:4px 8px; margin:0; width:auto;">About</button>
@@ -3295,6 +3278,9 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         setText('disco-create-submit-btn', '방 만들고 시작하기', 'Create and start');
         setText('mycircles-sub-label', '구독 현황', 'Subscription');
         setText('mycircles-withdrawal-link', '회원탈퇴', 'Delete account');
+        setText('mycircles-plans-label', '전환 가능한 플랜', 'Available plans');
+        setText('mycircles-plan-monthly-desc', '하루 2시간, 한 달간', '2 hrs/day for a month');
+        setText('mycircles-plan-weekly-desc', '하루 2시간, 일주일간', '2 hrs/day for a week');
         setText('trending-col-topic', '카테고리', 'Category');
         setText('trending-col-circles', '방 개수', 'Circles');
         setText('trending-col-voices', '대화 인원', 'Voices');
@@ -3335,10 +3321,10 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             const link = document.getElementById('nav-tab-' + t);
             const panel = document.getElementById('discover-tab-' + t);
             if (link) link.classList.toggle('active', t === tab);
-            if (panel) panel.style.display = (t === tab) ? 'block' : 'none';
+            if (panel) panel.style.display = (t === tab) ? 'flex' : 'none';
         });
         if (tab === 'trending') renderTrendingTab();
-        if (tab === 'mycircles') { loadMyCirclesSubStatus(); switchMyCirclesSubtab(currentMyCirclesSubtab); }
+        if (tab === 'mycircles') switchMyCirclesSubtab('recent');
     }
 
     // ── Trending 탭: 실제 discoRooms 데이터로 인원수 기준 랭킹 렌더 ──
@@ -3454,18 +3440,18 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
     }
 
     function switchMyCirclesSubtab(tab) {
-        // 'friends'는 별도 모달을 여는 일회성 액션이라 지속 상태로 남기지 않음 (My Circles 탭 재진입 시 모달이 다시 뜨는 것을 방지)
-        if (tab !== 'friends') currentMyCirclesSubtab = tab;
-        ['recent', 'saved', 'friends'].forEach(t => {
+        // 'friends'/'subscription'은 모달을 여는 일회성 액션이라 지속 상태로 남기지 않음 (My Circles 탭 재진입 시 모달이 다시 뜨는 것을 방지)
+        if (tab !== 'friends' && tab !== 'subscription') currentMyCirclesSubtab = tab;
+        ['recent', 'subscription', 'friends'].forEach(t => {
             const btn = document.getElementById('subtab-' + t);
             if (btn) btn.classList.toggle('active', t === tab);
         });
         const recentList = document.getElementById('mycircles-recent-list');
-        const savedList = document.getElementById('mycircles-saved-list');
+        const subPanel = document.getElementById('mycircles-subscription-panel');
         if (recentList) recentList.style.display = (tab === 'recent') ? 'block' : 'none';
-        if (savedList) savedList.style.display = (tab === 'saved') ? 'block' : 'none';
+        if (subPanel) subPanel.style.display = (tab === 'subscription') ? 'block' : 'none';
         if (tab === 'recent') renderRecentCirclesList();
-        if (tab === 'saved') renderSavedTopicsList();
+        if (tab === 'subscription') loadMyCirclesSubStatus();
         if (tab === 'friends') {
             const modal = document.getElementById('friends-modal');
             if (modal) { modal.classList.add('active'); if (typeof loadFriendsList === 'function') loadFriendsList(); }
@@ -3525,17 +3511,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             row.appendChild(rejoinBtn);
             container.appendChild(row);
         });
-    }
-
-    function renderSavedTopicsList() {
-        const container = document.getElementById('mycircles-saved-list');
-        if (!container) return;
-        const isKo = currentLang === 'ko';
-        container.innerHTML = '';
-        const empty = document.createElement('div');
-        empty.className = 'mycircles-empty';
-        empty.textContent = isKo ? '저장한 주제가 아직 없어요.' : 'No saved topics yet.';
-        container.appendChild(empty);
     }
 
     // ══════════════════ /Discover 화면 ══════════════════
@@ -3693,7 +3668,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         intro2S5: ``,
         intro2S6: ``,
         intro2S7: ``,
-        talkAgainBtn: "TALK AGAIN",
         guestLoginBtn: "👀 Continue as guest<br>— no account needed",
         addFriendBtn: "➕ ADD FRIEND",
         friendsModalTitle: "MY FRIEND LIST",
@@ -3819,7 +3793,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         intro2S5: ``,
         intro2S6: ``,
         intro2S7: ``,
-        talkAgainBtn: "또 대화하기",
         guestLoginBtn: "👀 계정 없이<br>게스트로 계속하기",
         addFriendBtn: "➕ 친구 추가",
         friendsModalTitle: "나의 친구 목록",
@@ -3895,7 +3868,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 const mainBattery = document.getElementById("main-battery");
                 if (mainBattery) mainBattery.style.display = "flex";
                 if (startBtn && !isJoined) startBtn.disabled = false;
-                document.getElementById("btn-talk-again").style.display = "inline-block";
                 // 로그인 시 이전 세션의 잔류 상태 메시지 초기화
                 document.getElementById("matching-status").innerText = "";
             }
@@ -4188,7 +4160,6 @@ window.closeTopicInfoModal = closeTopicInfoModal;
             if (mainContainer) mainContainer.style.justifyContent = 'center';
             const langContainerEl = document.getElementById('lang-container');
             if (langContainerEl) langContainerEl.style.position = 'fixed';
-            document.getElementById("btn-talk-again").style.display = "none";
             const mainBattery = document.getElementById("main-battery");
             if (mainBattery) mainBattery.style.display = "none";
 
@@ -4238,7 +4209,6 @@ function updateUI() {
         if (appTitle) appTitle.innerText = lang.title;
         if (appSubtitle) appSubtitle.innerText = lang.subtitle;
 
-        document.getElementById('btn-talk-again').innerText = lang.talkAgainBtn;
         const guestLoginText = document.getElementById('guest-login-text');
         if (guestLoginText) guestLoginText.innerHTML = lang.guestLoginBtn.replace('👀 ', '');
         // 인트로 화면 다국어
@@ -7563,16 +7533,6 @@ async function editFriendNickname(friendUid) {
     // 목록 새로고침
     loadFriendsList();
 }
-
-// 2. '또 대화하기' 버튼 클릭 시 친구 목록 열기 및 실시간 렌더링
-document.getElementById('btn-talk-again').addEventListener('click', () => {
-    if (isGuest) {
-        alert(currentLang === 'ko' ? '🔒 회원 전용 기능입니다.' : '🔒 This feature is for members only.');
-        return;
-    }
-    document.getElementById('friends-modal').classList.add('active');
-    loadFriendsList();
-});
 
 // 1. 실시간 리스너들을 추적하고 해제하기 위한 전역 배열 변수
 let activePresenceRefs = [];
