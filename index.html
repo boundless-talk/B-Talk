@@ -293,7 +293,7 @@
         #ban-overlay > p { font-size: 16px; color: #a0aec0; max-width: 500px; line-height: 1.6; }
         #appeal-textarea:focus { border-color: rgba(255,59,48,0.5); box-shadow: 0 0 12px rgba(255,59,48,0.15); }
 
-        .lang-container { position: absolute; top: calc(20px + env(safe-area-inset-top, 0px)); right: calc(20px + env(safe-area-inset-right, 0px)); z-index: 9000; display: flex; align-items: center; gap: 8px; }
+        .lang-container { position: fixed; top: calc(20px + env(safe-area-inset-top, 0px)); right: calc(20px + env(safe-area-inset-right, 0px)); z-index: 9000; display: flex; align-items: center; gap: 8px; }
         .settings-gear-btn {
             width: 40px; height: 40px; border-radius: 50%;
             background: transparent; border: none;
@@ -455,7 +455,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
         /* 버튼 3개 그룹 */
         .auth-btn-group {
-            width: 48%;
+            width: 100%;
+            max-width: 360px;
             display: flex;
             flex-direction: column;
             gap: 0;
@@ -1607,6 +1608,60 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         .disco-divider .line { flex: 1; height: 1px; background: rgba(255,255,255,0.07); }
         .disco-divider span { font-size: 11px; color: rgba(255,255,255,0.3); white-space: nowrap; }
 
+        /* ── Trending 탭 ── */
+        .trending-header-row {
+            display: grid; grid-template-columns: 28px 1fr 0.6fr 0.7fr; align-items: center; gap: 10px;
+            padding: 0 4px 10px; border-bottom: 1px solid rgba(255,255,255,0.08);
+            font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255,255,255,0.35);
+        }
+        .trending-header-row div:last-child, .trending-header-row div:nth-child(3) { text-align: right; }
+        .trending-row-item {
+            display: grid; grid-template-columns: 28px 1fr 0.6fr 0.7fr; align-items: center; gap: 10px;
+            padding: 16px 4px; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; text-align: left;
+        }
+        .trending-row-item:last-child { border-bottom: none; }
+        .trending-row-item:hover .trending-topic { color: var(--dr); }
+        .trending-rank { font-size: 15px; font-weight: 800; color: rgba(255,255,255,0.4); }
+        .trending-rank-top { color: var(--dr); }
+        .trending-topic { font-size: 14px; font-weight: 600; color: #f5f4f2; transition: color 0.15s; }
+        .trending-category { font-size: 12px; color: rgba(255,255,255,0.45); text-align: right; }
+        .trending-voices { font-size: 12px; color: rgba(255,255,255,0.45); text-align: right; }
+        @media (max-width: 480px) {
+            .trending-row-item { grid-template-columns: 24px 1fr auto; grid-template-rows: auto auto; column-gap: 8px; row-gap: 3px; }
+            .trending-rank { grid-row: 1 / 3; }
+            .trending-topic { grid-column: 2; grid-row: 1; }
+            .trending-category { grid-column: 2; grid-row: 2; text-align: left; }
+            .trending-voices { grid-column: 3; grid-row: 1 / 3; align-self: center; }
+            .trending-header-row { display: none; }
+        }
+
+        /* ── My Circles 탭 ── */
+        .mycircles-subtext { font-size: 13px; color: rgba(255,255,255,0.4); margin: 0 0 18px; }
+        .mycircles-subtabs { display: flex; gap: 18px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 4px; }
+        .mycircles-subtab {
+            background: none; border: none; cursor: pointer; padding: 10px 0; margin: 0; width: auto;
+            font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.4); border-bottom: 2px solid transparent;
+        }
+        .mycircles-subtab.active { color: #f5f4f2; font-weight: 700; border-bottom-color: var(--dr); }
+        .mycircles-row {
+            display: flex; align-items: center; gap: 14px; padding: 18px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .mycircles-row:last-child { border-bottom: none; }
+        .mycircles-row-icon {
+            flex: none; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 18px; background: rgba(var(--accent-rgb),0.12); border: 1px solid rgba(var(--accent-rgb),0.3);
+        }
+        .mycircles-row-mid { flex: 1; min-width: 0; }
+        .mycircles-row-title { font-size: 15px; font-weight: 700; color: #f5f4f2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mycircles-row-meta { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+        .mycircles-rejoin-btn {
+            flex: none; width: auto; margin: 0; font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5);
+            background: none; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 8px 14px; cursor: pointer;
+        }
+        .mycircles-rejoin-btn:hover { border-color: var(--dr); color: var(--dr); }
+        .mycircles-empty { padding: 28px 4px; text-align: center; color: rgba(255,255,255,0.35); font-size: 13px; }
+
         /* ── 방 만들기 모달 (같은 레드 액센트) ── */
         .disco-modal-box {
             --dr: var(--accent-color); width: 100%; max-width: 340px; background: #141416; border: 1px solid rgba(255,255,255,.09); border-radius: 10px; padding: 20px 20px 22px; box-shadow: 0 20px 60px rgba(0,0,0,.5);
@@ -1672,8 +1727,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
 
             .badge-list { flex-wrap: wrap; gap: 8px; justify-content: center; }
             .badge-item { font-size: 12px; padding: 6px 10px; }
-
-            .auth-btn-group { width: 100%; }
             .auth-form-panel { width: 100%; }
 
             #main-container { padding: 56px 0 16px; }
@@ -1823,6 +1876,24 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         html[data-cute-mode="cute"] #btn-talk-again:hover { background: #ffd6e5; border-color: #ff6f9c; }
         html[data-cute-mode="cute"] #disco-create-pp-toggle { background: rgba(0,0,0,.05) !important; }
         html[data-cute-mode="cute"] #disco-create-pp-off { background: rgba(0,0,0,.08) !important; color: #2b1f24 !important; }
+
+        /* ── Trending / My Circles 탭: 큐트 모드 ── */
+        html[data-cute-mode="cute"] .trending-header-row { color: rgba(43,31,36,.4); border-color: rgba(0,0,0,.08); }
+        html[data-cute-mode="cute"] .trending-row-item { border-color: rgba(0,0,0,.06); }
+        html[data-cute-mode="cute"] .trending-rank { color: rgba(43,31,36,.4); }
+        html[data-cute-mode="cute"] .trending-topic { color: #2b1f24; }
+        html[data-cute-mode="cute"] .trending-category,
+        html[data-cute-mode="cute"] .trending-voices { color: rgba(43,31,36,.5); }
+        html[data-cute-mode="cute"] .mycircles-subtext { color: rgba(43,31,36,.5); }
+        html[data-cute-mode="cute"] .mycircles-subtabs { border-color: rgba(0,0,0,.08); }
+        html[data-cute-mode="cute"] .mycircles-subtab { color: rgba(43,31,36,.4); }
+        html[data-cute-mode="cute"] .mycircles-subtab.active { color: #2b1f24; }
+        html[data-cute-mode="cute"] .mycircles-row { border-color: rgba(0,0,0,.06); }
+        html[data-cute-mode="cute"] .mycircles-row-title { color: #2b1f24; }
+        html[data-cute-mode="cute"] .mycircles-row-meta,
+        html[data-cute-mode="cute"] .mycircles-empty { color: rgba(43,31,36,.5); }
+        html[data-cute-mode="cute"] .mycircles-rejoin-btn { color: rgba(43,31,36,.5); border-color: rgba(0,0,0,.1); }
+        html[data-cute-mode="cute"] .mycircles-rejoin-btn:hover { border-color: #ff6f9c; color: #ff6f9c; }
     </style>
 </head>
 <body class="intro-open">
@@ -2050,23 +2121,66 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                     <span class="disco-navbar-word">boundless talk</span>
                 </div>
                 <div class="disco-navbar-links">
-                    <a class="active">Discover</a><a>Trending</a><a onclick="openMyCirclesModal()" style="cursor:pointer;">My Circles</a>
+                    <a class="active" id="nav-tab-discover" onclick="switchDiscoTab('discover')">Discover</a><a id="nav-tab-trending" onclick="switchDiscoTab('trending')">Trending</a><a id="nav-tab-mycircles" onclick="switchDiscoTab('mycircles')">My Circles</a>
                 </div>
                 <button class="disco-navbar-cta" onclick="openDiscoCreateModal()">Start a circle</button>
             </div>
-            <div class="disco-eyebrow" id="disco-eyebrow">Live now</div>
-            <div class="disco-head">
-                <div class="disco-title-glow" aria-hidden="true"></div>
-                <h2 class="disco-title" id="disco-title">Discover</h2>
-                <span class="disco-live-count" id="disco-live-count-text">0개 방 진행 중</span>
+
+            <div id="discover-tab-discover">
+                <div class="disco-eyebrow" id="disco-eyebrow">Live now</div>
+                <div class="disco-head">
+                    <div class="disco-title-glow" aria-hidden="true"></div>
+                    <h2 class="disco-title" id="disco-title">Discover</h2>
+                    <span class="disco-live-count" id="disco-live-count-text">0개 방 진행 중</span>
+                </div>
+                <div class="disco-search-row">
+                    <input type="text" id="disco-search-input" class="disco-search-input" placeholder="주제 검색...">
+                </div>
+                <div class="disco-chip-row" id="disco-chip-row"></div>
+                <div class="disco-trending-row" id="disco-trending-row"></div>
+                <div class="disco-grid" id="disco-grid"></div>
+                <div class="disco-empty" id="disco-empty" style="display:none;">지금 진행 중인 방이 없어요. 첫 방을 만들어보세요!</div>
             </div>
-            <div class="disco-search-row">
-                <input type="text" id="disco-search-input" class="disco-search-input" placeholder="주제 검색...">
+
+            <div id="discover-tab-trending" style="display:none;">
+                <div class="disco-eyebrow" id="trending-eyebrow">Ranked by voices this hour</div>
+                <div class="disco-head" style="margin-bottom:4px;">
+                    <h2 class="disco-title" id="trending-title">Trending</h2>
+                </div>
+                <div class="disco-trending-row" id="trending-tag-row" style="margin:14px 0 4px;"></div>
+                <div class="trending-header-row">
+                    <div>#</div>
+                    <div id="trending-col-topic">Category</div>
+                    <div id="trending-col-circles">Circles</div>
+                    <div id="trending-col-voices">Voices</div>
+                </div>
+                <div id="trending-list"></div>
+                <div class="disco-empty" id="trending-empty" style="display:none;">지금 진행 중인 방이 없어요.</div>
             </div>
-            <div class="disco-chip-row" id="disco-chip-row"></div>
-            <div class="disco-trending-row" id="disco-trending-row"></div>
-            <div class="disco-grid" id="disco-grid"></div>
-            <div class="disco-empty" id="disco-empty" style="display:none;">지금 진행 중인 방이 없어요. 첫 방을 만들어보세요!</div>
+
+            <div id="discover-tab-mycircles" style="display:none;">
+                <div class="disco-head" style="margin-bottom:2px;">
+                    <h2 class="disco-title" id="mycircles-title">My Circles</h2>
+                </div>
+                <p class="mycircles-subtext" id="mycircles-subtext">Anonymous by design — your history lives only on this device.</p>
+
+                <div class="mycircles-subtabs">
+                    <button class="mycircles-subtab active" id="subtab-recent" onclick="switchMyCirclesSubtab('recent')">Recently joined</button>
+                    <button class="mycircles-subtab" id="subtab-saved" onclick="switchMyCirclesSubtab('saved')">Saved topics</button>
+                    <button class="mycircles-subtab" id="subtab-friends" onclick="switchMyCirclesSubtab('friends')">Friends</button>
+                </div>
+
+                <div id="mycircles-recent-list"></div>
+                <div id="mycircles-saved-list" style="display:none;"></div>
+
+                <div class="settings-card" id="mycircles-sub-card" onclick="openMainPayModal()" style="margin-top:20px; cursor:pointer;">
+                    <div class="settings-card-label" id="mycircles-sub-label">구독 현황</div>
+                    <div class="settings-card-value" id="mycircles-sub-value" style="color:var(--accent-color);">--</div>
+                </div>
+                <div style="text-align:center; margin-top:10px;">
+                    <span id="mycircles-withdrawal-link" onclick="openWithdrawalModal()" style="font-size:10px; color:rgba(255,255,255,0.18); text-decoration:underline; cursor:pointer;">회원탈퇴</span>
+                </div>
+            </div>
         </div>
 
         <!-- ── 방 만들기 모달 ── -->
@@ -2090,21 +2204,6 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 </div>
 
                 <button class="disco-modal-submit" id="disco-create-submit-btn" onclick="submitDiscoCreate()">방 만들고 시작하기</button>
-            </div>
-        </div>
-
-        <!-- ── My Circles 모달 (대화스탯 / 톡어게인) ── -->
-        <div class="modal-overlay" id="my-circles-modal" onclick="if(event.target===this) closeMyCirclesModal()">
-            <div class="disco-modal-box" style="max-width:380px; max-height:80vh; overflow-y:auto;">
-                <div class="disco-modal-title" id="my-circles-title">My Circles</div>
-                <div id="my-circles-modal-body"></div>
-                <div class="settings-card" id="mycircles-sub-card" onclick="openMainPayModal()" style="margin-top:12px; margin-bottom:14px; cursor:pointer;">
-                    <div class="settings-card-label" id="mycircles-sub-label">구독 현황</div>
-                    <div class="settings-card-value" id="mycircles-sub-value" style="color:var(--accent-color);">--</div>
-                </div>
-                <div style="text-align:center; margin-top:10px;">
-                    <span id="mycircles-withdrawal-link" onclick="openWithdrawalModal()" style="font-size:10px; color:rgba(255,255,255,0.18); text-decoration:underline; cursor:pointer;">회원탈퇴</span>
-                </div>
             </div>
         </div>
 
@@ -3196,13 +3295,17 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
         setText('disco-create-submit-btn', '방 만들고 시작하기', 'Create and start');
         setText('mycircles-sub-label', '구독 현황', 'Subscription');
         setText('mycircles-withdrawal-link', '회원탈퇴', 'Delete account');
+        setText('trending-col-topic', '카테고리', 'Category');
+        setText('trending-col-circles', '방 개수', 'Circles');
+        setText('trending-col-voices', '대화 인원', 'Voices');
         renderDiscoCreateCatGrid();
+        if (document.getElementById('discover-tab-trending') && document.getElementById('discover-tab-trending').style.display !== 'none') renderTrendingTab();
     }
     updateDiscoLangTexts();
     document.getElementById('lang-toggle-btn').addEventListener('click', () => {
         setTimeout(updateDiscoLangTexts, 0);
     });
-    // ── My Circles 모달 (기존 '또 대화하기' / '대화스탯' 버튼 + 스탯 보드를 그대로 옮겨서 재사용) ──
+    // ── My Circles 탭 (구독 현황 카드는 그대로 재사용) ──
     async function loadMyCirclesSubStatus() {
         const uid = auth.currentUser ? auth.currentUser.uid : null;
         const isKo = currentLang === 'ko';
@@ -3225,19 +3328,215 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
             }
         } catch(e) { console.warn('mycircles sub status load failed:', e); }
     }
-    function openMyCirclesModal() {
-        document.getElementById('my-circles-modal').classList.add('active');
-        loadMyCirclesSubStatus();
+    // ══════════════════ Discover / Trending / My Circles 탭 전환 ══════════════════
+    function switchDiscoTab(tab) {
+        const tabs = ['discover', 'trending', 'mycircles'];
+        tabs.forEach(t => {
+            const link = document.getElementById('nav-tab-' + t);
+            const panel = document.getElementById('discover-tab-' + t);
+            if (link) link.classList.toggle('active', t === tab);
+            if (panel) panel.style.display = (t === tab) ? 'block' : 'none';
+        });
+        if (tab === 'trending') renderTrendingTab();
+        if (tab === 'mycircles') { loadMyCirclesSubStatus(); switchMyCirclesSubtab(currentMyCirclesSubtab); }
     }
-    function closeMyCirclesModal() {
-        document.getElementById('my-circles-modal').classList.remove('active');
+
+    // ── Trending 탭: 실제 discoRooms 데이터로 인원수 기준 랭킹 렌더 ──
+    function renderTrendingTagRow(containerId) {
+        const row = document.getElementById(containerId);
+        if (!row) return;
+        row.innerHTML = '';
+        const liveTags = (typeof allLiveTopics !== 'undefined' ? allLiveTopics : []).slice(0, 6);
+        const tags = liveTags.length > 0 ? liveTags : DISCO_TRENDING_FALLBACK;
+        tags.forEach((t, i) => {
+            const tag = document.createElement('button');
+            tag.type = 'button';
+            tag.className = 'disco-trending-tag' + (i % 2 === 1 ? ' disco-trending-tag-alt' : '');
+            tag.textContent = t;
+            tag.onclick = () => {
+                discoSearchQuery = t;
+                switchDiscoTab('discover');
+                document.getElementById('disco-search-input').value = t;
+                renderDiscoGrid();
+            };
+            row.appendChild(tag);
+        });
     }
-    (function relocateMyCirclesUI() {
-        const body = document.getElementById('my-circles-modal-body');
-        if (!body) return;
-        const el = document.getElementById('btn-talk-again');
-        if (el) body.appendChild(el);
-    })();
+    // 트렌드 = 같은 주제군(카테고리)에 지금 얼마나 많은 사람이 모여 얘기하고 있는가 (방 개별 인원이 아니라, 카테고리별 총 참여 인원으로 랭킹)
+    function renderTrendingTab() {
+        renderTrendingTagRow('trending-tag-row');
+        const list = document.getElementById('trending-list');
+        const empty = document.getElementById('trending-empty');
+        if (!list) return;
+        const isKo = currentLang === 'ko';
+        const liveRooms = (discoRooms || []).filter(r => r && r.topic && !String(r.topic).startsWith('🔒_'));
+
+        const grouped = {};
+        liveRooms.forEach(r => {
+            const catId = r.category || 'general';
+            if (!grouped[catId]) grouped[catId] = { category: catId, roomCount: 0, voices: 0 };
+            grouped[catId].roomCount += 1;
+            grouped[catId].voices += (r.occupancy || 0);
+        });
+        const ranked = Object.values(grouped).sort((a, b) => b.voices - a.voices || b.roomCount - a.roomCount);
+
+        list.innerHTML = '';
+        if (!ranked.length) {
+            if (empty) { empty.textContent = isKo ? '지금 진행 중인 방이 없어요.' : 'No circles live right now.'; empty.style.display = 'block'; }
+            return;
+        }
+        if (empty) empty.style.display = 'none';
+        ranked.forEach((g, i) => {
+            const item = document.createElement('div');
+            item.className = 'trending-row-item';
+            item.onclick = () => {
+                discoActiveCategory = g.category;
+                switchDiscoTab('discover');
+                renderDiscoChipRow();
+                renderDiscoGrid();
+            };
+
+            const rank = document.createElement('div');
+            rank.className = i === 0 ? 'trending-rank trending-rank-top' : 'trending-rank';
+            rank.textContent = String(i + 1);
+
+            const topicEl = document.createElement('div');
+            topicEl.className = 'trending-topic';
+            topicEl.textContent = discoCatLabel(g.category);
+
+            const catEl = document.createElement('div');
+            catEl.className = 'trending-category';
+            catEl.textContent = g.roomCount + (isKo ? '개 방' : (g.roomCount === 1 ? ' circle' : ' circles'));
+
+            const voicesEl = document.createElement('div');
+            voicesEl.className = 'trending-voices';
+            voicesEl.textContent = g.voices + (isKo ? '명 대화 중' : ' talking now');
+
+            item.appendChild(rank);
+            item.appendChild(topicEl);
+            item.appendChild(catEl);
+            item.appendChild(voicesEl);
+            list.appendChild(item);
+        });
+    }
+
+    // ══════════════════ My Circles: Recently joined (로컬 저장, 서버 저장 안 함 — 익명성 유지) ══════════════════
+    const RECENT_CIRCLES_KEY = 'btalk_recent_circles';
+    let currentMyCirclesSubtab = 'recent';
+
+    function getRecentCircles() {
+        try {
+            const raw = localStorage.getItem(RECENT_CIRCLES_KEY);
+            return raw ? JSON.parse(raw) : [];
+        } catch(e) { return []; }
+    }
+    function recordRecentCircle(topic, category) {
+        if (!topic || String(topic).startsWith('🔒_')) return;
+        try {
+            let list = getRecentCircles();
+            list = list.filter(c => c.topic !== topic);
+            list.unshift({ topic, category: category || '', joinedAt: Date.now() });
+            list = list.slice(0, 20);
+            localStorage.setItem(RECENT_CIRCLES_KEY, JSON.stringify(list));
+        } catch(e) { console.warn('recordRecentCircle failed:', e); }
+    }
+    function formatTimeAgo(ts) {
+        const isKo = currentLang === 'ko';
+        const diffMs = Date.now() - ts;
+        const min = Math.floor(diffMs / 60000);
+        if (min < 1) return isKo ? '방금' : 'just now';
+        if (min < 60) return isKo ? `${min}분 전` : `${min}m ago`;
+        const hr = Math.floor(min / 60);
+        if (hr < 24) return isKo ? `${hr}시간 전` : `${hr}h ago`;
+        const day = Math.floor(hr / 24);
+        if (day === 1) return isKo ? '어제' : 'yesterday';
+        return isKo ? `${day}일 전` : `${day}d ago`;
+    }
+
+    function switchMyCirclesSubtab(tab) {
+        // 'friends'는 별도 모달을 여는 일회성 액션이라 지속 상태로 남기지 않음 (My Circles 탭 재진입 시 모달이 다시 뜨는 것을 방지)
+        if (tab !== 'friends') currentMyCirclesSubtab = tab;
+        ['recent', 'saved', 'friends'].forEach(t => {
+            const btn = document.getElementById('subtab-' + t);
+            if (btn) btn.classList.toggle('active', t === tab);
+        });
+        const recentList = document.getElementById('mycircles-recent-list');
+        const savedList = document.getElementById('mycircles-saved-list');
+        if (recentList) recentList.style.display = (tab === 'recent') ? 'block' : 'none';
+        if (savedList) savedList.style.display = (tab === 'saved') ? 'block' : 'none';
+        if (tab === 'recent') renderRecentCirclesList();
+        if (tab === 'saved') renderSavedTopicsList();
+        if (tab === 'friends') {
+            const modal = document.getElementById('friends-modal');
+            if (modal) { modal.classList.add('active'); if (typeof loadFriendsList === 'function') loadFriendsList(); }
+        }
+    }
+
+    function renderRecentCirclesList() {
+        const container = document.getElementById('mycircles-recent-list');
+        if (!container) return;
+        const isKo = currentLang === 'ko';
+        const list = getRecentCircles();
+        container.innerHTML = '';
+        if (!list.length) {
+            const empty = document.createElement('div');
+            empty.className = 'mycircles-empty';
+            empty.textContent = isKo ? '아직 참여한 대화가 없어요.' : 'No circles joined yet.';
+            container.appendChild(empty);
+            return;
+        }
+        list.forEach(c => {
+            const liveRoom = (discoRooms || []).find(r => r && r.topic === c.topic);
+
+            const row = document.createElement('div');
+            row.className = 'mycircles-row';
+
+            const icon = document.createElement('div');
+            icon.className = 'mycircles-row-icon';
+            icon.textContent = '🎙';
+
+            const mid = document.createElement('div');
+            mid.className = 'mycircles-row-mid';
+            const title = document.createElement('div');
+            title.className = 'mycircles-row-title';
+            title.textContent = c.topic;
+            const meta = document.createElement('div');
+            meta.className = 'mycircles-row-meta';
+            meta.textContent = discoCatLabel(c.category) + ' · ' + (isKo ? '참여' : 'joined') + ' ' + formatTimeAgo(c.joinedAt);
+            mid.appendChild(title);
+            mid.appendChild(meta);
+
+            const rejoinBtn = document.createElement('button');
+            rejoinBtn.className = 'mycircles-rejoin-btn';
+            rejoinBtn.textContent = isKo ? '다시 참여' : 'Rejoin';
+            rejoinBtn.onclick = () => {
+                if (liveRoom) {
+                    joinDiscoRoom(liveRoom);
+                } else {
+                    switchDiscoTab('discover');
+                    discoSearchQuery = c.topic;
+                    document.getElementById('disco-search-input').value = c.topic;
+                    renderDiscoGrid();
+                }
+            };
+
+            row.appendChild(icon);
+            row.appendChild(mid);
+            row.appendChild(rejoinBtn);
+            container.appendChild(row);
+        });
+    }
+
+    function renderSavedTopicsList() {
+        const container = document.getElementById('mycircles-saved-list');
+        if (!container) return;
+        const isKo = currentLang === 'ko';
+        container.innerHTML = '';
+        const empty = document.createElement('div');
+        empty.className = 'mycircles-empty';
+        empty.textContent = isKo ? '저장한 주제가 아직 없어요.' : 'No saved topics yet.';
+        container.appendChild(empty);
+    }
 
     // ══════════════════ /Discover 화면 ══════════════════
 
@@ -3591,6 +3890,8 @@ select { background: #0d0e12; color: rgba(255,255,255,0.5); border: 1px solid rg
                 if (titleBlock) titleBlock.style.display = 'none';
                 const mainContainer = document.getElementById('main-container');
                 if (mainContainer) mainContainer.style.justifyContent = 'flex-start';
+                const langContainerEl = document.getElementById('lang-container');
+                if (langContainerEl) langContainerEl.style.position = 'absolute';
                 const mainBattery = document.getElementById("main-battery");
                 if (mainBattery) mainBattery.style.display = "flex";
                 if (startBtn && !isJoined) startBtn.disabled = false;
@@ -3885,6 +4186,8 @@ window.closeTopicInfoModal = closeTopicInfoModal;
             if (titleBlock) titleBlock.style.display = 'flex';
             const mainContainer = document.getElementById('main-container');
             if (mainContainer) mainContainer.style.justifyContent = 'center';
+            const langContainerEl = document.getElementById('lang-container');
+            if (langContainerEl) langContainerEl.style.position = 'fixed';
             document.getElementById("btn-talk-again").style.display = "none";
             const mainBattery = document.getElementById("main-battery");
             if (mainBattery) mainBattery.style.display = "none";
@@ -4926,6 +5229,7 @@ document.getElementById('max-people-group').style.visibility = "hidden";
             myUid = await client.join(AGORA_APP_ID, safeAgoraChannelId, agoraToken, 0);
             dbg('9. join 성공');
             isJoined = true;
+            recordRecentCircle(finalTopic, pendingRoomCategory || guessDiscoCategory(finalTopic));
             // 시간대별 접속 통계 (히트맵용, KST 기준)
             try {
                 const kstHour = new Date(Date.now() + 9 * 60 * 60 * 1000).getUTCHours();
